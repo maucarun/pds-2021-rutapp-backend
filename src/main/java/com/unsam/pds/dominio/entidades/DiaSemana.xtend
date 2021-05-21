@@ -1,4 +1,4 @@
-package com.unsam.pds.dominio
+package com.unsam.pds.dominio.entidades
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import javax.persistence.Entity
@@ -18,4 +18,5 @@ class DiaSemana {
 	@NotNull
 	@Column(length=15, nullable=false, unique=true)
 	String dia_semana
+	
 }

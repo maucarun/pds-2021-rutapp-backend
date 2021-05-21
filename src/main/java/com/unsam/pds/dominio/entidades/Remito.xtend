@@ -1,4 +1,4 @@
-package com.unsam.pds.dominio
+package com.unsam.pds.dominio.entidades
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import javax.persistence.Entity
@@ -11,6 +11,8 @@ import javax.validation.constraints.PositiveOrZero
 import java.sql.Time
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import java.util.Set
+import javax.persistence.OneToMany
 
 @Accessors
 @Entity(name="remito")
@@ -56,5 +58,8 @@ class Remito {
 	@ManyToOne
 	@JoinColumn(name="id_hoja_de_ruta")
 	HojaDeRuta hojaDeRuta
+	
+	@OneToMany(mappedBy = "remito")
+	Set<ProductoRemito> productos;
 	
 }

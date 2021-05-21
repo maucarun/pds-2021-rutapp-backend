@@ -1,4 +1,4 @@
-package com.unsam.pds.dominio
+package com.unsam.pds.dominio.entidades
 
 import javax.persistence.Entity
 import javax.persistence.Id

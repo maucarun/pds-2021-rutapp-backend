@@ -1,4 +1,4 @@
-package com.unsam.pds.dominio
+package com.unsam.pds.dominio.entidades
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import javax.persistence.Entity

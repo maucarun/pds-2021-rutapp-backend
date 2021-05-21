@@ -1,4 +1,4 @@
-package com.unsam.pds.dominio
+package com.unsam.pds.dominio.entidades
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import javax.persistence.Entity
@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn
 import javax.persistence.OneToOne
 import javax.validation.constraints.Size
 import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import java.util.Set
 
 @Accessors
 @Entity(name="cliente")
@@ -56,5 +58,7 @@ class Cliente {
 	/**
 	 * TODO: Falta la relacion con la disponibilidad
 	 */
+	@OneToMany(mappedBy = "cliente")
+	Set<Disponibilidad> disponibilidad_dias_horas
 	
 }
