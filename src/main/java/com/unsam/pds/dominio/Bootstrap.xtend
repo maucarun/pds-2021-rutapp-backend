@@ -25,20 +25,25 @@ import com.unsam.pds.dominio.entidades.Email
 import com.unsam.pds.servicio.ServicioEstado
 import com.unsam.pds.dominio.entidades.EstadoHojaDeRuta
 import com.unsam.pds.dominio.entidades.EstadoRemito
+import com.unsam.pds.servicio.ServicioHojaDeRuta
+import com.unsam.pds.dominio.entidades.HojaDeRuta
+import java.time.LocalDateTime
+import java.time.LocalDate
 
 @Service
 class Bootstrap implements InitializingBean {
 	
-	@Autowired ServicioCliente servicioClientes
-	@Autowired ServicioContacto servicioContactos
-	@Autowired ServicioDiaSemana servicioDiasSemana
-	@Autowired ServicioDireccion servicioDirecciones
-	@Autowired ServicioEmail servicioEmails
-	@Autowired ServicioEstado servicioEstados
-	@Autowired ServicioDisponibilidad servicioDisponibilidad
-	@Autowired ServicioProducto servicioProductos
-	@Autowired ServicioTelefono servicioTelefonos
-	@Autowired ServicioUsuario servicioUsuarios
+	@Autowired ServicioCliente 			servicioClientes
+	@Autowired ServicioContacto 		servicioContactos
+	@Autowired ServicioDiaSemana 		servicioDiasSemana
+	@Autowired ServicioDireccion 		servicioDirecciones
+	@Autowired ServicioDisponibilidad 	servicioDisponibilidad
+	@Autowired ServicioEmail 			servicioEmails
+	@Autowired ServicioEstado 			servicioEstados
+	@Autowired ServicioHojaDeRuta		servicioHojaDeRuta
+	@Autowired ServicioProducto 		servicioProductos
+	@Autowired ServicioTelefono 		servicioTelefonos
+	@Autowired ServicioUsuario 			servicioUsuarios
 	
 	/** Crear dias */
 	DiaSemana lunes = new DiaSemana() => [ dia_semana = "Lunes" ]
@@ -58,10 +63,20 @@ class Bootstrap implements InitializingBean {
 		latitud = 0.0
 		longitud = 0.0
 	]
+
+	/** Crear fechas */
+	LocalDate fechaDeHoy = LocalDate.now 
+	LocalDate fechaDeManana = LocalDate.now.plusDays(1)
 	
 	/** Crear horas de apertura y cierre */
 	LocalTime AM08 = LocalTime.of(8,0)
 	LocalTime AM12 = LocalTime.of(12,0)
+	
+	/** Crear fecha con horas */
+	LocalDateTime fechaDeHoyAM08 = LocalDateTime.of(fechaDeHoy, AM08)
+	LocalDateTime fechaDeHoyAM12 = LocalDateTime.of(fechaDeHoy, AM12)
+	LocalDateTime fechaDeMananaAM08 = LocalDateTime.of(fechaDeManana, AM08)
+	LocalDateTime fechaDeMananaAM12 = LocalDateTime.of(fechaDeManana, AM12)
 	
 	/** Crear usuarios */
 	Usuario homero = new Usuario() => [
@@ -132,6 +147,23 @@ class Bootstrap implements InitializingBean {
 	EstadoHojaDeRuta estadoHdrPendiente = new EstadoHojaDeRuta() => [ nombre = "Pendiente" ]
 	EstadoRemito estadoRemitoCancelado = new EstadoRemito() => [ nombre = "Cancelado" ]
 	
+	/** Crear hoja de rutas */
+	HojaDeRuta hojaDeRutaHoy = new HojaDeRuta() => [
+		fecha_hora_inicio = fechaDeHoyAM08
+		fecha_hora_fin = fechaDeHoyAM12
+		kms_recorridos = 0.0
+		justificacion = ""
+		estado = estadoHdrSuspendida
+	]
+	
+	HojaDeRuta hojaDeRutaManana = new HojaDeRuta() => [
+		fecha_hora_inicio = fechaDeMananaAM08
+		fecha_hora_fin = fechaDeMananaAM12
+		kms_recorridos = 0.0
+		justificacion = ""
+		estado = estadoHdrPendiente
+	]
+	
 	/**
 	 * Es importante el orden en que se guardan los objetos
 	 */
@@ -165,6 +197,9 @@ class Bootstrap implements InitializingBean {
 		servicioEstados.crearNuevoEstado(estadoHdrSuspendida)
 		servicioEstados.crearNuevoEstado(estadoHdrPendiente)
 		servicioEstados.crearNuevoEstado(estadoRemitoCancelado)
+		/** Guardando hoja de rutas */
+		servicioHojaDeRuta.crearNuevaHdr(hojaDeRutaHoy)
+		servicioHojaDeRuta.crearNuevaHdr(hojaDeRutaManana)
 	}
 
 	override afterPropertiesSet() throws Exception {
