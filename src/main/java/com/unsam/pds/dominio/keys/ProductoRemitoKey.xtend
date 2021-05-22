@@ -15,4 +15,15 @@ class ProductoRemitoKey implements Serializable{
 	@Column(name = "id_remito")
 	Long idRemito
 
+	/**
+	 * Es importante crear el constructor para definir los ids
+	 *  y el constructor por defecto
+	 */
+	new() { }
+	
+	new (Long _idProducto, Long _idRemito) {
+		idProducto = _idProducto
+		idRemito = _idRemito
+	}
+	
 }
