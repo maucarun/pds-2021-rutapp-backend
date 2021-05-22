@@ -29,6 +29,8 @@ import com.unsam.pds.servicio.ServicioHojaDeRuta
 import com.unsam.pds.dominio.entidades.HojaDeRuta
 import java.time.LocalDateTime
 import java.time.LocalDate
+import com.unsam.pds.dominio.entidades.Remito
+import com.unsam.pds.servicio.ServicioRemito
 
 @Service
 class Bootstrap implements InitializingBean {
@@ -42,6 +44,7 @@ class Bootstrap implements InitializingBean {
 	@Autowired ServicioEstado 			servicioEstados
 	@Autowired ServicioHojaDeRuta		servicioHojaDeRuta
 	@Autowired ServicioProducto 		servicioProductos
+	@Autowired ServicioRemito			servicioRemitos
 	@Autowired ServicioTelefono 		servicioTelefonos
 	@Autowired ServicioUsuario 			servicioUsuarios
 	
@@ -72,11 +75,8 @@ class Bootstrap implements InitializingBean {
 	LocalTime AM08 = LocalTime.of(8,0)
 	LocalTime AM12 = LocalTime.of(12,0)
 	
-	/** Crear fecha con horas */
-	LocalDateTime fechaDeHoyAM08 = LocalDateTime.of(fechaDeHoy, AM08)
-	LocalDateTime fechaDeHoyAM12 = LocalDateTime.of(fechaDeHoy, AM12)
-	LocalDateTime fechaDeMananaAM08 = LocalDateTime.of(fechaDeManana, AM08)
-	LocalDateTime fechaDeMananaAM12 = LocalDateTime.of(fechaDeManana, AM12)
+	/** Crear tiempos */
+	LocalTime diezMinutos = LocalTime.of(0,10)
 	
 	/** Crear usuarios */
 	Usuario homero = new Usuario() => [
@@ -98,6 +98,12 @@ class Bootstrap implements InitializingBean {
 	/*
 	 * NOTA: Los objetos creados ABAJO DEPENDEN de los objetos creados ARRIBA
 	 */
+
+	/** Crear fecha con horas */
+	LocalDateTime fechaDeHoyAM08 = LocalDateTime.of(fechaDeHoy, AM08)
+	LocalDateTime fechaDeHoyAM12 = LocalDateTime.of(fechaDeHoy, AM12)
+	LocalDateTime fechaDeMananaAM08 = LocalDateTime.of(fechaDeManana, AM08)
+	LocalDateTime fechaDeMananaAM12 = LocalDateTime.of(fechaDeManana, AM12)
 	
 	/** Crear productos */
 	Producto ventiladorHomero = new Producto() => [
@@ -146,6 +152,7 @@ class Bootstrap implements InitializingBean {
 	EstadoHojaDeRuta estadoHdrSuspendida = new EstadoHojaDeRuta() => [ nombre = "Suspendida" ]
 	EstadoHojaDeRuta estadoHdrPendiente = new EstadoHojaDeRuta() => [ nombre = "Pendiente" ]
 	EstadoRemito estadoRemitoCancelado = new EstadoRemito() => [ nombre = "Cancelado" ]
+	EstadoRemito estadoRemitoPendiente = new EstadoRemito() => [ nombre = "Pendiente" ]
 	
 	/** Crear hoja de rutas */
 	HojaDeRuta hojaDeRutaHoy = new HojaDeRuta() => [
@@ -162,6 +169,17 @@ class Bootstrap implements InitializingBean {
 		kms_recorridos = 0.0
 		justificacion = ""
 		estado = estadoHdrPendiente
+	]
+	
+	/** Crear remitos */
+	Remito remitoMoe = new Remito() => [
+		fecha = fechaDeHoy
+		total = 0.0
+		motivo = ""
+		tiempo_espera = diezMinutos
+		cliente = barMoe
+		estado = estadoRemitoPendiente
+		hojaDeRuta = hojaDeRutaHoy
 	]
 	
 	/**
@@ -197,9 +215,12 @@ class Bootstrap implements InitializingBean {
 		servicioEstados.crearNuevoEstado(estadoHdrSuspendida)
 		servicioEstados.crearNuevoEstado(estadoHdrPendiente)
 		servicioEstados.crearNuevoEstado(estadoRemitoCancelado)
+		servicioEstados.crearNuevoEstado(estadoRemitoPendiente)
 		/** Guardando hoja de rutas */
 		servicioHojaDeRuta.crearNuevaHdr(hojaDeRutaHoy)
 		servicioHojaDeRuta.crearNuevaHdr(hojaDeRutaManana)
+		/** Guardando remitos */
+		servicioRemitos.crearNuevoRemito(remitoMoe)
 	}
 
 	override afterPropertiesSet() throws Exception {
