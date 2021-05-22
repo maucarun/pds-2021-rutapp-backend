@@ -31,6 +31,8 @@ import java.time.LocalDateTime
 import java.time.LocalDate
 import com.unsam.pds.dominio.entidades.Remito
 import com.unsam.pds.servicio.ServicioRemito
+import com.unsam.pds.servicio.ServicioProductoRemito
+import com.unsam.pds.dominio.entidades.ProductoRemito
 
 @Service
 class Bootstrap implements InitializingBean {
@@ -44,6 +46,7 @@ class Bootstrap implements InitializingBean {
 	@Autowired ServicioEstado 			servicioEstados
 	@Autowired ServicioHojaDeRuta		servicioHojaDeRuta
 	@Autowired ServicioProducto 		servicioProductos
+	@Autowired ServicioProductoRemito 	servicioProductoRemitos
 	@Autowired ServicioRemito			servicioRemitos
 	@Autowired ServicioTelefono 		servicioTelefonos
 	@Autowired ServicioUsuario 			servicioUsuarios
@@ -174,13 +177,15 @@ class Bootstrap implements InitializingBean {
 	/** Crear remitos */
 	Remito remitoMoe = new Remito() => [
 		fecha = fechaDeHoy
-		total = 0.0
 		motivo = ""
 		tiempo_espera = diezMinutos
 		cliente = barMoe
 		estado = estadoRemitoPendiente
 		hojaDeRuta = hojaDeRutaHoy
 	]
+	
+	/** Crear PRs */
+	ProductoRemito productoRemitoMoe = new ProductoRemito(remitoMoe, ventiladorHomero, 10, ventiladorHomero.precio_unitario, 1.0)
 	
 	/**
 	 * Es importante el orden en que se guardan los objetos
@@ -221,6 +226,12 @@ class Bootstrap implements InitializingBean {
 		servicioHojaDeRuta.crearNuevaHdr(hojaDeRutaManana)
 		/** Guardando remitos */
 		servicioRemitos.crearNuevoRemito(remitoMoe)
+		/** Guardar PRs */
+		servicioProductoRemitos.crearNuevoProductoRemito(productoRemitoMoe)
+		/**
+		 * Si agregamos un producto al remito lanza nullPointerException
+		remitoMoe.agregarProducto(productoRemitoMoe)
+		 */
 	}
 
 	override afterPropertiesSet() throws Exception {
