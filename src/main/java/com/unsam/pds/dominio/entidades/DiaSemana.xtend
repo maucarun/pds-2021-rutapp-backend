@@ -16,7 +16,8 @@ class DiaSemana {
 	Long id_dia_semana
 	
 	@NotNull
-	@Column(length=15, nullable=false, unique=true)
+	@Column(length=12, nullable=false, unique=true)
 	String dia_semana
 	
+	new() { }	
 }

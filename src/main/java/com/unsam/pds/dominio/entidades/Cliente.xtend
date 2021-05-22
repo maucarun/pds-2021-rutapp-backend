@@ -39,7 +39,7 @@ class Cliente {
 	Double promedio_espera
 	
 	@Column(nullable=false, unique=false)
-	Boolean activo
+	Boolean activo = true
 	
 	/**
 	 * Un usuario puede tener muchos clientes
@@ -47,18 +47,16 @@ class Cliente {
 	 * 
 	 * TODO: es un propietario?
 	 */
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="id_usuario")
 	Usuario propietario
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.REMOVE)
 	@JoinColumn(name="id_direccion")
 	Direccion direccion
 	
-	/**
-	 * TODO: Falta la relacion con la disponibilidad
-	 */
 	@OneToMany(mappedBy = "cliente")
 	Set<Disponibilidad> disponibilidad_dias_horas
 	
+	new () { }
 }

@@ -7,7 +7,6 @@ import javax.persistence.GenerationType
 import javax.validation.constraints.NotNull
 import javax.persistence.Column
 import org.eclipse.xtend.lib.annotations.Accessors
-import javax.persistence.CascadeType
 import javax.validation.constraints.Positive
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
@@ -38,14 +37,20 @@ class Producto {
 	
 	@NotNull
 	@Column(nullable=false, unique=false)
-	Boolean activo
+	Boolean activo = true
 	
 	/**
 	 * Un usuario puede tener muchos productos
 	 *  El producto pertenece a un usuario
 	 */
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="id_usuario")
 	Usuario propietario
+	
+	new() { }
+	
+	def void eliminarProducto() {
+		activo = false
+	}
 	
 }

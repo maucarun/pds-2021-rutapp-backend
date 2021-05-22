@@ -20,6 +20,10 @@ class Usuario {
 	String nombre
 	
 	@NotNull
+	@Column(length=50, nullable=false, unique=false)
+	String apellido
+	
+	@NotNull
 	@Column(length=50, nullable=false, unique=true)
 	String username
 	
@@ -33,6 +37,12 @@ class Usuario {
 	
 	@NotNull
 	@Column(nullable=false, unique=false)
-	Boolean activo
+	Boolean activo = true
 	
+	new() { }
+	
+	def void desactivarUsuario() {
+		activo = false
+	}
+
 }

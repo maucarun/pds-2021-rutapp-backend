@@ -3,12 +3,12 @@ package com.unsam.pds.dominio.entidades
 import org.eclipse.xtend.lib.annotations.Accessors
 import javax.persistence.Entity
 import javax.persistence.Column
-import java.sql.Time
 import javax.persistence.ManyToOne
 import javax.persistence.JoinColumn
 import javax.persistence.EmbeddedId
 import javax.persistence.MapsId
 import com.unsam.pds.dominio.keys.DisponibilidadKey
+import java.time.LocalTime
 
 @Accessors
 @Entity(name="disponibilidad")
@@ -28,9 +28,9 @@ class Disponibilidad {
 	DiaSemana diaSemana
 
 	@Column(nullable=false, unique=false)
-	Time hora_apertura
+	LocalTime hora_apertura
 
 	@Column(nullable=false, unique=false)
-	Time hora_cierre
+	LocalTime hora_cierre
 
 }
