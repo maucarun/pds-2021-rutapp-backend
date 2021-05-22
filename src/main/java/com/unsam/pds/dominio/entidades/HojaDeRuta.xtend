@@ -39,4 +39,5 @@ class HojaDeRuta {
 	@JoinColumn(name="id_estado")
 	EstadoHojaDeRuta estado
 	
+	new() { }
 }
