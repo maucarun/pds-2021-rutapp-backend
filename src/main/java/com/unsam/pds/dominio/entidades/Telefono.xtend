@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne
 class Telefono {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	Long id_email
+	Long id_telefono
 	
 	@Min(value=8)
 	@Column(length=20, nullable=false, unique=false)
@@ -34,4 +34,5 @@ class Telefono {
 	@JoinColumn(name="id_contacto")
 	Contacto contacto
 	
+	new() { }
 }

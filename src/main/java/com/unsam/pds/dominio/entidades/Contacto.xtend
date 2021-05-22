@@ -33,4 +33,5 @@ class Contacto {
 	@JoinColumn(name="id_cliente")
 	Cliente cliente
 	
+	new() { }
 }
