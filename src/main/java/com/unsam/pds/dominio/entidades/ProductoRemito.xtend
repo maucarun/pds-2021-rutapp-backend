@@ -14,7 +14,7 @@ import com.unsam.pds.dominio.keys.ProductoRemitoKey
 class ProductoRemito {
 	
 	@EmbeddedId
-	ProductoRemitoKey id_producto_remito;
+	ProductoRemitoKey idProductoRemito;
 	
 	@ManyToOne
 	@MapsId("idRemito")
@@ -34,5 +34,23 @@ class ProductoRemito {
 	
 	@Column(nullable=false, unique=false)
 	Double descuento
-
+	
+	new() { }
+	
+	/**
+	 * Es importante tener este constructor para definir el ID
+	 *  ya que hibernate no puede hacer el seter id por reflection
+	 */
+	new(Remito _remito, Producto _producto, Integer _cantidad, Double _precioUnitario, Double _descuento) {
+		idProductoRemito = new ProductoRemitoKey(_producto.id_producto, _remito.id_remito)
+		remito = _remito
+		producto = _producto
+		cantidad = _cantidad
+		precio_unitario = _precioUnitario
+		descuento = _descuento
+	}
+	
+	def Double calcularSubCosto() {
+		cantidad * precio_unitario * descuento
+	}
 }
