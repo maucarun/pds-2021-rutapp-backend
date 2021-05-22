@@ -8,8 +8,7 @@ import com.unsam.pds.dominio.entidades.DiaSemana
 @Service
 class ServicioDiaSemana {
 	
-	@Autowired
-	RepositorioDiaSemana repositorioDiasSemana
+	@Autowired RepositorioDiaSemana repositorioDiasSemana
 	
 	def void crearNuevoDia(DiaSemana nuevoDia) {
 		repositorioDiasSemana.save(nuevoDia)

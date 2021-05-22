@@ -8,8 +8,7 @@ import com.unsam.pds.dominio.entidades.Usuario
 @Service
 class ServicioUsuario {
 	
-	@Autowired
-	RepositorioUsuario repositorioUsuarios
+	@Autowired RepositorioUsuario repositorioUsuarios
 	
 	def void crearNuevoUsuario(Usuario nuevoUsuario) {
 		repositorioUsuarios.save(nuevoUsuario)
