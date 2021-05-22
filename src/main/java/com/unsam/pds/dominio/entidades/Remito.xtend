@@ -8,11 +8,11 @@ import javax.persistence.GenerationType
 import javax.persistence.Column
 import java.time.LocalDate
 import javax.validation.constraints.PositiveOrZero
-import java.sql.Time
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import java.util.Set
 import javax.persistence.OneToMany
+import java.time.LocalTime
 
 @Accessors
 @Entity(name="remito")
@@ -33,7 +33,7 @@ class Remito {
 	
 	@PositiveOrZero(message="El tiempo no puede ser negativo")
 	@Column(nullable=false, unique=false)
-	Time tiempo_espera
+	LocalTime tiempo_espera
 	
 	/**
 	 * Un cliente puede tener muchos remitos
@@ -62,4 +62,18 @@ class Remito {
 	@OneToMany(mappedBy = "remito")
 	Set<ProductoRemito> productos;
 	
+	new () { }
+	
+	def void calcularTotal() {
+		/** 
+		 * Alternativa
+		productos.forEach[ producto | 
+			total = total + producto.precio_unitario
+		]
+		 */
+		
+		/** En un fold va primero el total a devolver y luego el elemento de la lista */
+		total = productos.fold(0.0)[subTotal, producto | subTotal + producto.precio_unitario ]
+		
+	}
 }
