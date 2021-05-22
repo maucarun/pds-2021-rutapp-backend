@@ -20,6 +20,11 @@ import com.unsam.pds.servicio.ServicioContacto
 import com.unsam.pds.dominio.entidades.Contacto
 import com.unsam.pds.servicio.ServicioTelefono
 import com.unsam.pds.dominio.entidades.Telefono
+import com.unsam.pds.servicio.ServicioEmail
+import com.unsam.pds.dominio.entidades.Email
+import com.unsam.pds.servicio.ServicioEstado
+import com.unsam.pds.dominio.entidades.EstadoHojaDeRuta
+import com.unsam.pds.dominio.entidades.EstadoRemito
 
 @Service
 class Bootstrap implements InitializingBean {
@@ -28,27 +33,12 @@ class Bootstrap implements InitializingBean {
 	@Autowired ServicioContacto servicioContactos
 	@Autowired ServicioDiaSemana servicioDiasSemana
 	@Autowired ServicioDireccion servicioDirecciones
+	@Autowired ServicioEmail servicioEmails
+	@Autowired ServicioEstado servicioEstados
 	@Autowired ServicioDisponibilidad servicioDisponibilidad
 	@Autowired ServicioProducto servicioProductos
 	@Autowired ServicioTelefono servicioTelefonos
 	@Autowired ServicioUsuario servicioUsuarios
-	
-	/** Crear usuarios */
-	Usuario homero = new Usuario() => [
-		nombre = "Homero"
-		apellido = "Simpson"
-		username = "homer"
-		password = "abcd1"
-		email = "homer@mail.com"
-	]
-	
-	Usuario bart = new Usuario() => [
-		nombre = "Bartolomeo"
-		apellido = "Simpson"
-		username = "elBarto"
-		password = "abcd1"
-		email = "bartman@mail.com"
-	]
 	
 	/** Crear dias */
 	DiaSemana lunes = new DiaSemana() => [ dia_semana = "Lunes" ]
@@ -73,6 +63,27 @@ class Bootstrap implements InitializingBean {
 	LocalTime AM08 = LocalTime.of(8,0)
 	LocalTime AM12 = LocalTime.of(12,0)
 	
+	/** Crear usuarios */
+	Usuario homero = new Usuario() => [
+		nombre = "Homero"
+		apellido = "Simpson"
+		username = "homer"
+		password = "abcd1"
+		email = "homer@mail.com"
+	]
+	
+	Usuario bart = new Usuario() => [
+		nombre = "Bartolomeo"
+		apellido = "Simpson"
+		username = "elBarto"
+		password = "abcd1"
+		email = "bartman@mail.com"
+	]
+	
+	/*
+	 * NOTA: Los objetos creados ABAJO DEPENDEN de los objetos creados ARRIBA
+	 */
+	
 	/** Crear productos */
 	Producto ventiladorHomero = new Producto() => [
 		nombre = "ventilador"
@@ -81,11 +92,7 @@ class Bootstrap implements InitializingBean {
 		url_imagen = ""
 		propietario = homero
 	]
-	
-	/*
-	 * NOTA: Los objetos creados ABAJO DEPENDEN de los objetos creados ARRIBA
-	 */
-	
+		
 	/** Crear clientes */
 	Cliente barMoe = new Cliente() => [
 		nombre = "Bar de Moe"
@@ -113,6 +120,21 @@ class Bootstrap implements InitializingBean {
 		contacto = moe
 	]
 	
+	/** Crear emails */
+	Email emailMoe = new Email() => [
+		direccion = "moe@mail.com"
+		esPrincipal = true
+		contacto = moe
+	]
+	
+	/** Crear estados */
+	EstadoHojaDeRuta estadoHdrSuspendida = new EstadoHojaDeRuta() => [ nombre = "Suspendida" ]
+	EstadoHojaDeRuta estadoHdrPendiente = new EstadoHojaDeRuta() => [ nombre = "Pendiente" ]
+	EstadoRemito estadoRemitoCancelado = new EstadoRemito() => [ nombre = "Cancelado" ]
+	
+	/**
+	 * Es importante el orden en que se guardan los objetos
+	 */
 	def void init_app() {
 		/** Guardando usuarios */
 		servicioUsuarios.crearNuevoUsuario(homero)
@@ -137,6 +159,12 @@ class Bootstrap implements InitializingBean {
 		servicioContactos.crearNuevoContacto(moe)
 		/** Guardando telefonos */
 		servicioTelefonos.crearNuevoTelefono(telefonoMoe)
+		/** Guardando emails */
+		servicioEmails.crearNuevoEmail(emailMoe)
+		/** Guardando estados */
+		servicioEstados.crearNuevoEstado(estadoHdrSuspendida)
+		servicioEstados.crearNuevoEstado(estadoHdrPendiente)
+		servicioEstados.crearNuevoEstado(estadoRemitoCancelado)
 	}
 
 	override afterPropertiesSet() throws Exception {
