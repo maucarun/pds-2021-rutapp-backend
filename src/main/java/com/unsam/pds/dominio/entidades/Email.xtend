@@ -33,4 +33,6 @@ class Email {
 	@JoinColumn(name="id_contacto")
 	Contacto contacto
 	
+	new() { }
+	
 }
