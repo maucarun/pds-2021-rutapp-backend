@@ -15,7 +15,7 @@ import java.time.LocalTime
 class Disponibilidad {
 
 	@EmbeddedId
-	DisponibilidadKey id_disponibilidad;
+	DisponibilidadKey idDisponibilidad;
 
 	@ManyToOne
 	@MapsId("idCliente")
@@ -33,4 +33,18 @@ class Disponibilidad {
 	@Column(nullable=false, unique=false)
 	LocalTime hora_cierre
 
+	new() { }
+	
+	/**
+	 * Es importante tener este constructor para definir el ID
+	 *  ya que hibernate no puede hacer el seter id por reflection
+	 */
+	new(Cliente _cliente, DiaSemana _dia, LocalTime _hora_apertura, LocalTime _hora_cierre) {
+		idDisponibilidad = new DisponibilidadKey(_cliente.id_cliente, _dia.id_dia_semana)
+		cliente = _cliente
+		diaSemana = _dia
+		hora_apertura = _hora_apertura
+		hora_cierre = _hora_cierre
+	}
+	
 }

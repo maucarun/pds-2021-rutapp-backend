@@ -82,14 +82,13 @@ class Bootstrap implements InitializingBean {
 		direccion = direccionMoe
 	]
 	
-	/** Crear disponibilidad */
-	Disponibilidad disponibilidadMoeLunes = new Disponibilidad() => [
-		cliente = barMoe
-		diaSemana = lunes
-		hora_apertura = LocalTime.now
-		hora_cierre = LocalTime.now
-	]
+	/** Crear horas de apertura y cierre */
+	LocalTime AM08 = LocalTime.of(8,0)
+	LocalTime AM12 = LocalTime.of(12,0)
 	
+	
+	/** Crear disponibilidad */
+	Disponibilidad disponibilidadMoeLunes = new Disponibilidad(barMoe, lunes, AM08, AM12)
 	
 	def void init_app() {
 		servicioUsuarios.crearNuevoUsuario(homero)

@@ -1,18 +1,27 @@
 package com.unsam.pds.dominio.keys
 
 import javax.persistence.Embeddable
-import org.eclipse.xtend.lib.annotations.Accessors
 import java.io.Serializable
 import javax.persistence.Column
 
 @Embeddable
-@Accessors
 class DisponibilidadKey implements Serializable {
 	
 	@Column(name = "id_cliente")
-	Long idCliente
+	public Long idCliente
 	
 	@Column(name = "id_dia_semana")
-	Long idDiaSemana
+	public Long idDiaSemana
 
+	/**
+	 * Es importante crear el constructor para definir los ids
+	 *  y el constructor por defecto
+	 */
+	new() { }
+	
+	new (Long _idCliente, Long _idDiaSemana) {
+		idCliente = _idCliente
+		idDiaSemana = _idDiaSemana
+	}
+	
 }

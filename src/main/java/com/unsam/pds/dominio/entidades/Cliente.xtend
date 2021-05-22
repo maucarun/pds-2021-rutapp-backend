@@ -56,7 +56,7 @@ class Cliente {
 	Direccion direccion
 	
 	@OneToMany(mappedBy = "cliente")
-	Set<Disponibilidad> disponibilidad_dias_horas
+	Set<Disponibilidad> disponibilidades
 	
 	new () { }
 }
