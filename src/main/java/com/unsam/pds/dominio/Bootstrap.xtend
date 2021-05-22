@@ -16,15 +16,21 @@ import com.unsam.pds.dominio.entidades.Cliente
 import com.unsam.pds.servicio.ServicioDisponibilidad
 import com.unsam.pds.dominio.entidades.Disponibilidad
 import java.time.LocalTime
+import com.unsam.pds.servicio.ServicioContacto
+import com.unsam.pds.dominio.entidades.Contacto
+import com.unsam.pds.servicio.ServicioTelefono
+import com.unsam.pds.dominio.entidades.Telefono
 
 @Service
 class Bootstrap implements InitializingBean {
 	
 	@Autowired ServicioCliente servicioClientes
+	@Autowired ServicioContacto servicioContactos
 	@Autowired ServicioDiaSemana servicioDiasSemana
 	@Autowired ServicioDireccion servicioDirecciones
 	@Autowired ServicioDisponibilidad servicioDisponibilidad
 	@Autowired ServicioProducto servicioProductos
+	@Autowired ServicioTelefono servicioTelefonos
 	@Autowired ServicioUsuario servicioUsuarios
 	
 	/** Crear usuarios */
@@ -53,15 +59,6 @@ class Bootstrap implements InitializingBean {
 	DiaSemana sabado = new DiaSemana() => [ dia_semana = "Sabado" ]
 	DiaSemana domingo = new DiaSemana() => [ dia_semana = "Domingo" ]
 	
-	/** Crear productos */
-	Producto ventiladorHomero = new Producto() => [
-		nombre = "ventilador"
-		precio_unitario = 1000.0
-		descripcion = "es un ventilador"
-		url_imagen = ""
-		propietario = homero
-	]
-	
 	/** Crear direcciones */
 	Direccion direccionMoe = new Direccion() => [
 		calle = "25 de Mayo"
@@ -71,6 +68,23 @@ class Bootstrap implements InitializingBean {
 		latitud = 0.0
 		longitud = 0.0
 	]
+	
+	/** Crear horas de apertura y cierre */
+	LocalTime AM08 = LocalTime.of(8,0)
+	LocalTime AM12 = LocalTime.of(12,0)
+	
+	/** Crear productos */
+	Producto ventiladorHomero = new Producto() => [
+		nombre = "ventilador"
+		precio_unitario = 1000.0
+		descripcion = "es un ventilador"
+		url_imagen = ""
+		propietario = homero
+	]
+	
+	/*
+	 * NOTA: Los objetos creados ABAJO DEPENDEN de los objetos creados ARRIBA
+	 */
 	
 	/** Crear clientes */
 	Cliente barMoe = new Cliente() => [
@@ -82,17 +96,28 @@ class Bootstrap implements InitializingBean {
 		direccion = direccionMoe
 	]
 	
-	/** Crear horas de apertura y cierre */
-	LocalTime AM08 = LocalTime.of(8,0)
-	LocalTime AM12 = LocalTime.of(12,0)
-	
-	
 	/** Crear disponibilidad */
 	Disponibilidad disponibilidadMoeLunes = new Disponibilidad(barMoe, lunes, AM08, AM12)
 	
+	/** Crear contacto */
+	Contacto moe = new Contacto() => [ 
+		nombre = "Moe"
+		apellido = "Syzlack"
+		cliente = barMoe
+	]
+	
+	/** Crear telefonos */
+	Telefono telefonoMoe = new Telefono() => [
+		telefono = "1122223333"
+		esPrincipal = true
+		contacto = moe
+	]
+	
 	def void init_app() {
+		/** Guardando usuarios */
 		servicioUsuarios.crearNuevoUsuario(homero)
 		servicioUsuarios.crearNuevoUsuario(bart)
+		/** Guardando dias */
 		servicioDiasSemana.crearNuevoDia(lunes)
 		servicioDiasSemana.crearNuevoDia(martes)
 		servicioDiasSemana.crearNuevoDia(miercoles)
@@ -100,10 +125,18 @@ class Bootstrap implements InitializingBean {
 		servicioDiasSemana.crearNuevoDia(viernes)
 		servicioDiasSemana.crearNuevoDia(sabado)
 		servicioDiasSemana.crearNuevoDia(domingo)
+		/** Guardando productos */
 		servicioProductos.crearNuevoProducto(ventiladorHomero)
+		/** Guardando direcciones */
 		servicioDirecciones.crearNuevaDireccion(direccionMoe)
+		/** Guardando clientes */
 		servicioClientes.crearNuevoCliente(barMoe)
+		/** Guardando disponibilidad */
 		servicioDisponibilidad.crearNuevaDisponibilidad(disponibilidadMoeLunes)
+		/** Guardando contactos */
+		servicioContactos.crearNuevoContacto(moe)
+		/** Guardando telefonos */
+		servicioTelefonos.crearNuevoTelefono(telefonoMoe)
 	}
 
 	override afterPropertiesSet() throws Exception {
