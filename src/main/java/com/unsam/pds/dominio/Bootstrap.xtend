@@ -230,8 +230,8 @@ class Bootstrap implements InitializingBean {
 		servicioProductoRemitos.crearNuevoProductoRemito(productoRemitoMoe)
 		/**
 		 * Si agregamos un producto al remito lanza nullPointerException
-		remitoMoe.agregarProducto(productoRemitoMoe)
 		 */
+		remitoMoe.agregarProducto(productoRemitoMoe)
 	}
 
 	override afterPropertiesSet() throws Exception {

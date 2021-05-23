@@ -64,7 +64,7 @@ class Remito {
 	HojaDeRuta hojaDeRuta
 	
 	@OneToMany(mappedBy = "remito")
-	Set<ProductoRemito> productos;
+	Set<ProductoRemito> productos = newHashSet;
 	
 	new () { }
 	
