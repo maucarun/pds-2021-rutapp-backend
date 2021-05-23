@@ -64,21 +64,21 @@ class Remito {
 	HojaDeRuta hojaDeRuta
 	
 	@OneToMany(mappedBy = "remito")
-	Set<ProductoRemito> productos = newHashSet;
+	Set<ProductoRemito> productos = newHashSet
 	
 	new () { }
 	
 	def void calcularTotal() {
 		/** 
 		 * Alternativa
-		 */
 		productos.forEach[ producto | 
 			total = total + producto.calcularSubCosto()
 		]
+		 */
 		
 		/** En un fold va primero el total a devolver y luego el elemento de la lista 
-		total = productos.fold(0.0)[subTotal, producto | subTotal + producto.calcularSubCosto()]
 		 * */
+		total = productos.fold(0.0)[subTotal, producto | subTotal + producto.calcularSubCosto()]
 		
 	}
 	
@@ -86,4 +86,9 @@ class Remito {
 		productos.add(nuevoProducto)
 		calcularTotal()
 	}
+	
+	def void asignarHojaDeRuta(HojaDeRuta hdr) {
+		hojaDeRuta = hdr		
+	}
+	
 }
