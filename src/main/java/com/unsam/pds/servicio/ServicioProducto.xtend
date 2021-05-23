@@ -5,6 +5,7 @@ import com.unsam.pds.repositorio.RepositorioProducto
 import org.springframework.beans.factory.annotation.Autowired
 import com.unsam.pds.dominio.entidades.Producto
 import java.util.List
+import javax.transaction.Transactional
 
 @Service
 class ServicioProducto {
@@ -13,7 +14,7 @@ class ServicioProducto {
 
 	@Autowired ServicioUsuario servicioUsuarios
 	
-	
+	@Transactional
 	def void crearNuevoProducto(Producto nuevoProducto) {
 		repositorioProductos.save(nuevoProducto)
 	}

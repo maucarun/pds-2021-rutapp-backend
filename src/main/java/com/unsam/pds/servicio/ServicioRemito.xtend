@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 
 @Service
 class ServicioRemito {
+	
 	Logger logger = LoggerFactory.getLogger(ServicioRemito)
 
 	@Autowired RepositorioRemito repositorioRemitos
@@ -30,10 +31,10 @@ class ServicioRemito {
 	@Transactional
 	def void actualizarRemito(Long idRemito, Remito nuevoRemito) {
 		var remitoAModificar = obtenerRemitoPorId(idRemito)
-		logger.info("Actualizando el remito " + remitoAModificar.fecha + " del cliente " +
+		logger.info("Actualizando el remito del " + remitoAModificar.fecha + " para el cliente " +
 			remitoAModificar.cliente.nombre)
 		BeanUtils.copyProperties(nuevoRemito, remitoAModificar)
-		crearNuevoRemito(nuevoRemito)
+		crearNuevoRemito(remitoAModificar)
 		logger.info("Remito actualizado!")
 	}
 }
