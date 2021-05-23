@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.unsam.pds.repositorio.RepositorioUsuario
 import com.unsam.pds.dominio.entidades.Usuario
 import javassist.NotFoundException
+import javax.transaction.Transactional
 
 @Service
 class ServicioUsuario {
 	
 	@Autowired RepositorioUsuario repositorioUsuarios
 	
+	@Transactional
 	def void crearNuevoUsuario(Usuario nuevoUsuario) {
 		repositorioUsuarios.save(nuevoUsuario)
 	}
