@@ -33,11 +33,14 @@ import com.unsam.pds.dominio.entidades.Remito
 import com.unsam.pds.servicio.ServicioRemito
 import com.unsam.pds.servicio.ServicioProductoRemito
 import com.unsam.pds.dominio.entidades.ProductoRemito
+import com.unsam.pds.servicio.ServicioComprobanteEntrega
+import com.unsam.pds.dominio.entidades.ComprobanteEntrega
 
 @Service
 class Bootstrap implements InitializingBean {
 	
 	@Autowired ServicioCliente 			servicioClientes
+	@Autowired ServicioComprobanteEntrega servicioComprobantes
 	@Autowired ServicioContacto 		servicioContactos
 	@Autowired ServicioDiaSemana 		servicioDiasSemana
 	@Autowired ServicioDireccion 		servicioDirecciones
@@ -70,6 +73,12 @@ class Bootstrap implements InitializingBean {
 		longitud = 0.0
 	]
 
+	/** Crear estados */
+	EstadoHojaDeRuta estadoHdrSuspendida = new EstadoHojaDeRuta() => [ nombre = "Suspendida" ]
+	EstadoHojaDeRuta estadoHdrPendiente = new EstadoHojaDeRuta() => [ nombre = "Pendiente" ]
+	EstadoRemito estadoRemitoCancelado = new EstadoRemito() => [ nombre = "Cancelado" ]
+	EstadoRemito estadoRemitoPendiente = new EstadoRemito() => [ nombre = "Pendiente" ]
+	
 	/** Crear fechas */
 	LocalDate fechaDeHoy = LocalDate.now 
 	LocalDate fechaDeManana = LocalDate.now.plusDays(1)
@@ -151,12 +160,6 @@ class Bootstrap implements InitializingBean {
 		contacto = moe
 	]
 	
-	/** Crear estados */
-	EstadoHojaDeRuta estadoHdrSuspendida = new EstadoHojaDeRuta() => [ nombre = "Suspendida" ]
-	EstadoHojaDeRuta estadoHdrPendiente = new EstadoHojaDeRuta() => [ nombre = "Pendiente" ]
-	EstadoRemito estadoRemitoCancelado = new EstadoRemito() => [ nombre = "Cancelado" ]
-	EstadoRemito estadoRemitoPendiente = new EstadoRemito() => [ nombre = "Pendiente" ]
-	
 	/** Crear hoja de rutas */
 	HojaDeRuta hojaDeRutaHoy = new HojaDeRuta() => [
 		fecha_hora_inicio = fechaDeHoyAM08
@@ -181,11 +184,17 @@ class Bootstrap implements InitializingBean {
 		tiempo_espera = diezMinutos
 		cliente = barMoe
 		estado = estadoRemitoPendiente
-		hojaDeRuta = hojaDeRutaHoy
 	]
 	
 	/** Crear PRs */
 	ProductoRemito productoRemitoMoe = new ProductoRemito(remitoMoe, ventiladorHomero, 10, ventiladorHomero.precio_unitario, 1.0)
+	
+	/** Crear comprobantes */
+	ComprobanteEntrega comprobanteMoe = new ComprobanteEntrega() => [
+		nombre_completo = moe.nombre.concat(" " + moe.apellido)
+		dni = "11222333"
+		hora_entrega = LocalTime.now
+	]
 	
 	/**
 	 * Es importante el orden en que se guardan los objetos
@@ -228,11 +237,14 @@ class Bootstrap implements InitializingBean {
 		servicioRemitos.crearNuevoRemito(remitoMoe)
 		/** Guardar PRs */
 		servicioProductoRemitos.crearNuevoProductoRemito(productoRemitoMoe)
-		/**
-		 * Actualizamos remitos
-		 */
+		/** Actualizar remitos */
+		hojaDeRutaHoy.agregarRemito(remitoMoe)
+		comprobanteMoe.remito = remitoMoe
+		servicioHojaDeRuta.actualizarHdr(hojaDeRutaHoy.id_hoja_de_ruta, hojaDeRutaHoy)
 		remitoMoe.agregarProducto(productoRemitoMoe)
 		servicioRemitos.actualizarRemito(remitoMoe.id_remito, remitoMoe)
+		/** Guardar Comprobantes */
+		servicioComprobantes.crearNuevoComprobante(comprobanteMoe)
 	}
 
 	override afterPropertiesSet() throws Exception {
