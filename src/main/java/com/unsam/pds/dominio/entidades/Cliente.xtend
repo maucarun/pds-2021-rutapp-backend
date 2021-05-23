@@ -56,7 +56,11 @@ class Cliente {
 	Direccion direccion
 	
 	@OneToMany(mappedBy = "cliente")
-	Set<Disponibilidad> disponibilidades
+	Set<Disponibilidad> disponibilidades = newHashSet
 	
 	new () { }
+	
+	def void agregarDisponibilidad(Disponibilidad nuevaDisponibilidad) {
+		disponibilidades.add(nuevaDisponibilidad)
+	}
 }
