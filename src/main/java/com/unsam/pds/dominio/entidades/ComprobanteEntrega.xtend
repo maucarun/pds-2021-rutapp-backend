@@ -9,7 +9,8 @@ import javax.validation.constraints.NotNull
 import javax.persistence.Column
 import javax.validation.constraints.Size
 import java.time.LocalTime
-import javax.validation.constraints.PositiveOrZero
+import javax.persistence.OneToOne
+import javax.persistence.JoinColumn
 
 @Accessors
 @Entity(name="comprobante_entrega")
@@ -26,15 +27,19 @@ class ComprobanteEntrega {
 	@Column(length=10, nullable=false, unique=false)
 	String dni
 	
-	@PositiveOrZero(message="El total no puede ser negativo")
-	@Column(nullable=false, unique=false)
-	Double total
-	
-	@Column(length=250, nullable=true, unique=false)
-	String motivo
-	
-	@PositiveOrZero(message="La hora de entrega no puede ser negativa")
+	@NotNull
 	@Column(nullable=false, unique=false, name="hora_entrega")
 	LocalTime hora_entrega
 	
+	@OneToOne
+	@JoinColumn(name="id_remito", nullable = false, unique = true)
+	Remito remito
+	
+	new() { }
+	
+	def void setRemito(Remito _remito) {
+		if (_remito.hojaDeRuta === null )
+			throw new RuntimeException("La hoja de ruta del remito no puede ser nula")
+		remito = _remito
+	}
 }
