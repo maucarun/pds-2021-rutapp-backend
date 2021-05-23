@@ -10,6 +10,8 @@ import javax.persistence.Column
 import javax.validation.constraints.PositiveOrZero
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import java.util.Set
 
 @Accessors
 @Entity(name="hoja_de_ruta")
@@ -39,5 +41,15 @@ class HojaDeRuta {
 	@JoinColumn(name="id_estado")
 	EstadoHojaDeRuta estado
 	
+	@OneToMany
+	@JoinColumn(name="id_remito")
+	Set<Remito> remitos = newHashSet
+	
 	new() { }
+	
+	def void agregarRemito(Remito nuevoRemito) {
+		remitos.add(nuevoRemito)
+		nuevoRemito.asignarHojaDeRuta(this)
+	}
+	
 }
