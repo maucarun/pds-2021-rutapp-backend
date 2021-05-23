@@ -9,7 +9,9 @@ import javax.persistence.EmbeddedId
 import javax.persistence.MapsId
 import com.unsam.pds.dominio.keys.DisponibilidadKey
 import java.time.LocalTime
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+@JsonIgnoreProperties("cliente")
 @Accessors
 @Entity(name="disponibilidad")
 class Disponibilidad {
