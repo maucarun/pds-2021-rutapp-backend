@@ -9,6 +9,10 @@ import javax.validation.constraints.NotNull
 import javax.persistence.Column
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import java.util.Set
+import com.fasterxml.jackson.annotation.JsonIgnore
+import javax.persistence.FetchType
 
 @Accessors
 @Entity(name="contacto")
@@ -31,7 +35,16 @@ class Contacto {
 	 */
 	@ManyToOne
 	@JoinColumn(name="id_cliente")
+	@JsonIgnore
 	Cliente cliente
+	
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="id_email")
+	Set<Email> emails = newHashSet
+
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="id_telefono")
+	Set<Telefono> telefonos = newHashSet
 	
 	new() { }
 }

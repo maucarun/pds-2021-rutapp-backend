@@ -15,6 +15,7 @@ import javax.validation.constraints.Size
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import java.util.Set
+import javax.persistence.FetchType
 
 @Accessors
 @Entity(name="cliente")
@@ -51,12 +52,16 @@ class Cliente {
 	@JoinColumn(name="id_usuario")
 	Usuario propietario
 	
-	@OneToOne(cascade=CascadeType.REMOVE)
+	@OneToOne(cascade=CascadeType.REMOVE, fetch=FetchType.EAGER)
 	@JoinColumn(name="id_direccion")
 	Direccion direccion
 	
-	@OneToMany(mappedBy = "cliente")
+	@OneToMany(mappedBy = "cliente", fetch=FetchType.EAGER)
 	Set<Disponibilidad> disponibilidades = newHashSet
+	
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="id_contacto")
+	Set<Contacto> contactos = newHashSet
 	
 	new () { }
 	

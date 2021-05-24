@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull
 import javax.persistence.JoinColumn
 import javax.validation.constraints.Min
 import javax.persistence.ManyToOne
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Accessors
 @Entity(name="telefono")
@@ -32,6 +33,7 @@ class Telefono {
 	 */
 	@ManyToOne
 	@JoinColumn(name="id_contacto")
+	@JsonIgnore
 	Contacto contacto
 	
 	new() { }
