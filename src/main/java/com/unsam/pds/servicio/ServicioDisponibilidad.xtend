@@ -25,6 +25,8 @@ class ServicioDisponibilidad {
 		disponibilidadesSinCliente.forEach[ disponibilidad | 
 			cliente.disponibilidades.add(crearDisponibilidad(disponibilidad, cliente))
 		]
+		
+		repositorioDisponibilidad.deleteByCliente(cliente)
 		repositorioDisponibilidad.saveAll(cliente.disponibilidades)
 	}
 	

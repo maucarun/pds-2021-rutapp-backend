@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.unsam.pds.repositorio.RepositorioEmail
 import com.unsam.pds.dominio.entidades.Email
 import javax.transaction.Transactional
-import java.util.Set
+import com.unsam.pds.dominio.entidades.Contacto
 
 @Service
 class ServicioEmail {
@@ -16,9 +16,10 @@ class ServicioEmail {
 	def void crearNuevoEmail(Email nuevoEmail) {
 		repositorioEmails.save(nuevoEmail)
 	}
-	
+
 	@Transactional
-	def void crearNuevosEmails(Set<Email> emails) {
-		repositorioEmails.saveAll(emails)		
+	def void crearNuevosEmails(Contacto contacto) {
+		contacto.emails.forEach[ email | email.contacto = contacto ]
+		repositorioEmails.saveAll(contacto.emails)		
 	}
 }
