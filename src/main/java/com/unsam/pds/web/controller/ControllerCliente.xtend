@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.http.HttpStatus
 import com.unsam.pds.servicio.ServicioDireccion
 import javax.transaction.Transactional
+import org.springframework.web.bind.annotation.PutMapping
 
 @Controller
 @CrossOrigin("*")
@@ -32,6 +33,25 @@ class ControllerCliente {
 		servicioClientes.obtenerClientesPorUsuario(idUsuario)
 	}
 	
+	@GetMapping(path="/usuario/{idUsuario}/cliente/{idCliente}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	def Cliente obtenerClienteDelUsuarioPorId(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idCliente") Long idCliente) {
+		servicioClientes.obtenerClienteDelUsuarioPorId(idCliente, idUsuario)
+	}
+	
+	@PutMapping(path="/usuario/{idUsuario}/cliente/{idCliente}", consumes=MediaType.APPLICATION_JSON_VALUE) 
+	@ResponseBody
+	@ResponseStatus(code=HttpStatus.OK)
+	@Transactional
+	def void actualizarCLiente(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idCliente") Long idCliente, @RequestBody Cliente clienteModificado) {
+		try {
+			servicioDirecciones.actualizarDireccion(clienteModificado.direccion)
+			servicioClientes.actualizarCliente(clienteModificado, idCliente, idUsuario)
+			} catch (Exception e) {
+				println(e.message)
+			}
+	}
+		
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	@ResponseStatus(code=HttpStatus.CREATED)
@@ -40,4 +60,5 @@ class ControllerCliente {
 		servicioDirecciones.crearNuevaDireccion(nuevoCliente.direccion)
 		servicioClientes.crearNuevoCliente(nuevoCliente)
 	}
+	
 }
