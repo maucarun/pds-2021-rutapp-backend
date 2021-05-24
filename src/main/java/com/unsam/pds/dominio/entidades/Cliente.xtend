@@ -59,7 +59,7 @@ class Cliente {
 	@OneToMany(mappedBy = "cliente", fetch=FetchType.EAGER)
 	Set<Disponibilidad> disponibilidades = newHashSet
 	
-	@OneToMany(fetch=FetchType.EAGER)
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="id_contacto")
 	Set<Contacto> contactos = newHashSet
 	

@@ -13,6 +13,7 @@ import javax.persistence.OneToMany
 import java.util.Set
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.FetchType
+import javax.persistence.CascadeType
 
 @Accessors
 @Entity(name="contacto")
@@ -38,11 +39,11 @@ class Contacto {
 	@JsonIgnore
 	Cliente cliente
 	
-	@OneToMany(fetch=FetchType.EAGER)
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="id_email")
 	Set<Email> emails = newHashSet
 
-	@OneToMany(fetch=FetchType.EAGER)
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="id_telefono")
 	Set<Telefono> telefonos = newHashSet
 	
