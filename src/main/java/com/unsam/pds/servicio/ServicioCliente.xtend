@@ -12,6 +12,8 @@ class ServicioCliente {
 	
 	@Autowired RepositorioCliente repositorioClientes
 	
+	@Autowired ServicioContacto servicioContactos
+	@Autowired ServicioDisponibilidad servicioDisponibilidad
 	@Autowired ServicioUsuario servicioUsuario
 	
 	def List<Cliente> obtenerClientesPorUsuario(Long idUsuario) {
@@ -22,5 +24,9 @@ class ServicioCliente {
 	@Transactional
 	def void crearNuevoCliente(Cliente nuevoCliente) {
 		repositorioClientes.save(nuevoCliente)
+		
+		servicioContactos.crearNuevosContactos(nuevoCliente.contactos)
+		
+		servicioDisponibilidad.crearNuevaDisponibilidades(nuevoCliente)
 	}
 }
