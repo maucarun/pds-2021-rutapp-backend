@@ -35,7 +35,7 @@ class Contacto {
 	 *  un contacto pertenece a un cliente
 	 */
 	@ManyToOne
-	@JoinColumn(name="id_cliente")
+	@JoinColumn(name="id_cliente", nullable=false)
 	@JsonIgnore
 	Cliente cliente
 	
@@ -48,4 +48,18 @@ class Contacto {
 	Set<Telefono> telefonos = newHashSet
 	
 	new() { }
+	
+	def void setTelefonos(Set<Telefono> _telefonos) {
+		_telefonos.forEach[ telefono |
+			telefono.contacto = this
+		]
+		telefonos = _telefonos
+	}
+	
+	def void setEmails(Set<Email> _emails) {
+		_emails.forEach[ email |
+			email.contacto = this
+		]
+		emails = _emails
+	}
 }

@@ -31,7 +31,7 @@ class Email {
 	 *  un email pertenece a un contacto
 	 */
 	@ManyToOne
-	@JoinColumn(name="id_contacto")
+	@JoinColumn(name="id_contacto", nullable=false)
 	@JsonIgnore
 	Contacto contacto
 	

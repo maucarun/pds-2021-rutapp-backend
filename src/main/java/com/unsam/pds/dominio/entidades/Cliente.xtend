@@ -68,4 +68,11 @@ class Cliente {
 	def void agregarDisponibilidad(Disponibilidad nuevaDisponibilidad) {
 		disponibilidades.add(nuevaDisponibilidad)
 	}
+	
+	def void setContactos(Set<Contacto> _contactos){
+		_contactos.forEach[contacto |
+			contacto.cliente = this
+		]
+		contactos = _contactos
+	}
 }
