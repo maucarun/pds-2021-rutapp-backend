@@ -4,13 +4,16 @@ import org.springframework.stereotype.Service
 import org.springframework.beans.factory.annotation.Autowired
 import com.unsam.pds.repositorio.RepositorioDireccion
 import com.unsam.pds.dominio.entidades.Direccion
+import javax.transaction.Transactional
 
 @Service
 class ServicioDireccion {
 	
 	@Autowired RepositorioDireccion repositorioDirecciones
 	
+	@Transactional
 	def void crearNuevaDireccion(Direccion nuevaDireccion) {
 		repositorioDirecciones.save(nuevaDireccion)
 	}
+	
 }
