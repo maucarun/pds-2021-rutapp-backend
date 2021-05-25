@@ -13,7 +13,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class Usuario {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	Long id_usuario
+	Long idUsuario
 	
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)

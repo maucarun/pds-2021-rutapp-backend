@@ -8,6 +8,8 @@ import javax.persistence.GenerationType
 import javax.validation.constraints.NotNull
 import javax.persistence.Column
 import javax.validation.constraints.Positive
+import javax.persistence.OneToOne
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Accessors
 @Entity(name="direccion")
@@ -42,5 +44,11 @@ class Direccion {
 	@NotNull
 	@Column(nullable=false, unique=false)
 	Double longitud
+	
+	@OneToOne(mappedBy = "direccion")
+	@JsonIgnore
+	Cliente cliente
+	
+	new() { }
 	
 }

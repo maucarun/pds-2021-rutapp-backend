@@ -22,7 +22,7 @@ import javax.persistence.FetchType
 class Cliente {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	Long id_cliente
+	Long idCliente
 	
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
@@ -52,7 +52,7 @@ class Cliente {
 	@JoinColumn(name="id_usuario")
 	Usuario propietario
 	
-	@OneToOne(cascade=CascadeType.REMOVE, fetch=FetchType.EAGER)
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="id_direccion")
 	Direccion direccion
 	
@@ -74,5 +74,10 @@ class Cliente {
 			contacto.cliente = this
 		]
 		contactos = _contactos
+	}
+	
+	def void setDireccion(Direccion _direccion) {
+		direccion = _direccion
+		_direccion.cliente = this
 	}
 }
