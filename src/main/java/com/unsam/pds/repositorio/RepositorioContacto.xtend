@@ -5,4 +5,6 @@ import com.unsam.pds.dominio.entidades.Contacto
 
 interface RepositorioContacto extends CrudRepository <Contacto, Long> {
 	
+	def void deleteByCliente_idCliente (Long idCliente)
+	
 }
