@@ -40,12 +40,9 @@ class Contacto {
 	Cliente cliente
 	
 	@OneToMany(mappedBy="contacto", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-//	@JoinColumn(name="id_email")
-	
 	Set<Email> emails = newHashSet
 
 	@OneToMany(mappedBy="contacto", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-//	@JoinColumn(name="id_telefono")
 	Set<Telefono> telefonos = newHashSet
 	
 	new() { }
