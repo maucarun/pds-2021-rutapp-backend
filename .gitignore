@@ -38,3 +38,6 @@ build/
 bin
 generated*
 xtend-gen
+
+### BD configuracion ###
+application.yml

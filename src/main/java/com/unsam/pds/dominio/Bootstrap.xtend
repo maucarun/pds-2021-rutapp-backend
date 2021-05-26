@@ -35,6 +35,8 @@ import com.unsam.pds.servicio.ServicioProductoRemito
 import com.unsam.pds.dominio.entidades.ProductoRemito
 import com.unsam.pds.servicio.ServicioComprobanteEntrega
 import com.unsam.pds.dominio.entidades.ComprobanteEntrega
+import com.unsam.pds.repositorio.RepositorioUsuario
+import java.util.Set
 
 @Service
 class Bootstrap implements InitializingBean {
@@ -53,6 +55,7 @@ class Bootstrap implements InitializingBean {
 	@Autowired ServicioRemito			servicioRemitos
 	@Autowired ServicioTelefono 		servicioTelefonos
 	@Autowired ServicioUsuario 			servicioUsuarios
+	@Autowired RepositorioUsuario       repositorioUsuarios
 	
 	/** Crear dias */
 	DiaSemana lunes = new DiaSemana() => [ dia_semana = "Lunes" ]
@@ -200,51 +203,56 @@ class Bootstrap implements InitializingBean {
 	 * Es importante el orden en que se guardan los objetos
 	 */
 	def void init_app() {
+		var Set<Usuario> repoUsuarioVacio = repositorioUsuarios.findAll().toSet;
+		if (repoUsuarioVacio.length === 0){
 		/** Guardando usuarios */
-		servicioUsuarios.crearNuevoUsuario(homero)
-		servicioUsuarios.crearNuevoUsuario(bart)
-		/** Guardando dias */
-		servicioDiasSemana.crearNuevoDia(lunes)
-		servicioDiasSemana.crearNuevoDia(martes)
-		servicioDiasSemana.crearNuevoDia(miercoles)
-		servicioDiasSemana.crearNuevoDia(jueves)
-		servicioDiasSemana.crearNuevoDia(viernes)
-		servicioDiasSemana.crearNuevoDia(sabado)
-		servicioDiasSemana.crearNuevoDia(domingo)
-		/** Guardando productos */
-		servicioProductos.crearNuevoProducto(ventiladorHomero)
-		/** Guardando clientes */
-		servicioClientes.crearNuevoCliente(barMoe)
-		/** Guardando direcciones */
-		servicioDirecciones.crearNuevaDireccion(direccionMoe)
-		/** Guardando disponibilidad */
-		servicioDisponibilidad.crearNuevaDisponibilidad(disponibilidadMoeLunes)
-		/** Guardando contactos */
-		servicioContactos.crearNuevoContacto(moe)
-		/** Guardando telefonos */
-		servicioTelefonos.crearNuevoTelefono(telefonoMoe)
-		/** Guardando emails */
-		servicioEmails.crearNuevoEmail(emailMoe)
-		/** Guardando estados */
-		servicioEstados.crearNuevoEstado(estadoHdrSuspendida)
-		servicioEstados.crearNuevoEstado(estadoHdrPendiente)
-		servicioEstados.crearNuevoEstado(estadoRemitoCancelado)
-		servicioEstados.crearNuevoEstado(estadoRemitoPendiente)
-		/** Guardando hoja de rutas */
-		servicioHojaDeRuta.crearNuevaHdr(hojaDeRutaHoy)
-		servicioHojaDeRuta.crearNuevaHdr(hojaDeRutaManana)
-		/** Guardando remitos */
-		servicioRemitos.crearNuevoRemito(remitoMoe)
-		/** Guardar PRs */
-		servicioProductoRemitos.crearNuevoProductoRemito(productoRemitoMoe)
-		/** Actualizar remitos */
-		hojaDeRutaHoy.agregarRemito(remitoMoe)
-		comprobanteMoe.remito = remitoMoe
-		servicioHojaDeRuta.actualizarHdr(hojaDeRutaHoy.id_hoja_de_ruta, hojaDeRutaHoy)
-		remitoMoe.agregarProducto(productoRemitoMoe)
-		servicioRemitos.actualizarRemito(remitoMoe.id_remito, remitoMoe)
-		/** Guardar Comprobantes */
-		servicioComprobantes.crearNuevoComprobante(comprobanteMoe)
+			servicioUsuarios.crearNuevoUsuario(homero)
+			servicioUsuarios.crearNuevoUsuario(bart)
+			/** Guardando dias */
+			servicioDiasSemana.crearNuevoDia(lunes)
+			servicioDiasSemana.crearNuevoDia(martes)
+			servicioDiasSemana.crearNuevoDia(miercoles)
+			servicioDiasSemana.crearNuevoDia(jueves)
+			servicioDiasSemana.crearNuevoDia(viernes)
+			servicioDiasSemana.crearNuevoDia(sabado)
+			servicioDiasSemana.crearNuevoDia(domingo)
+			/** Guardando productos */
+			servicioProductos.crearNuevoProducto(ventiladorHomero)
+			/** Guardando clientes */
+			servicioClientes.crearNuevoCliente(barMoe)
+			/** Guardando direcciones */
+			servicioDirecciones.crearNuevaDireccion(direccionMoe)
+			/** Guardando disponibilidad */
+			servicioDisponibilidad.crearNuevaDisponibilidad(disponibilidadMoeLunes)
+			/** Guardando contactos */
+			servicioContactos.crearNuevoContacto(moe)
+			/** Guardando telefonos */
+			servicioTelefonos.crearNuevoTelefono(telefonoMoe)
+			/** Guardando emails */
+			servicioEmails.crearNuevoEmail(emailMoe)
+			/** Guardando estados */
+			servicioEstados.crearNuevoEstado(estadoHdrSuspendida)
+			servicioEstados.crearNuevoEstado(estadoHdrPendiente)
+			servicioEstados.crearNuevoEstado(estadoRemitoCancelado)
+			servicioEstados.crearNuevoEstado(estadoRemitoPendiente)
+			/** Guardando hoja de rutas */
+			servicioHojaDeRuta.crearNuevaHdr(hojaDeRutaHoy)
+			servicioHojaDeRuta.crearNuevaHdr(hojaDeRutaManana)
+			/** Guardando remitos */
+			servicioRemitos.crearNuevoRemito(remitoMoe)
+			/** Guardar PRs */
+			servicioProductoRemitos.crearNuevoProductoRemito(productoRemitoMoe)
+			/** Actualizar remitos */
+			hojaDeRutaHoy.agregarRemito(remitoMoe)
+			comprobanteMoe.remito = remitoMoe
+			servicioHojaDeRuta.actualizarHdr(hojaDeRutaHoy.id_hoja_de_ruta, hojaDeRutaHoy)
+			remitoMoe.agregarProducto(productoRemitoMoe)
+			servicioRemitos.actualizarRemito(remitoMoe.id_remito, remitoMoe)
+			/** Guardar Comprobantes */
+			servicioComprobantes.crearNuevoComprobante(comprobanteMoe)
+			
+		}
+		
 	}
 
 	override afterPropertiesSet() throws Exception {
