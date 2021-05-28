@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import java.util.Set
+import javax.persistence.FetchType
 
 @Accessors
 @Entity(name="hoja_de_ruta")
@@ -41,8 +42,7 @@ class HojaDeRuta {
 	@JoinColumn(name="id_estado")
 	EstadoHojaDeRuta estado
 	
-	@OneToMany
-	@JoinColumn(name="id_remito")
+	@OneToMany(mappedBy="hojaDeRuta", fetch=FetchType.EAGER)
 	Set<Remito> remitos = newHashSet
 	
 	new() { }

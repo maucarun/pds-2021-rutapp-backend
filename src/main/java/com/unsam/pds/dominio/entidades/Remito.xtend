@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne
 import java.util.Set
 import javax.persistence.OneToMany
 import java.time.LocalTime
+import com.fasterxml.jackson.annotation.JsonIgnore
+import javax.persistence.FetchType
 
 @Accessors
 @Entity(name="remito")
@@ -61,9 +63,10 @@ class Remito {
 	 */
 	@ManyToOne
 	@JoinColumn(name="id_hoja_de_ruta")
+	@JsonIgnore
 	HojaDeRuta hojaDeRuta
 	
-	@OneToMany(mappedBy = "remito")
+	@OneToMany(mappedBy = "remito", fetch=FetchType.EAGER)
 	Set<ProductoRemito> productos = newHashSet
 	
 	new () { }

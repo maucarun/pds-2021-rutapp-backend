@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn
 import javax.persistence.EmbeddedId
 import javax.persistence.MapsId
 import com.unsam.pds.dominio.keys.ProductoRemitoKey
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Accessors
 @Entity(name="producto_remito")
@@ -19,6 +20,7 @@ class ProductoRemito {
 	@ManyToOne
 	@MapsId("idRemito")
 	@JoinColumn(name="id_remito")
+	@JsonIgnore
 	Remito remito
 	
 	@ManyToOne
