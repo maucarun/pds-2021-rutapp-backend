@@ -9,6 +9,7 @@ import javassist.NotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.BeanUtils
+import java.util.List
 
 @Service
 class ServicioHojaDeRuta {
@@ -21,6 +22,10 @@ class ServicioHojaDeRuta {
 		repositorioHojaDeRutas.findById(idHdr).orElseThrow([
 			throw new NotFoundException("No existe el remito con el id " + idHdr)
 		])
+	}
+	
+	def List<HojaDeRuta> obtenerHojasDeRutaPorIdUsuario(Long idUsuario) {
+		repositorioHojaDeRutas.obtenerHojasDeRutaPorIdUsuario(idUsuario)
 	}
 	
 	@Transactional
@@ -36,4 +41,5 @@ class ServicioHojaDeRuta {
 		crearNuevaHdr(nuevaHdr)
 		logger.info("Hoja de ruta actualizada!")
 	}
+	
 }

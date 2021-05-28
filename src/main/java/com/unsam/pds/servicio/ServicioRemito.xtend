@@ -9,6 +9,7 @@ import javassist.NotFoundException
 import org.springframework.beans.BeanUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.List
 
 @Service
 class ServicioRemito {
@@ -21,6 +22,10 @@ class ServicioRemito {
 		repositorioRemitos.findById(idRemito).orElseThrow([
 			throw new NotFoundException("No existe el remito con el id " + idRemito)
 		])
+	}
+	
+	def List<Remito> obtenerRemitosPorIdUsuario(Long idUsuario) {
+		repositorioRemitos.findRemitosByIdUsuario(idUsuario)
 	}
 
 	@Transactional
