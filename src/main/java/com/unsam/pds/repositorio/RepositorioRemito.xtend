@@ -26,4 +26,5 @@ interface RepositorioRemito extends CrudRepository <Remito, Long> {
 		)")
 	def List<Remito> findRemitosByIdUsuario (@Param("usuarioId") Long idUsuario)
 	
+	def List<Remito> findByCliente_idClienteAndEstado_nombre(Long idCliente, String estadoPendiente)
 }
