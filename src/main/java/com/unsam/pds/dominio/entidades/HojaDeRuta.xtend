@@ -47,9 +47,11 @@ class HojaDeRuta {
 	
 	new() { }
 	
-	def void agregarRemito(Remito nuevoRemito) {
-		remitos.add(nuevoRemito)
-		nuevoRemito.asignarHojaDeRuta(this)
+	def void setRemitos(Set<Remito> _remitos) {
+		_remitos.forEach[remito | 
+			remito.hojaDeRuta = this
+		]
+		remitos = _remitos
 	}
 	
 }

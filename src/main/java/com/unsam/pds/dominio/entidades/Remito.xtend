@@ -56,10 +56,6 @@ class Remito {
 	/**
 	 * Un remito pertenece a una hdr
 	 *  una hdr puede tener muchos remitos
-	 * 
-	 * TODO: El remito deberia estar en la hdr
-	 *  porque al crear el remito tiene que tener asignada un hdr
-	 *  y esa no es la funcionalidad que le dimos en la app
 	 */
 	@ManyToOne
 	@JoinColumn(name="id_hoja_de_ruta")
@@ -72,15 +68,11 @@ class Remito {
 	new () { }
 	
 	def void calcularTotal() {
-		/** 
-		 * Alternativa
-		productos.forEach[ producto | 
-			total = total + producto.calcularSubCosto()
-		]
+		/** Alternativa
+		 productos.forEach[ producto | total = total + producto.calcularSubCosto() ]
 		 */
 		
-		/** En un fold va primero el total a devolver y luego el elemento de la lista 
-		 * */
+		/** En un fold va primero el total a devolver y luego el elemento de la lista */
 		total = productos.fold(0.0)[subTotal, producto | subTotal + producto.calcularSubCosto()]
 		
 	}
@@ -90,8 +82,14 @@ class Remito {
 		calcularTotal()
 	}
 	
-	def void asignarHojaDeRuta(HojaDeRuta hdr) {
-		hojaDeRuta = hdr		
+	def void setProductos(Set<ProductoRemito> _productos) {
+		_productos.forEach[producto | 
+			producto.remito = this
+		]
+		
+		productos = _productos
+		calcularTotal()
 	}
+	
 	
 }
