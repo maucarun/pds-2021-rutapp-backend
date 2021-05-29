@@ -8,6 +8,8 @@ interface RepositorioCliente extends CrudRepository <Cliente, Long> {
 	
 	def List<Cliente> findByPropietario_IdUsuario(Long idPropietario)
 	
+	def List<Cliente> findByPropietario_IdUsuarioAndActivo(Long idPropietario, Boolean estado)
+	
 	def Boolean existsByIdClienteAndPropietario_IdUsuario(Long idCliente, Long idPropietario)
 	
 }
