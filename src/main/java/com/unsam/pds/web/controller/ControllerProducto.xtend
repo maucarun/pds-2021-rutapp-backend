@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 @RequestMapping("/producto")
 class ControllerProducto {
 
-	Logger logger = LoggerFactory.getLogger(ControllerCliente)
+	Logger logger = LoggerFactory.getLogger(this.class)
 
 	@Autowired ServicioProducto servicioProducto
 
