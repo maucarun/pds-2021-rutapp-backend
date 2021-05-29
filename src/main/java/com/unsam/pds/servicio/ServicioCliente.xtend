@@ -13,12 +13,11 @@ import org.slf4j.LoggerFactory
 @Service
 class ServicioCliente {
 	
-	Logger logger = LoggerFactory.getLogger(ServicioCliente)
+	Logger logger = LoggerFactory.getLogger(this.class)
 	
 	
 	@Autowired RepositorioCliente repositorioClientes
 	
-//	@Autowired ServicioContacto servicioContactos
 	@Autowired ServicioDisponibilidad servicioDisponibilidad
 	
 	def Cliente obtenerClientePorId(Long idCliente) {
@@ -28,9 +27,14 @@ class ServicioCliente {
 		])
 	}
 	
-	def List<Cliente> obtenerClientesPorUsuario(Long idUsuario) {
-		logger.info("Obteniendo los clientes para el usuario id " + idUsuario)
+	def List<Cliente> obtenerClientesPorIdUsuario(Long idUsuario) {
+		logger.info("Obteniendo los clientes activos para el usuario id " + idUsuario)
 		repositorioClientes.findByPropietario_IdUsuario(idUsuario)
+	}
+	
+	def List<Cliente> obtenerClientesActivosPorUsuario(Long idUsuario) {
+		logger.info("Obteniendo los clientes activos para el usuario id " + idUsuario)
+		repositorioClientes.findByPropietario_IdUsuarioAndActivo(idUsuario, true)
 	}
 	
 	/** Devuelve true si el idUsuario pertenece al idCliente */
@@ -40,15 +44,20 @@ class ServicioCliente {
 	}
 	
 	/** 
-	 * Valida que el cliente tenga a ese propietario y 
-	 *  retorna el cliente
+	 * Valida que el cliente tenga a ese propietario y que esté activo 
+	 * Retorna el cliente
 	 */
-	def Cliente obtenerClienteDelUsuarioPorId(Long idCliente, Long idUsuario) {
+	def Cliente obtenerClienteActivoDelUsuarioPorId(Long idCliente, Long idUsuario) {
 		if (!validarClienteDelUsuarioPorId(idCliente, idUsuario))
 			throw new RuntimeException("El cliente con id " + idCliente + " no pertenece al usuario con id " + idUsuario)
-		obtenerClientePorId(idCliente)
+		
+		var cliente = obtenerClientePorId(idCliente)
+		
+		if (!cliente.activo)
+			throw new RuntimeException("El cliente con id " + idCliente + " no está activo")
+		
+		cliente
 	}
-	
 	
 	@Transactional
 	def void crearNuevoCliente(Cliente nuevoCliente) {
@@ -62,10 +71,17 @@ class ServicioCliente {
 	@Transactional
 	def void actualizarCliente(Cliente clienteModificado, Long idCliente, Long idUsuario) {
 		logger.info("Actualizando el cliente id " + idCliente)
-		obtenerClienteDelUsuarioPorId(idCliente, idUsuario)
+		obtenerClienteActivoDelUsuarioPorId(idCliente, idUsuario)
 		
 		crearNuevoCliente(clienteModificado)
 		logger.info("Cliente actualizado exitosamente!")
+	}
+	
+	@Transactional
+	def void desactivarCliente(Long idCliente, Long idUsuario) {
+		var cliente = obtenerClienteActivoDelUsuarioPorId(idCliente, idUsuario)
+		cliente.desactivarCliente
+		logger.info("Cliente desactivado exitosamente!")
 	}
 	
 }
