@@ -79,4 +79,9 @@ class Cliente {
 		direccion = _direccion
 		_direccion.cliente = this
 	}
+	
+	def void desactivarCliente() {
+		activo = false
+	}
+	
 }
