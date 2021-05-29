@@ -43,7 +43,7 @@ class ControllerRemito {
 		, @PathVariable("idCliente") Long idCliente
 	) {
 		logger.info("GET obtener todos los remitos pendientes del usuario id " + idUsuario + " del cliente id " + idCliente)
-		servicioClientes.obtenerClienteDelUsuarioPorId(idCliente, idUsuario)	
+		servicioClientes.obtenerClienteActivoDelUsuarioPorId(idCliente, idUsuario)	
 		servicioRemitos.obtenerRemitosPendientesPorIdCliente(idCliente)
 	}
 }
