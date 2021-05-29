@@ -19,29 +19,37 @@ import javax.transaction.Transactional
 import org.springframework.web.bind.annotation.PutMapping
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.web.bind.annotation.DeleteMapping
 
 @Controller
 @CrossOrigin("*")
 @RequestMapping("/cliente")
 class ControllerCliente {
 	
-	Logger logger = LoggerFactory.getLogger(ControllerCliente)
+	Logger logger = LoggerFactory.getLogger(this.class)
 	
 	@Autowired ServicioCliente servicioClientes
 	
+	@GetMapping(path="/activo/usuario/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	def List<Cliente> obtenerClientesActivosPorUsuarioId(@PathVariable("idUsuario") Long idUsuario) {
+		logger.info("GET obtener todos los clientes activos del usuario id " + idUsuario)
+		servicioClientes.obtenerClientesActivosPorUsuario(idUsuario)
+	}
+	
 	@GetMapping(path="/usuario/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	def List<Cliente> obtenerTodosLosClientesPorUsuario(@PathVariable("idUsuario") Long idUsuario) {
-		logger.info("GET obtener todos los clientes del usuario con el id " + idUsuario)
-		servicioClientes.obtenerClientesPorUsuario(idUsuario)
+	def List<Cliente> obtenerClientesPorUsuarioId(@PathVariable("idUsuario") Long idUsuario) {
+		logger.info("GET obtener todos los clientes del usuario id " + idUsuario)
+		servicioClientes.obtenerClientesPorIdUsuario(idUsuario)
 	}
 	
 	@GetMapping(path="/usuario/{idUsuario}/cliente/{idCliente}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	def Cliente obtenerClienteDelUsuarioPorId(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idCliente") Long idCliente) {
+	def Cliente obtenerClienteActivoDelUsuarioPorUsuarioIdYClienteId(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idCliente") Long idCliente) {
 		logger.info("GET obtener el cliente con id " + idCliente + 
 			" del usuario con el id " + idUsuario)
-		servicioClientes.obtenerClienteDelUsuarioPorId(idCliente, idUsuario)
+		servicioClientes.obtenerClienteActivoDelUsuarioPorId(idCliente, idUsuario)
 	}
 	
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
@@ -62,6 +70,17 @@ class ControllerCliente {
 		logger.info("PUT actualizar el cliente con id " + idCliente + 
 			" del usuario con el id " + idUsuario)
 		servicioClientes.actualizarCliente(clienteModificado, idCliente, idUsuario)
+	}
+	
+	@DeleteMapping(path="/usuario/{idUsuario}/cliente/{idCliente}")
+	@ResponseStatus(code=HttpStatus.OK)
+	@Transactional
+	def void desactivarCliente(
+		  @PathVariable("idUsuario") Long idUsuario
+		, @PathVariable("idCliente") Long idCliente
+	) {
+		logger.info("DELETE desactivar el cliente con id " + idCliente)
+		servicioClientes.desactivarCliente(idCliente, idUsuario)
 	}
 	
 }
