@@ -27,6 +27,10 @@ class ServicioRemito {
 	def List<Remito> obtenerRemitosPorIdUsuario(Long idUsuario) {
 		repositorioRemitos.findRemitosByIdUsuario(idUsuario)
 	}
+	
+	def List<Remito> obtenerRemitosPendientesPorIdCliente(Long idCliente) {
+		repositorioRemitos.findByCliente_idClienteAndEstado_nombre(idCliente, "Pendiente")
+	}
 
 	@Transactional
 	def void crearNuevoRemito(Remito nuevoRemito) {
