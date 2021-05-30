@@ -1,26 +1,25 @@
 package com.unsam.pds.web.controller
 
-import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.beans.factory.annotation.Autowired
-import com.unsam.pds.servicio.ServicioCliente
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.ResponseBody
-import java.util.List
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.http.HttpStatus
-import javax.transaction.Transactional
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.http.MediaType
+import org.springframework.http.HttpStatus
+import java.util.List
+import javax.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import com.unsam.pds.servicio.ServicioProducto
 import com.unsam.pds.dominio.entidades.Producto
-import org.springframework.web.bind.annotation.DeleteMapping
 
 @Controller
 @CrossOrigin("*")

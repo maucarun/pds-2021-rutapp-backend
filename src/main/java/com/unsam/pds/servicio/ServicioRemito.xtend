@@ -17,6 +17,7 @@ class ServicioRemito {
 	Logger logger = LoggerFactory.getLogger(ServicioRemito)
 
 	@Autowired RepositorioRemito repositorioRemitos
+	@Autowired ServicioProductoRemito servicioProductoRemito
 
 	def Remito obtenerRemitoPorId(Long idRemito) {
 		repositorioRemitos.findById(idRemito).orElseThrow([
@@ -31,19 +32,18 @@ class ServicioRemito {
 	def List<Remito> obtenerRemitosPendientesPorIdCliente(Long idCliente) {
 		repositorioRemitos.findByCliente_idClienteAndEstado_nombre(idCliente, "Pendiente")
 	}
-
-	@Transactional
-	def void crearNuevoRemito(Remito nuevoRemito) {
-		repositorioRemitos.save(nuevoRemito)
+	
+	def void actualizarOCrearRemito( Remito remito){
+		repositorioRemitos.save(remito)
+		servicioProductoRemito.guardarProductoRemito(remito.productos)
 	}
-
-	@Transactional
-	def void actualizarRemito(Long idRemito, Remito nuevoRemito) {
-		var remitoAModificar = obtenerRemitoPorId(idRemito)
-		logger.info("Actualizando el remito del " + remitoAModificar.fecha + " para el cliente " +
-			remitoAModificar.cliente.nombre)
-		BeanUtils.copyProperties(nuevoRemito, remitoAModificar)
-		crearNuevoRemito(remitoAModificar)
-		logger.info("Remito actualizado!")
-	}
+//	@Transactional
+//	def void actualizarRemito(Long idRemito, Remito nuevoRemito) {
+//		var remitoAModificar = obtenerRemitoPorId(idRemito)
+//		logger.info("Actualizando el remito del " + remitoAModificar.fecha + " para el cliente " +
+//			remitoAModificar.cliente.nombre)
+//		BeanUtils.copyProperties(nuevoRemito, remitoAModificar)
+//		crearNuevoRemito(remitoAModificar)
+//		logger.info("Remito actualizado!")
+//	}
 }

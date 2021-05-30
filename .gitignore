@@ -40,4 +40,8 @@ generated*
 xtend-gen
 
 ### BD configuracion ###
-application.yml
+/src/main/resources/application.yml
+
+# Ignore application configuration
+/config/application
+*.yml
