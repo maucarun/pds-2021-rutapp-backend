@@ -20,6 +20,8 @@ import com.unsam.pds.servicio.ServicioUsuario
 import com.unsam.pds.dominio.entidades.Usuario
 import java.time.format.DateTimeParseException
 import org.springframework.web.bind.annotation.DeleteMapping
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Controller
 @CrossOrigin("*")
@@ -30,13 +32,15 @@ class ControllerUsuario {
 
 	@Autowired ServicioUsuario servicioUsuarios
 
+	@JsonView(View.Usuario.Perfil)
 	@GetMapping(path="/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def Usuario obtenerUsuarioPorId(@PathVariable("idUsuario") Long idUsuario) {
 		logger.info("GET obtener el usuario con id " + idUsuario)
 		servicioUsuarios.obtenerUsuarioPorId(idUsuario)
 	}
-
+	
+	@JsonView(View.Usuario.Perfil)
 	@PostMapping(path="/login", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
 	@ResponseBody

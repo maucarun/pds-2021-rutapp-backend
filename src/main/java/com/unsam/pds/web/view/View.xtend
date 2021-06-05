@@ -5,8 +5,6 @@ class View {
 
 		static interface Perfil { }
 		
-		static interface Login { }
-		
 	}
 	
 	static interface Producto {
