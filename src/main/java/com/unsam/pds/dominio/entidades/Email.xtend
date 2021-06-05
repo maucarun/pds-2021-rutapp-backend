@@ -10,18 +10,24 @@ import javax.persistence.Column
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
+import javax.persistence.FetchType
 
 @Accessors
 @Entity(name="email")
 class Email {
 	
+	@JsonView(View.Cliente.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_email
 	
+	@JsonView(View.Cliente.Perfil)
 	@javax.validation.constraints.Email
 	@Column(length=50, nullable=false, unique=false)
 	String direccion
 	
+	@JsonView(View.Cliente.Perfil)
 	@NotNull
 	@Column(nullable=false, unique=false)
 	Boolean esPrincipal
@@ -30,7 +36,7 @@ class Email {
 	 * Un contacto tiene muchos emails
 	 *  un email pertenece a un contacto
 	 */
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_contacto", nullable=false)
 	@JsonIgnore
 	Contacto contacto

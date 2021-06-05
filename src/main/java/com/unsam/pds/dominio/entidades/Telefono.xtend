@@ -11,18 +11,24 @@ import javax.persistence.JoinColumn
 import javax.validation.constraints.Min
 import javax.persistence.ManyToOne
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
+import javax.persistence.FetchType
 
 @Accessors
 @Entity(name="telefono")
 class Telefono {
 	
+	@JsonView(View.Cliente.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_telefono
 	
+	@JsonView(View.Cliente.Perfil)
 	@Min(value=8)
 	@Column(length=20, nullable=false, unique=false)
 	String telefono
 	
+	@JsonView(View.Cliente.Perfil)
 	@NotNull
 	@Column(nullable=false, unique=false)
 	Boolean esPrincipal
@@ -31,7 +37,7 @@ class Telefono {
 	 * Un contacto tiene muchos telefonos
 	 *  un telefono pertenece a un contacto
 	 */
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_contacto", nullable=false)
 	@JsonIgnore
 	Contacto contacto

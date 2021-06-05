@@ -10,26 +10,34 @@ import javax.persistence.Column
 import javax.validation.constraints.Positive
 import javax.persistence.OneToOne
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
+import javax.persistence.FetchType
 
 @Accessors
 @Entity(name="direccion")
 class Direccion {
 	
+	@JsonView(View.Cliente.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_direccion
 	
+	@JsonView(View.Cliente.Perfil)
 	@NotNull
 	@Column(length=250, nullable=false, unique=false)
 	String calle
 	
+	@JsonView(View.Cliente.Perfil)
 	@Positive(message="La altura debe ser positiva")
 	@Column(nullable=false, unique=false)
 	Integer altura
 	
+	@JsonView(View.Cliente.Perfil)
 	@NotNull
 	@Column(length=100, nullable=false, unique=false)
 	String localidad
 	
+	@JsonView(View.Cliente.Perfil)
 	@NotNull
 	@Column(length=100, nullable=false, unique=false)
 	String provincia
@@ -45,7 +53,7 @@ class Direccion {
 	@Column(nullable=false, unique=false)
 	Double longitud
 	
-	@OneToOne(mappedBy = "direccion")
+	@OneToOne(mappedBy = "direccion", fetch=FetchType.LAZY)
 	@JsonIgnore
 	Cliente cliente
 	

@@ -20,9 +20,9 @@ class ServicioCliente {
 	
 	@Autowired ServicioDisponibilidad servicioDisponibilidad
 	
-	def Cliente obtenerClientePorId(Long idCliente) {
-		logger.info("Obtener el cliente con el " + idCliente)
-		repositorioClientes.findById(idCliente).orElseThrow([
+	def Cliente obtenerClienteActivoPorId(Long idCliente) {
+		logger.info("Obtener el id cliente " + idCliente)
+		repositorioClientes.findByIdClienteAndActivo(idCliente, true).orElseThrow([
 			throw new NotFoundException("No existe el cliente con el id " + idCliente)
 		])
 	}
@@ -51,12 +51,7 @@ class ServicioCliente {
 		if (!validarClienteDelUsuarioPorId(idCliente, idUsuario))
 			throw new RuntimeException("El cliente con id " + idCliente + " no pertenece al usuario con id " + idUsuario)
 		
-		var cliente = obtenerClientePorId(idCliente)
-		
-		if (!cliente.activo)
-			throw new RuntimeException("El cliente con id " + idCliente + " no está activo")
-		
-		cliente
+		obtenerClienteActivoPorId(idCliente)
 	}
 	
 	@Transactional

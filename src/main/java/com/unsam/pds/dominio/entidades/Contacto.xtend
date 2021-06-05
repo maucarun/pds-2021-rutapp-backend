@@ -14,18 +14,23 @@ import java.util.Set
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.FetchType
 import javax.persistence.CascadeType
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Accessors
 @Entity(name="contacto")
 class Contacto {
 	
+	@JsonView(View.Cliente.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_contacto
 	
+	@JsonView(View.Cliente.Perfil)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
 	
+	@JsonView(View.Cliente.Perfil)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String apellido
@@ -34,15 +39,17 @@ class Contacto {
 	 * Un cliente tiene muchos contactos
 	 *  un contacto pertenece a un cliente
 	 */
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_cliente", nullable=false)
 	@JsonIgnore
 	Cliente cliente
 	
-	@OneToMany(mappedBy="contacto", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JsonView(View.Cliente.Perfil)
+	@OneToMany(mappedBy="contacto", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Email> emails = newHashSet
 
-	@OneToMany(mappedBy="contacto", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JsonView(View.Cliente.Perfil)
+	@OneToMany(mappedBy="contacto", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Telefono> telefonos = newHashSet
 	
 	new() { }

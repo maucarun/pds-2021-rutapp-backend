@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.DeleteMapping
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Controller
 @CrossOrigin("*")
@@ -30,6 +32,7 @@ class ControllerCliente {
 	
 	@Autowired ServicioCliente servicioClientes
 	
+	@JsonView(View.Cliente.Lista)
 	@GetMapping(path="/activo/usuario/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def List<Cliente> obtenerClientesActivosPorUsuarioId(@PathVariable("idUsuario") Long idUsuario) {
@@ -37,6 +40,7 @@ class ControllerCliente {
 		servicioClientes.obtenerClientesActivosPorUsuario(idUsuario)
 	}
 	
+	@JsonView(View.Cliente.Lista)
 	@GetMapping(path="/usuario/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def List<Cliente> obtenerClientesPorUsuarioId(@PathVariable("idUsuario") Long idUsuario) {
@@ -44,6 +48,7 @@ class ControllerCliente {
 		servicioClientes.obtenerClientesPorIdUsuario(idUsuario)
 	}
 	
+	@JsonView(View.Cliente.Perfil)
 	@GetMapping(path="/usuario/{idUsuario}/cliente/{idCliente}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def Cliente obtenerClienteActivoDelUsuarioPorUsuarioIdYClienteId(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idCliente") Long idCliente) {

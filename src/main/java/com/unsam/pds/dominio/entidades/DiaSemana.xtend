@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.validation.constraints.NotNull
 import javax.persistence.Column
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Accessors
 @Entity(name="dia_semana")
@@ -15,6 +17,7 @@ class DiaSemana {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_dia_semana
 	
+	@JsonView(View.Cliente.Perfil)
 	@NotNull
 	@Column(length=12, nullable=false, unique=true)
 	String dia_semana
