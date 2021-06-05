@@ -10,28 +10,36 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import javax.validation.constraints.Positive
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.FetchType
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Accessors
 @Entity(name="producto")
 class Producto {
 	
+	@JsonView(View.Producto.Perfil, View.Producto.Lista)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	Long id_producto
+	Long idProducto
 	
+	@JsonView(View.Producto.Perfil, View.Producto.Lista)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
 	
+	@JsonView(View.Producto.Perfil)
 	@Positive(message="El precio debe ser positivo")
 	@Column(nullable=false, unique=false, name="precio_unitario")
 	Double precio_unitario
 	
+	@JsonView(View.Producto.Perfil)
 	@Column(length=250, nullable=true, unique=false)
 	String descripcion
 	
 	/**
 	 * TODO: vamos a tener las imagenes en un servidor local?
 	 */
+ 	@JsonView(View.Producto.Perfil)
 	@Column(length=100, nullable=true, unique=false)
 	String url_imagen
 	
@@ -43,13 +51,13 @@ class Producto {
 	 * Un usuario puede tener muchos productos
 	 *  El producto pertenece a un usuario
 	 */
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="id_usuario")
 	Usuario propietario
 	
 	new() { }
 	
-	def void eliminarProducto() {
+	def void desactivarProducto() {
 		activo = false
 	}
 	

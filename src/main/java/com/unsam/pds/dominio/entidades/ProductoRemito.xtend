@@ -44,7 +44,7 @@ class ProductoRemito {
 	 *  ya que hibernate no puede hacer el seter id por reflection
 	 */
 	new(Remito _remito, Producto _producto, Integer _cantidad, Double _precioUnitario, Double _descuento) {
-		idProductoRemito = new ProductoRemitoKey(_producto.id_producto, _remito.id_remito)
+		idProductoRemito = new ProductoRemitoKey(_producto.idProducto, _remito.id_remito)
 		remito = _remito
 		producto = _producto
 		cantidad = _cantidad

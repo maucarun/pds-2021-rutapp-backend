@@ -20,6 +20,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import com.unsam.pds.servicio.ServicioProducto
 import com.unsam.pds.dominio.entidades.Producto
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Controller
 @CrossOrigin("*")
@@ -29,41 +31,44 @@ class ControllerProducto {
 	Logger logger = LoggerFactory.getLogger(this.class)
 
 	@Autowired ServicioProducto servicioProducto
-
-	// GET ALL PRODUCTOS
+	@JsonView(View.Producto.Lista)
 	@GetMapping(path="/all/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	def List<Producto> obtenerTodosLosProductosPorUsuario(@PathVariable("idUsuario") Long idUsuario) {
-		servicioProducto.obtenerTodosLosProductosPorUsuario(idUsuario)
+	def List<Producto> obtenerProductosActivosPorUsuario(@PathVariable("idUsuario") Long idUsuario) {
+		logger.info("GET - Obtener todos los productos activos del id usuario " + idUsuario)
+		servicioProducto.obtenerProductosActivosPorUsuario(idUsuario)
 	}
-
-	// GET PRODUCTO
+	
+	@JsonView(View.Producto.Perfil)
 	@GetMapping(path="/{idProducto}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def Producto obtenerProducto(@PathVariable("idProducto") Long idProducto) {
-		servicioProducto.obtenerUnProdutoPorId(idProducto)
+		logger.info("GET - Obtener el producto con id producto " + idProducto)
+		servicioProducto.obtenerProductoActivoPorId(idProducto)
 	}
 
 	// POST PRODUCTO
 	@PostMapping(path="", consumes=MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(code=HttpStatus.OK)
+	@ResponseStatus(code=HttpStatus.CREATED)
 	@Transactional
 	def void crearProducto(@RequestBody Producto producto) {
-		servicioProducto.crearNuevoProducto(producto)
+		servicioProducto.guardarProducto(producto)
 	}
 
 	// PUT PRODUCTO
-	@PutMapping(path="", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(path="/{idProducto}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
 	@Transactional
-	def void actualizarProducto(@RequestBody Producto producto) {
-		servicioProducto.actualizarProducto(producto)
+	def void actualizarProducto(@PathVariable("idProducto") Long idProducto, 
+		@RequestBody Producto producto
+	) {
+		servicioProducto.actualizarProducto(idProducto, producto)
 	}
 
 	// DELETE PRODUCTO
 	@DeleteMapping(path="/{idProducto}", produces=MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+	@ResponseStatus(code=HttpStatus.OK)
 	def void eliminarProducto(@PathVariable("idProducto") Long idProducto) {
-		servicioProducto.eliminarUnProdutoPorId(idProducto)
+		servicioProducto.desactivarProduto(idProducto)
 	}
 }
