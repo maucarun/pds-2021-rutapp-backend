@@ -217,7 +217,7 @@ class Bootstrap implements InitializingBean {
 			servicioDiasSemana.crearNuevoDia(sabado)
 			servicioDiasSemana.crearNuevoDia(domingo)
 			/** Guardando productos */
-			servicioProductos.crearNuevoProducto(ventiladorHomero)
+			servicioProductos.guardarProducto(ventiladorHomero)
 			/** Guardando clientes */
 			servicioClientes.crearNuevoCliente(barMoe)
 			/** Guardando direcciones */
