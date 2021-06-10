@@ -8,9 +8,10 @@ import javax.persistence.GenerationType
 import javax.validation.constraints.NotNull
 import javax.persistence.Column
 import javax.validation.constraints.Size
-import java.time.LocalTime
 import javax.persistence.OneToOne
 import javax.persistence.JoinColumn
+import java.time.LocalDateTime
+import javax.persistence.FetchType
 
 @Accessors
 @Entity(name="comprobante_entrega")
@@ -28,10 +29,10 @@ class ComprobanteEntrega {
 	String dni
 	
 	@NotNull
-	@Column(nullable=false, unique=false, name="hora_entrega")
-	LocalTime hora_entrega
+	@Column(nullable=false, unique=false)
+	LocalDateTime fechaHoraEntrega
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_remito", nullable = false, unique = true)
 	Remito remito
 	

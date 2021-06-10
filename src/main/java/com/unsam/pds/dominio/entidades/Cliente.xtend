@@ -27,7 +27,7 @@ class Cliente {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long idCliente
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Remito.Lista)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre

@@ -15,17 +15,23 @@ import javax.persistence.OneToMany
 import java.time.LocalTime
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.FetchType
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
+import javax.persistence.OneToOne
+import javax.persistence.CascadeType
 
 @Accessors
 @Entity(name="remito")
 class Remito {
 	
+	@JsonView(View.Remito.Lista)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_remito
 	
 	@Column(nullable=false, unique=false)
-	LocalDate fecha
+	LocalDate fechaDeCreacion
 	
+	@JsonView(View.Remito.Lista)
 	@PositiveOrZero(message="El total no puede ser negativo")
 	@Column(nullable=false, unique=false)
 	Double total = 0.0
@@ -41,7 +47,8 @@ class Remito {
 	 * Un cliente puede tener muchos remitos
 	 *  Un remito pertenece a un solo cliente
 	 */
-	@ManyToOne
+	@JsonView(View.Remito.Lista)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_cliente")
 	Cliente cliente
 	
@@ -49,7 +56,7 @@ class Remito {
 	 * Un estado puede estar en muchos remitos
 	 *  Un remito tiene un solo estado
 	 */
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_estado")
 	EstadoRemito estado
 	
@@ -57,13 +64,16 @@ class Remito {
 	 * Un remito pertenece a una hdr
 	 *  una hdr puede tener muchos remitos
 	 */
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_hoja_de_ruta")
 	@JsonIgnore
 	HojaDeRuta hojaDeRuta
 	
-	@OneToMany(mappedBy = "remito", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "remito", fetch=FetchType.LAZY)
 	Set<ProductoRemito> productos = newHashSet
+	
+	@OneToOne(mappedBy = "remito", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	ComprobanteEntrega comprobante
 	
 	new () { }
 	
@@ -91,5 +101,20 @@ class Remito {
 		calcularTotal()
 	}
 	
+	def void setComprobante(ComprobanteEntrega _comprobante) {
+		comprobante = _comprobante
+		_comprobante.remito = this
+	}
+	
+	@JsonView(View.Remito.Lista)
+	def void cantidadDeItems() {
+		productos.size
+	}
+	
+	@JsonView(View.Remito.Lista)
+	def LocalDate fechaEntregado() {
+		if (comprobante !== null)
+			comprobante.fechaHoraEntrega.toLocalDate
+	}
 	
 }
