@@ -21,4 +21,11 @@ class View {
 		
 		static interface Lista { }
 	}
+	
+	static interface Remito {
+		
+		static interface Perfil { }
+		
+		static interface Lista { }
+	}
 }
