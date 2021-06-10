@@ -182,7 +182,7 @@ class Bootstrap implements InitializingBean {
 	
 	/** Crear remitos */
 	Remito remitoMoe = new Remito() => [
-		fecha = fechaDeHoy
+		fechaDeCreacion = fechaDeHoy
 		motivo = ""
 		tiempo_espera = diezMinutos
 		cliente = barMoe
@@ -196,7 +196,7 @@ class Bootstrap implements InitializingBean {
 	ComprobanteEntrega comprobanteMoe = new ComprobanteEntrega() => [
 		nombre_completo = moe.nombre.concat(" " + moe.apellido)
 		dni = "11222333"
-		hora_entrega = LocalTime.now
+		setFechaHoraEntrega = LocalDateTime.now
 	]
 	
 	/**
@@ -245,13 +245,13 @@ class Bootstrap implements InitializingBean {
 			servicioProductoRemitos.crearNuevoProductoRemito(productoRemitoMoe)
 			/** Actualizar remitos */
 			hojaDeRutaHoy.remitos = #[remitoMoe].toSet
-			comprobanteMoe.remito = remitoMoe
 			servicioHojaDeRuta.actualizarHdr(hojaDeRutaHoy.id_hoja_de_ruta, hojaDeRutaHoy)
 			remitoMoe.productos = #[productoRemitoMoe].toSet
-			servicioRemitos.actualizarOCrearRemito(remitoMoe)
-//			servicioRemitos.actualizarRemito(remitoMoe.id_remito, remitoMoe)
+			remitoMoe.comprobante = comprobanteMoe
 			/** Guardar Comprobantes */
 			servicioComprobantes.crearNuevoComprobante(comprobanteMoe)
+			servicioRemitos.actualizarOCrearRemito(remitoMoe)
+//			servicioRemitos.actualizarRemito(remitoMoe.id_remito, remitoMoe)
 			
 		}
 		
