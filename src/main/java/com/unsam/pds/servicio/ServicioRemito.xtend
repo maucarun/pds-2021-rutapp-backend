@@ -40,7 +40,7 @@ class ServicioRemito {
 //	@Transactional
 //	def void actualizarRemito(Long idRemito, Remito nuevoRemito) {
 //		var remitoAModificar = obtenerRemitoPorId(idRemito)
-//		logger.info("Actualizando el remito del " + remitoAModificar.fecha + " para el cliente " +
+//		logger.info("Actualizando el remito del " + remitoAModificar.fechaDeCreacion + " para el cliente " +
 //			remitoAModificar.cliente.nombre)
 //		BeanUtils.copyProperties(nuevoRemito, remitoAModificar)
 //		crearNuevoRemito(remitoAModificar)

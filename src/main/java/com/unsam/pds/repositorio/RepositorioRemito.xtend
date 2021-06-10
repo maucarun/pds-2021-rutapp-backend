@@ -5,6 +5,7 @@ import com.unsam.pds.dominio.entidades.Remito
 import java.util.List
 import org.springframework.data.repository.query.Param
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.jpa.repository.EntityGraph
 
 interface RepositorioRemito extends CrudRepository <Remito, Long> {
 	
@@ -26,5 +27,6 @@ interface RepositorioRemito extends CrudRepository <Remito, Long> {
 		)")
 	def List<Remito> findRemitosByIdUsuario (@Param("usuarioId") Long idUsuario)
 	
+	@EntityGraph(attributePaths=#["cliente","comprobante"])
 	def List<Remito> findByCliente_idClienteAndEstado_nombre(Long idCliente, String estadoPendiente)
 }

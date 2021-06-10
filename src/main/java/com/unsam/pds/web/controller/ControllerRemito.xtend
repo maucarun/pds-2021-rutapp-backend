@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -21,6 +20,8 @@ import org.slf4j.LoggerFactory
 import com.unsam.pds.servicio.ServicioRemito
 import com.unsam.pds.dominio.entidades.Remito
 import org.springframework.web.bind.annotation.RequestParam
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Controller
 @CrossOrigin("*")
@@ -39,6 +40,7 @@ class ControllerRemito {
 //	}
 
 	// GET REMITOS por id cliente y estado pendiente
+	@JsonView(View.Remito.Lista)
 	@GetMapping(path="/all", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def List<Remito> obtenerRemito(@RequestParam("idCliente") Long idCliente, @RequestParam("estado") String estado) {
