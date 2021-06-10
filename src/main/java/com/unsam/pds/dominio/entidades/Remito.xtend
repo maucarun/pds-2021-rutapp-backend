@@ -24,14 +24,14 @@ import javax.persistence.CascadeType
 @Entity(name="remito")
 class Remito {
 	
-	@JsonView(View.Remito.Lista)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_remito
 	
 	@Column(nullable=false, unique=false)
 	LocalDate fechaDeCreacion
 	
-	@JsonView(View.Remito.Lista)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil)
 	@PositiveOrZero(message="El total no puede ser negativo")
 	@Column(nullable=false, unique=false)
 	Double total = 0.0
@@ -47,7 +47,7 @@ class Remito {
 	 * Un cliente puede tener muchos remitos
 	 *  Un remito pertenece a un solo cliente
 	 */
-	@JsonView(View.Remito.Lista)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_cliente")
 	Cliente cliente
@@ -69,7 +69,9 @@ class Remito {
 	@JsonIgnore
 	HojaDeRuta hojaDeRuta
 	
-	@OneToMany(mappedBy = "remito", fetch=FetchType.LAZY)
+	@JsonView(View.Remito.Perfil)
+//	@JsonIgnore
+	@OneToMany(mappedBy = "remito", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<ProductoRemito> productos = newHashSet
 	
 	@OneToOne(mappedBy = "remito", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
@@ -106,8 +108,8 @@ class Remito {
 		_comprobante.remito = this
 	}
 	
-	@JsonView(View.Remito.Lista)
-	def void cantidadDeItems() {
+	@JsonView(View.Remito.Lista, View.Remito.Perfil)
+	def Integer cantidadDeItems() {
 		productos.size
 	}
 	

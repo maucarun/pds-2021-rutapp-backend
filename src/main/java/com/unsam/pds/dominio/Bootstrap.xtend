@@ -246,7 +246,9 @@ class Bootstrap implements InitializingBean {
 			/** Actualizar remitos */
 			hojaDeRutaHoy.remitos = #[remitoMoe].toSet
 			servicioHojaDeRuta.actualizarHdr(hojaDeRutaHoy.id_hoja_de_ruta, hojaDeRutaHoy)
-			remitoMoe.productos = #[productoRemitoMoe].toSet
+//			remitoMoe.productos = #[productoRemitoMoe].toSet
+//			remitoMoe.setProductos(#{productoRemitoMoe})
+			remitoMoe.agregarProducto(productoRemitoMoe)
 			remitoMoe.comprobante = comprobanteMoe
 			/** Guardar Comprobantes */
 			servicioComprobantes.crearNuevoComprobante(comprobanteMoe)

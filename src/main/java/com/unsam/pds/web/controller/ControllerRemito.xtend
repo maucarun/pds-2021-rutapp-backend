@@ -49,6 +49,7 @@ class ControllerRemito {
 	}
 	
 	// GET REMITO por id remito
+	@JsonView(View.Remito.Perfil)
 	@GetMapping(path="/{idRemito}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def Remito obtenerRemito(@PathVariable("idRemito") Long idRemito) {

@@ -9,11 +9,15 @@ import javax.persistence.EmbeddedId
 import javax.persistence.MapsId
 import com.unsam.pds.dominio.keys.ProductoRemitoKey
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
+import javax.persistence.FetchType
+import javax.persistence.CascadeType
 
 @Accessors
 @Entity(name="producto_remito")
 class ProductoRemito {
-	
+	@JsonView(View.Remito.Perfil)
 	@EmbeddedId
 	ProductoRemitoKey idProductoRemito;
 	
@@ -23,11 +27,13 @@ class ProductoRemito {
 	@JsonIgnore
 	Remito remito
 	
-	@ManyToOne
+	@JsonView(View.Remito.Perfil, View.Producto.Lista)
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@MapsId("idProducto")
 	@JoinColumn(name="id_producto")
 	Producto producto
 	
+	@JsonView(View.Remito.Perfil)// TODO Puede borrarse si no es necesario
 	@Column(nullable=false, unique=false)
 	Integer cantidad
 	

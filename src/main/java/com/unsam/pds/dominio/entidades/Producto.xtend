@@ -18,16 +18,16 @@ import com.unsam.pds.web.view.View
 @Entity(name="producto")
 class Producto {
 	
-	@JsonView(View.Producto.Perfil, View.Producto.Lista)
+	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Remito.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long idProducto
-	
-	@JsonView(View.Producto.Perfil, View.Producto.Lista)
+
+	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Remito.Perfil)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
 	
-	@JsonView(View.Producto.Perfil)
+	@JsonView(View.Producto.Perfil, View.Remito.Perfil)
 	@Positive(message="El precio debe ser positivo")
 	@Column(nullable=false, unique=false, name="precio_unitario")
 	Double precio_unitario
