@@ -70,7 +70,6 @@ class Remito {
 	HojaDeRuta hojaDeRuta
 	
 	@JsonView(View.Remito.Perfil)
-//	@JsonIgnore
 	@OneToMany(mappedBy = "remito", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<ProductoRemito> productos = newHashSet
 	
