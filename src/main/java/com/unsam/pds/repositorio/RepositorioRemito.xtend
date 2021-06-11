@@ -28,7 +28,7 @@ interface RepositorioRemito extends CrudRepository <Remito, Long> {
 		)")
 	def List<Remito> findRemitosByIdUsuario (@Param("usuarioId") Long idUsuario)
 	
-	@EntityGraph(attributePaths=#["cliente","comprobante"])
+	@EntityGraph(attributePaths=#["cliente","productos","comprobante"])
 	def List<Remito> findByCliente_idClienteAndEstado_nombre(Long idCliente, String estadoPendiente)
 	
 	@EntityGraph(attributePaths=#["cliente","productos","productos.producto"])
