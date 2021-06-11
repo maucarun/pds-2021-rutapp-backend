@@ -12,23 +12,28 @@ import javax.persistence.OneToOne
 import javax.persistence.JoinColumn
 import java.time.LocalDateTime
 import javax.persistence.FetchType
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Accessors
 @Entity(name="comprobante_entrega")
 class ComprobanteEntrega {
-	
+	@JsonView(View.Remito.Perfil, View.Remito.Perfil, View.Remito.Post)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_comprobante
 	
 	@NotNull
+	@JsonView(View.Remito.Perfil, View.Remito.Perfil, View.Remito.Post)
 	@Column(length=150, nullable=false, unique=false)
 	String nombre_completo
 	
 	@Size(min=7, max=9)
+	@JsonView(View.Remito.Perfil, View.Remito.Perfil, View.Remito.Post)
 	@Column(length=10, nullable=false, unique=false)
 	String dni
 	
 	@NotNull
+	@JsonView(View.Remito.Perfil, View.Remito.Perfil, View.Remito.Post)
 	@Column(nullable=false, unique=false)
 	LocalDateTime fechaHoraEntrega
 	

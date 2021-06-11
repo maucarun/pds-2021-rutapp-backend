@@ -27,19 +27,21 @@ class ProductoRemito {
 	@JsonIgnore
 	Remito remito
 	
-	@JsonView(View.Remito.Perfil, View.Producto.Lista)
+	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.Remito.Post, View.Producto.Lista)
 	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@MapsId("idProducto")
 	@JoinColumn(name="id_producto")
 	Producto producto
 	
-	@JsonView(View.Remito.Perfil)// TODO Puede borrarse si no es necesario
+	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.Remito.Post, View.Producto.Lista)// TODO Puede borrarse si no es necesario
 	@Column(nullable=false, unique=false)
 	Integer cantidad
 	
+	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.Remito.Post, View.Producto.Lista)
 	@Column(nullable=false, unique=false, name="precio_unitario")
 	Double precio_unitario
 	
+	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.Remito.Post, View.Producto.Lista)
 	@Column(nullable=false, unique=false)
 	Double descuento
 	

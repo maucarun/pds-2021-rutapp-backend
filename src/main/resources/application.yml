@@ -1,13 +1,13 @@
 spring:
   datasource:
     url: 'jdbc:mysql://localhost:3306/rutapp_db?serverTimezone=UTC'
-    username: "root"
-    password: root
+    username: "grupo2"
+    password: grupo2
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    open-in-view: false
+  # open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate.format_sql: true

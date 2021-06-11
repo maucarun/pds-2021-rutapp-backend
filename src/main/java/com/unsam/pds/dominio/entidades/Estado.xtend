@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import javax.persistence.InheritanceType
 import javax.persistence.Inheritance
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo", visible = true) 
 @JsonSubTypes(#[
@@ -22,10 +24,12 @@ import javax.persistence.Inheritance
 @Accessors
 abstract class Estado {
 	
+	@JsonView(View.Remito.Perfil, View.Remito.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_estado
 	
 	@NotNull
+	@JsonView(View.Remito.Perfil, View.Remito.Perfil)
 	@Column(length=20, nullable=false, unique=false)
 	String nombre
 	

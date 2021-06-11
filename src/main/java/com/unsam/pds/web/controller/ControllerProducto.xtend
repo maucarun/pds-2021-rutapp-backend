@@ -22,11 +22,25 @@ import com.unsam.pds.servicio.ServicioProducto
 import com.unsam.pds.dominio.entidades.Producto
 import com.fasterxml.jackson.annotation.JsonView
 import com.unsam.pds.web.view.View
+import com.unsam.pds.dominio.Generics.PaginationResponse
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And
+import net.kaczmarzyk.spring.data.jpa.domain.Equal
+import net.kaczmarzyk.spring.data.jpa.domain.Like
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec
+import net.kaczmarzyk.spring.data.jpa.domain.Between
+import org.springframework.data.jpa.domain.Specification
+import org.springframework.data.domain.Sort
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.http.HttpHeaders
+import com.unsam.pds.dominio.Generics.GenericController
+import com.unsam.pds.dominio.entidades.Usuario
+import com.unsam.pds.dominio.Exceptions.NotFoundException
+import com.unsam.pds.dominio.Exceptions.UnauthorizedException
 
 @Controller
 @CrossOrigin("*")
 @RequestMapping("/producto")
-class ControllerProducto {
+class ControllerProducto extends GenericController<Producto> {
 
 	Logger logger = LoggerFactory.getLogger(this.class)
 
@@ -39,36 +53,132 @@ class ControllerProducto {
 		servicioProducto.obtenerProductosActivosPorUsuario(idUsuario)
 	}
 	
-	@JsonView(View.Producto.Perfil)
-	@GetMapping(path="/{idProducto}", produces=MediaType.APPLICATION_JSON_VALUE)
+//	@JsonView(View.Producto.Perfil)
+//	@GetMapping(path="/{idProducto}", produces=MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
+//	def Producto obtenerProducto(@PathVariable("idProducto") Long idProducto) {
+//		logger.info("GET - Obtener el producto con id producto " + idProducto)
+//		servicioProducto.obtenerProductoActivoPorId(idProducto)
+//	}
+
+//	// POST PRODUCTO
+//	@PostMapping(path="", consumes=MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseStatus(code=HttpStatus.CREATED)
+//	@Transactional
+//	def void crearProducto(@RequestBody Producto producto) {
+//		servicioProducto.guardarProducto(producto)
+//	}
+
+//	// PUT PRODUCTO
+//	@PutMapping(path="/{idProducto}", consumes=MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseStatus(code=HttpStatus.OK)
+//	@Transactional
+//	def void actualizarProducto(@PathVariable("idProducto") Long idProducto, 
+//		@RequestBody Producto producto
+//	) {
+//		servicioProducto.actualizarProducto(idProducto, producto)
+//	}
+
+//	// DELETE PRODUCTO
+//	@DeleteMapping(path="/{idProducto}", produces=MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseStatus(code=HttpStatus.OK)
+//	def void eliminarProducto(@PathVariable("idProducto") Long idProducto) {
+//		servicioProducto.desactivarProduto(idProducto)
+//	}
+
+	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	@JsonView(View.Producto.Lista)
 	@ResponseBody
-	def Producto obtenerProducto(@PathVariable("idProducto") Long idProducto) {
-		logger.info("GET - Obtener el producto con id producto " + idProducto)
-		servicioProducto.obtenerProductoActivoPorId(idProducto)
+	def PaginationResponse<Producto> getAll(@And(#[
+		@Spec(path="idProducto", params="id", spec=typeof(Equal)),
+		@Spec(path="nombre", params="nombre", spec=typeof(Like)),
+		@Spec(path="descripcion", params="descripcion", spec=typeof(Like)),
+		@Spec(path="activo", params="activo", spec=typeof(Equal)),
+		@Spec(path="precio_unitario", params=#["preciodesde", "preciohasta"], spec=typeof(Between))
+	])
+	Specification<Producto> spec, Sort sort, @RequestHeader HttpHeaders headers) {
+		var Long usr = getUsuarioIdFromLogin(headers)
+		var specUsr = AgregarFiltro(spec, "propietario", usr)
+
+		servicioProducto.getByFilter(specUsr, headers, sort)
 	}
 
-	// POST PRODUCTO
-	@PostMapping(path="", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@JsonView(View.Producto.Perfil)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	def Producto get(@PathVariable("id") Long id, @RequestHeader HttpHeaders headers) {
+		var Long usr = getUsuarioIdFromLogin(headers)
+		var specUsr = AgregarFiltro(null, "propietario", usr)
+
+		specUsr = AgregarFiltro(specUsr, "idCliente", id)
+
+		servicioProducto.obtenerProductoActivoPorId(id)
+	}
+
+	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.CREATED)
+	@JsonView(View.Producto.Perfil)
+	@ResponseBody
 	@Transactional
-	def void crearProducto(@RequestBody Producto producto) {
-		servicioProducto.guardarProducto(producto)
+	def Producto set(@RequestBody @JsonView(View.Producto.Post) Producto producto,
+		@RequestHeader HttpHeaders headers) {
+		var Long usr = getUsuarioIdFromLogin(headers)
+
+		producto.propietario = new Usuario()
+		producto.propietario.idUsuario = usr
+
+		servicioProducto.save(producto)
 	}
 
-	// PUT PRODUCTO
-	@PutMapping(path="/{idProducto}", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
+	@JsonView(View.Producto.Perfil)
+	@ResponseBody
 	@Transactional
-	def void actualizarProducto(@PathVariable("idProducto") Long idProducto, 
-		@RequestBody Producto producto
-	) {
-		servicioProducto.actualizarProducto(idProducto, producto)
+	def Producto update(@RequestBody @JsonView(View.Producto.Put) Producto producto,
+		@RequestHeader HttpHeaders headers) {
+		var Long usr = getUsuarioIdFromLogin(headers)
+
+		var Producto prod = servicioProducto.getById(producto.idProducto)
+
+		if (prod === null || !prod.activo)
+			throw new NotFoundException
+
+		if (prod.propietario === null || prod.propietario.idUsuario !== usr)
+			throw new UnauthorizedException
+		
+		producto.propietario = producto.propietario === null ? prod.propietario : producto.propietario
+		producto.activo = producto.activo === null ? prod.activo : producto.activo
+		producto.nombre = producto.nombre === null ? prod.nombre : producto.nombre
+		producto.precio_unitario = producto.precio_unitario === null ? prod.precio_unitario : producto.precio_unitario
+		producto.descripcion = producto.descripcion === null ? prod.descripcion : producto.descripcion
+		producto.url_imagen = producto.url_imagen === null ? prod.url_imagen : producto.url_imagen
+
+		servicioProducto.save(producto)
 	}
 
-	// DELETE PRODUCTO
-	@DeleteMapping(path="/{idProducto}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(path="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
-	def void eliminarProducto(@PathVariable("idProducto") Long idProducto) {
-		servicioProducto.desactivarProduto(idProducto)
+	@ResponseBody
+	def com.unsam.pds.dominio.Generics.ResponseBody delete(@PathVariable("id") Long id, @RequestHeader HttpHeaders headers) {
+		var Long usr = getUsuarioIdFromLogin(headers)
+		var Producto prod = servicioProducto.getById(id)
+		
+		if (prod === null || !prod.activo)
+			throw new NotFoundException
+
+		if (prod.propietario === null || prod.propietario.idUsuario !== usr)
+			throw new UnauthorizedException
+
+		prod.activo  = false
+
+		servicioProducto.save(prod)
+		
+		new com.unsam.pds.dominio.Generics.ResponseBody() => [
+			code = HttpStatus.OK.toString
+			message = "Producto eliminado exitosamente"
+		]
 	}
 }

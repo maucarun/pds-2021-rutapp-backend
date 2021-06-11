@@ -8,35 +8,36 @@ import javassist.NotFoundException
 import javax.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import com.unsam.pds.dominio.Exceptions.UnauthorizedException
 
 @Service
 class ServicioUsuario {
 
 	Logger logger = LoggerFactory.getLogger(ServicioUsuario)
 
-	@Autowired RepositorioUsuario repositorioUsuarios
+	@Autowired RepositorioUsuario repo
 
 	def Usuario validarUsuario(String username, String password) {
-		if (!repositorioUsuarios.existsByUsernameAndPasswordAndActivo(username, password, true)) 
+		if (!repo.existsByUsernameAndPasswordAndActivo(username, password, true)) 
 			throw new NotFoundException("Usuario y/o contraseña no son validos")
 		obtenerUsuarioPorUsername(username)
 	}
 	
 	def Usuario obtenerUsuarioPorUsername(String username) {
-		repositorioUsuarios.findByUsername(username).orElseThrow([
+		repo.findByUsername(username).orElseThrow([
 			throw new NotFoundException("No existe el usuario con el username " + username)
 		])
 	}
 
 	def Usuario obtenerUsuarioPorId(Long idUsuario) {
-		repositorioUsuarios.findById(idUsuario).orElseThrow([
+		repo.findById(idUsuario).orElseThrow([
 			throw new NotFoundException("No existe el usuario con el id " + idUsuario)
 		])
 	}
 
 	@Transactional
 	def void crearNuevoUsuario(Usuario nuevoUsuario) {
-		repositorioUsuarios.save(nuevoUsuario)
+		repo.save(nuevoUsuario)
 	}
 
 	@Transactional
@@ -52,4 +53,11 @@ class ServicioUsuario {
 		logger.info("Usuario desactivado exitosamente!")
 	}
 
+	def Long validar(String username, String password) {
+		var usr = repo.findByUsernameAndPasswordAndActivo(username, password, true)
+		if(!usr.present)
+			throw new UnauthorizedException("Credenciales de autenticación invalidas")
+			
+		usr.get.idUsuario
+	}
 }

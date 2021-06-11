@@ -1,14 +1,14 @@
 package com.unsam.pds.repositorio
 
-import org.springframework.data.repository.CrudRepository
+import com.unsam.pds.dominio.Generics.GenericRepository
 import com.unsam.pds.dominio.entidades.Remito
 import java.util.List
-import org.springframework.data.repository.query.Param
-import org.springframework.data.jpa.repository.Query
-import org.springframework.data.jpa.repository.EntityGraph
 import java.util.Optional
+import org.springframework.data.jpa.repository.EntityGraph
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 
-interface RepositorioRemito extends CrudRepository <Remito, Long> {
+interface RepositorioRemito extends GenericRepository<Remito, Long> {
 	
 	@Query(value = 
 	   "SELECT
@@ -33,4 +33,10 @@ interface RepositorioRemito extends CrudRepository <Remito, Long> {
 	
 	@EntityGraph(attributePaths=#["cliente","productos","productos.producto"])
 	override Optional<Remito> findById(Long idRemito)
+	
+	
+	
+	override Remito getById(Long id){
+		findById(id).get
+	}
 }

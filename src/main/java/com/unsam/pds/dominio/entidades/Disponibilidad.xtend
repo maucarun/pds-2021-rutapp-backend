@@ -19,7 +19,7 @@ import javax.persistence.FetchType
 @Entity(name="disponibilidad")
 class Disponibilidad {
 
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
 	@EmbeddedId
 	DisponibilidadKey idDisponibilidad;
 
@@ -28,17 +28,17 @@ class Disponibilidad {
 	@JoinColumn(name="id_cliente")
 	Cliente cliente
 
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@MapsId("idDiaSemana")
 	@JoinColumn(name="id_dia_semana")
 	DiaSemana diaSemana
 
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@Column(nullable=false, unique=false)
 	LocalTime hora_apertura
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@Column(nullable=false, unique=false)
 	LocalTime hora_cierre
 

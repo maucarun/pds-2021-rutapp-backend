@@ -18,26 +18,26 @@ import javax.persistence.FetchType
 @Entity(name="direccion")
 class Direccion {
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_direccion
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@NotNull
 	@Column(length=250, nullable=false, unique=false)
 	String calle
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@Positive(message="La altura debe ser positiva")
 	@Column(nullable=false, unique=false)
 	Integer altura
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@NotNull
 	@Column(length=100, nullable=false, unique=false)
 	String localidad
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@NotNull
 	@Column(length=100, nullable=false, unique=false)
 	String provincia
@@ -46,10 +46,12 @@ class Direccion {
 	 * Latitud y Longitud pueden ser negativas
 	 */
 	@NotNull
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@Column(nullable=false, unique=false)
 	Double latitud
 	
 	@NotNull
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@Column(nullable=false, unique=false)
 	Double longitud
 	

@@ -9,11 +9,11 @@ import com.unsam.pds.web.view.View
 @Embeddable
 class DisponibilidadKey implements Serializable {
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
 	@Column(name = "id_cliente")
 	public Long idCliente
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
 	@Column(name = "id_dia_semana")
 	public Long idDiaSemana
 

@@ -12,6 +12,10 @@ class View {
 		static interface Perfil { }
 		
 		static interface Lista { }
+		
+		static interface Post { }
+		
+		static interface Put extends Post { }
 	}
 
 
@@ -20,6 +24,10 @@ class View {
 		static interface Perfil { }
 		
 		static interface Lista { }
+		
+		static interface Post { }
+		
+		static interface Put extends Post { }
 	}
 	
 	static interface Remito {
@@ -27,5 +35,9 @@ class View {
 		static interface Perfil { }
 		
 		static interface Lista { }
+		
+		static interface Post { }
+		
+		static interface Put extends Post { }
 	}
 }

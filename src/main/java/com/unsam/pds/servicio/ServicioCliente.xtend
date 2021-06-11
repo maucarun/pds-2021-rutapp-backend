@@ -9,38 +9,38 @@ import java.util.List
 import javassist.NotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import com.unsam.pds.dominio.Generics.GenericService
 
 @Service
-class ServicioCliente {
+class ServicioCliente extends GenericService<Cliente, Long> {
 	
 	Logger logger = LoggerFactory.getLogger(this.class)
 	
-	
-	@Autowired RepositorioCliente repositorioClientes
+	@Autowired RepositorioCliente repo
 	
 	@Autowired ServicioDisponibilidad servicioDisponibilidad
 	
 	def Cliente obtenerClienteActivoPorId(Long idCliente) {
 		logger.info("Obtener el id cliente " + idCliente)
-		repositorioClientes.findByIdClienteAndActivo(idCliente, true).orElseThrow([
+		repo.findByIdClienteAndActivo(idCliente, true).orElseThrow([
 			throw new NotFoundException("No existe el cliente con el id " + idCliente)
 		])
 	}
 	
 	def List<Cliente> obtenerClientesPorIdUsuario(Long idUsuario) {
 		logger.info("Obteniendo los clientes activos para el usuario id " + idUsuario)
-		repositorioClientes.findByPropietario_IdUsuario(idUsuario)
+		repo.findByPropietario_IdUsuario(idUsuario)
 	}
 	
 	def List<Cliente> obtenerClientesActivosPorUsuario(Long idUsuario) {
 		logger.info("Obteniendo los clientes activos para el usuario id " + idUsuario)
-		repositorioClientes.findByPropietario_IdUsuarioAndActivo(idUsuario, true)
+		repo.findByPropietario_IdUsuarioAndActivo(idUsuario, true)
 	}
 	
 	/** Devuelve true si el idUsuario pertenece al idCliente */
 	def Boolean validarClienteDelUsuarioPorId(Long idCliente, Long idUsuario) {
 		logger.info("Validando si el cliente id " + idCliente + " tiene de al propietario id " + idUsuario)
-		repositorioClientes.existsByIdClienteAndPropietario_IdUsuario(idCliente, idUsuario)
+		repo.existsByIdClienteAndPropietario_IdUsuario(idCliente, idUsuario)
 	}
 	
 	/** 
@@ -57,7 +57,7 @@ class ServicioCliente {
 	@Transactional
 	def void crearNuevoCliente(Cliente nuevoCliente) {
 		logger.info("Creando al cliente con el nombre " + nuevoCliente.nombre)
-		repositorioClientes.save(nuevoCliente)
+		repo.save(nuevoCliente)
 		
 		servicioDisponibilidad.crearNuevaDisponibilidades(nuevoCliente)
 		logger.info("Cliente creado exitosamente!")

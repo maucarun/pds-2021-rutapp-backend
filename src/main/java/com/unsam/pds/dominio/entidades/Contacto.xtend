@@ -21,16 +21,16 @@ import com.unsam.pds.web.view.View
 @Entity(name="contacto")
 class Contacto {
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_contacto
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String apellido
@@ -44,11 +44,11 @@ class Contacto {
 	@JsonIgnore
 	Cliente cliente
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@OneToMany(mappedBy="contacto", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Email> emails = newHashSet
 
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@OneToMany(mappedBy="contacto", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Telefono> telefonos = newHashSet
 	

@@ -1,40 +1,41 @@
 package com.unsam.pds.servicio
 
-import org.springframework.stereotype.Service
-import org.springframework.beans.factory.annotation.Autowired
-import com.unsam.pds.repositorio.RepositorioRemito
+import com.unsam.pds.dominio.Generics.GenericService
 import com.unsam.pds.dominio.entidades.Remito
-import javax.transaction.Transactional
-import javassist.NotFoundException
-import org.springframework.beans.BeanUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.unsam.pds.repositorio.RepositorioRemito
 import java.util.List
+import javassist.NotFoundException
+//import org.slf4j.Logger
+//import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import com.unsam.pds.dominio.entidades.Cliente
 
 @Service
-class ServicioRemito {
+class ServicioRemito extends GenericService<Remito, Long> {
 	
-	Logger logger = LoggerFactory.getLogger(ServicioRemito)
+	//Logger logger = LoggerFactory.getLogger(ServicioRemito)
 
-	@Autowired RepositorioRemito repositorioRemitos
+	@Autowired RepositorioRemito repo
 	@Autowired ServicioProductoRemito servicioProductoRemito
+	@Autowired ServicioCliente servicioCliente
 
 	def Remito obtenerRemitoPorId(Long idRemito) {
-		repositorioRemitos.findById(idRemito).orElseThrow([
+		repo.findById(idRemito).orElseThrow([
 			throw new NotFoundException("No existe el remito con el id " + idRemito)
 		])
 	}
 	
 	def List<Remito> obtenerRemitosPorIdUsuario(Long idUsuario) {
-		repositorioRemitos.findRemitosByIdUsuario(idUsuario)
+		repo.findRemitosByIdUsuario(idUsuario)
 	}
 	
 	def List<Remito> obtenerRemitosPendientesPorIdCliente(Long idCliente) {
-		repositorioRemitos.findByCliente_idClienteAndEstado_nombre(idCliente, "Pendiente")
+		repo.findByCliente_idClienteAndEstado_nombre(idCliente, "Pendiente")
 	}
 	
 	def void actualizarOCrearRemito( Remito remito){
-		repositorioRemitos.save(remito)
+		repo.save(remito)
 		servicioProductoRemito.guardarProductoRemito(remito.productos)
 	}
 //	@Transactional
@@ -46,4 +47,8 @@ class ServicioRemito {
 //		crearNuevoRemito(remitoAModificar)
 //		logger.info("Remito actualizado!")
 //	}
+
+	def Cliente getClienteById(Long id){
+		servicioCliente.obtenerClienteActivoPorId(id)
+	} 
 }

@@ -9,26 +9,27 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import com.unsam.pds.dominio.Generics.GenericService
 
 @Service
-class ServicioProducto {
+class ServicioProducto extends GenericService<Producto, Long> {
 	
 	Logger logger = LoggerFactory.getLogger(this.class)
 	
-	@Autowired RepositorioProducto repositorioProductos
+	@Autowired RepositorioProducto repo
 	
 	
 	def List<Producto> obtenerProductosActivosPorUsuario(Long idUsuario) {
-		repositorioProductos.findByPropietario_IdUsuarioAndActivo(idUsuario, true)
+		repo.findByPropietario_IdUsuarioAndActivo(idUsuario, true)
 	}
 	
 	def List<Producto> obtenerTodosLosProductos() {
-		repositorioProductos.findAll.toList
+		repo.findAll.toList
 	}
 	
 	
 	def Producto obtenerProductoActivoPorId(Long idProducto){
-		repositorioProductos.findByIdProductoAndActivo(idProducto, true).orElseThrow([
+		repo.findByIdProductoAndActivo(idProducto, true).orElseThrow([
 			throw new NotFoundException("No existe el Producto con el id: " + idProducto)
 		])
 	}
@@ -36,7 +37,7 @@ class ServicioProducto {
 	@Transactional
 	def void guardarProducto(Producto producto) {
 		logger.info("Guardando el producto " + producto.nombre)
-		repositorioProductos.save(producto)
+		repo.save(producto)
 		logger.info("Producto creado exitosamente!")
 	}
 

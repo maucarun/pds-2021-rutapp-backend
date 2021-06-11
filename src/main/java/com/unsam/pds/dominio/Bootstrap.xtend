@@ -37,6 +37,7 @@ import com.unsam.pds.servicio.ServicioComprobanteEntrega
 import com.unsam.pds.dominio.entidades.ComprobanteEntrega
 import com.unsam.pds.repositorio.RepositorioUsuario
 import java.util.Set
+import com.unsam.pds.dominio.entidades.Estado
 
 @Service
 class Bootstrap implements InitializingBean {
@@ -48,7 +49,7 @@ class Bootstrap implements InitializingBean {
 	@Autowired ServicioDireccion 		servicioDirecciones
 	@Autowired ServicioDisponibilidad 	servicioDisponibilidad
 	@Autowired ServicioEmail 			servicioEmails
-	@Autowired ServicioEstado 			servicioEstados
+	@Autowired ServicioEstado<Estado> 			servicioEstados
 	@Autowired ServicioHojaDeRuta		servicioHojaDeRuta
 	@Autowired ServicioProducto 		servicioProductos
 	@Autowired ServicioProductoRemito 	servicioProductoRemitos

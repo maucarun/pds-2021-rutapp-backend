@@ -1,16 +1,25 @@
 package com.unsam.pds.servicio
 
-import org.springframework.stereotype.Service
+import com.unsam.pds.dominio.entidades.Estado
 import com.unsam.pds.repositorio.RepositorioEstado
 import org.springframework.beans.factory.annotation.Autowired
-import com.unsam.pds.dominio.entidades.Estado
+import org.springframework.stereotype.Service
 
 @Service
-class ServicioEstado {
+class ServicioEstado<T extends Estado> {
 	
-	@Autowired RepositorioEstado repositorioEstados
+	@Autowired RepositorioEstado repo
 	
-	def void crearNuevoEstado(Estado nuevoEstado) {
-		repositorioEstados.save(nuevoEstado)		
+	def void crearNuevoEstado(T nuevoEstado) {
+		repo.save(nuevoEstado)		
+	}
+	
+	private def <T extends Estado> T getEstadoByNombre(String estado) {
+		repo.getByNombre(estado) as T	
+	}
+	
+	def static <T extends Estado> T getByNombre(String estado) {
+		var ServicioEstado<T> serv = new ServicioEstado<T>
+		serv.getEstadoByNombre(estado) as T	
 	}
 }

@@ -22,25 +22,25 @@ import com.unsam.pds.web.view.View
 @Accessors
 @Entity(name="cliente")
 class Cliente {
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Remito.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Put, View.Remito.Perfil, View.Remito.Post)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long idCliente
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Remito.Lista, View.Remito.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Lista, View.Remito.Perfil)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@Column(length=250, nullable=true, unique=false)
 	String observaciones
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@Size(min=10, max=12)
 	@Column(length=13, nullable=false, unique=true)
 	String cuit
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@Positive(message="El promedio de espera debe ser positivo")
 	@Column(nullable=false, unique=false, name="promedio_espera")
 	Double promedio_espera
@@ -58,16 +58,16 @@ class Cliente {
 	@JoinColumn(name="id_usuario")
 	Usuario propietario
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="id_direccion")
 	Direccion direccion
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@OneToMany(mappedBy = "cliente", fetch=FetchType.LAZY)
 	Set<Disponibilidad> disponibilidades = newHashSet
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@OneToMany(mappedBy="cliente", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Contacto> contactos = newHashSet
 	

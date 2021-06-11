@@ -10,4 +10,5 @@ interface RepositorioUsuario extends CrudRepository<Usuario, Long> {
 	
 	def Optional<Usuario> findByUsername(String username)
 
+	def Optional<Usuario> findByUsernameAndPasswordAndActivo(String username, String password, Boolean activo)
 }

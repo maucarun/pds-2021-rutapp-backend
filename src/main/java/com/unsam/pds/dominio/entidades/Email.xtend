@@ -18,16 +18,16 @@ import javax.persistence.FetchType
 @Entity(name="email")
 class Email {
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_email
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@javax.validation.constraints.Email
 	@Column(length=50, nullable=false, unique=false)
 	String direccion
 	
-	@JsonView(View.Cliente.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@NotNull
 	@Column(nullable=false, unique=false)
 	Boolean esPrincipal

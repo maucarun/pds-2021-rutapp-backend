@@ -29,6 +29,7 @@ class Remito {
 	Long id_remito
 	
 	@Column(nullable=false, unique=false)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
 	LocalDate fechaDeCreacion
 	
 	@JsonView(View.Remito.Lista, View.Remito.Perfil)
@@ -36,9 +37,11 @@ class Remito {
 	@Column(nullable=false, unique=false)
 	Double total = 0.0
 	
+	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
 	@Column(length=250, nullable=true, unique=false)
 	String motivo
 	
+	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
 	@PositiveOrZero(message="El tiempo no puede ser negativo")
 	@Column(nullable=false, unique=false)
 	LocalTime tiempo_espera = LocalTime.of(0,0)
@@ -47,7 +50,7 @@ class Remito {
 	 * Un cliente puede tener muchos remitos
 	 *  Un remito pertenece a un solo cliente
 	 */
-	@JsonView(View.Remito.Lista, View.Remito.Perfil)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_cliente")
 	Cliente cliente
@@ -57,6 +60,7 @@ class Remito {
 	 *  Un remito tiene un solo estado
 	 */
 	@ManyToOne(fetch=FetchType.LAZY)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil)
 	@JoinColumn(name="id_estado")
 	EstadoRemito estado
 	
@@ -66,13 +70,15 @@ class Remito {
 	 */
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_hoja_de_ruta")
+	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
 	@JsonIgnore
 	HojaDeRuta hojaDeRuta
 	
-	@JsonView(View.Remito.Perfil)
+	@JsonView(View.Remito.Perfil, View.Remito.Perfil, View.Remito.Post)
 	@OneToMany(mappedBy = "remito", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<ProductoRemito> productos = newHashSet
 	
+	@JsonView(View.Remito.Perfil, View.Remito.Perfil, View.Remito.Post)
 	@OneToOne(mappedBy = "remito", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	ComprobanteEntrega comprobante
 	
