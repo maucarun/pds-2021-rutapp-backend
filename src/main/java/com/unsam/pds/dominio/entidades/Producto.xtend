@@ -40,12 +40,12 @@ class Producto {
 	 * TODO: vamos a tener las imagenes en un servidor local?
 	 */
  	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Post)
-	@Column(length=100, nullable=true, unique=false)
+	@Column(length=250, nullable=true, unique=false)
 	String url_imagen
 	
 	@NotNull
 	@Column(nullable=false, unique=false)
- 	@JsonView(View.Producto.Perfil, View.Producto.Lista)
+	@JsonView(View.Producto.Perfil, View.Producto.Lista)
 	Boolean activo = true
 	
 	/**

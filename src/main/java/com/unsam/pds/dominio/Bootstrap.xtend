@@ -76,6 +76,15 @@ class Bootstrap implements InitializingBean {
 		latitud = 0.0
 		longitud = 0.0
 	]
+	
+	Direccion direccionMoe2 = new Direccion() => [
+		calle = "25 de Mayo"
+		altura = 100
+		localidad = "San Martin"
+		provincia = "Buenos Aires"
+		latitud = 0.0
+		longitud = 0.0
+	]
 
 	/** Crear estados */
 	EstadoHojaDeRuta estadoHdrSuspendida = new EstadoHojaDeRuta() => [ nombre = "Suspendida" ]
@@ -126,7 +135,7 @@ class Bootstrap implements InitializingBean {
 		nombre = "ventilador"
 		precio_unitario = 1000.0
 		descripcion = "es un ventilador"
-		url_imagen = ""
+		url_imagen = "https://depor.com/resizer/UO7fzHpi6ZCPJXpfl9aFntHfIuE=/1200x900/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/SNF4HQTDJVCIFBU7NLYOH6BY7E.jpg"
 		propietario = homero
 	]
 		
@@ -138,6 +147,15 @@ class Bootstrap implements InitializingBean {
 		promedio_espera = 10.0
 		propietario = homero
 		direccion = direccionMoe
+	]
+	
+	Cliente barMoe2 = new Cliente() => [
+		nombre = "Bar de Moe2"
+		observaciones = "Es un bar"
+		cuit = "10301112220"
+		promedio_espera = 10.0
+		propietario = homero
+		direccion = direccionMoe2
 	]
 	
 	/** Crear disponibilidad */
@@ -221,8 +239,10 @@ class Bootstrap implements InitializingBean {
 			servicioProductos.guardarProducto(ventiladorHomero)
 			/** Guardando clientes */
 			servicioClientes.crearNuevoCliente(barMoe)
+			servicioClientes.crearNuevoCliente(barMoe2)
 			/** Guardando direcciones */
 			servicioDirecciones.crearNuevaDireccion(direccionMoe)
+			servicioDirecciones.crearNuevaDireccion(direccionMoe2)
 			/** Guardando disponibilidad */
 			servicioDisponibilidad.crearNuevaDisponibilidad(disponibilidadMoeLunes)
 			/** Guardando contactos */
