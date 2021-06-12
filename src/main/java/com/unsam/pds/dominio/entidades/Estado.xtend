@@ -24,12 +24,12 @@ import com.unsam.pds.web.view.View
 @Accessors
 abstract class Estado {
 	
-	@JsonView(View.Remito.Perfil, View.Remito.Perfil)
+	@JsonView(View.Remito.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_estado
 	
 	@NotNull
-	@JsonView(View.Remito.Perfil, View.Remito.Perfil)
+	@JsonView(View.Remito.Perfil, View.Remito.Lista)
 	@Column(length=20, nullable=false, unique=false)
 	String nombre
 	

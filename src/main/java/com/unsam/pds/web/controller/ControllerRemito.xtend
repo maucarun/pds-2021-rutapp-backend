@@ -119,12 +119,12 @@ class ControllerRemito extends GenericController<Remito> {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	def Remito get(@PathVariable("id") Long id, @RequestHeader HttpHeaders headers) {
-		var Long usr = getUsuarioIdFromLogin(headers)
+		//var Long usr = getUsuarioIdFromLogin(headers)
 
-		var spec = joinClienteUsuario(null, usr)
-		spec = AgregarFiltro(spec, "id_remito", id)
+		//var spec = joinClienteUsuario(null, usr)
+		//spec = AgregarFiltro(spec, "id_remito", id)
 		
-		servicioRemito.get(spec)
+		servicioRemito.getById(id)
 	}
 
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)

@@ -28,14 +28,12 @@ interface RepositorioRemito extends GenericRepository<Remito, Long> {
 		)")
 	def List<Remito> findRemitosByIdUsuario (@Param("usuarioId") Long idUsuario)
 	
-	@EntityGraph(attributePaths=#["cliente","productos","comprobante"])
+	@EntityGraph(attributePaths=#["cliente","productos","comprobante","estado"])
 	def List<Remito> findByCliente_idClienteAndEstado_nombre(Long idCliente, String estadoPendiente)
 	
-	@EntityGraph(attributePaths=#["cliente","productos","productos.producto"])
+	@EntityGraph(attributePaths=#["cliente","productos","productos.producto","estado"])
 	override Optional<Remito> findById(Long idRemito)
-	
-	
-	
+		
 	override Remito getById(Long id){
 		findById(id).get
 	}
