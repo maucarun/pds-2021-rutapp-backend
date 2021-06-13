@@ -67,4 +67,17 @@ class Contacto {
 		]
 		emails = _emails
 	}
+	
+	def void setCliente(Cliente _cliente) {
+		_cliente.agregarContacto(this)
+		cliente = _cliente
+	}
+	
+	def void agregarTelefono(Telefono telefono) {
+		telefonos.add(telefono)
+	}
+	
+	def void agregarEmail(Email email) {
+		emails.add(email)
+	}
 }

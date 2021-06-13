@@ -43,4 +43,9 @@ class Telefono {
 	Contacto contacto
 	
 	new() { }
+	
+	def void setContacto(Contacto _contacto) {
+		_contacto.agregarTelefono(this)
+		contacto = _contacto
+	}
 }

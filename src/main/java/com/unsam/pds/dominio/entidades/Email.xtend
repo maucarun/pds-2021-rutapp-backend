@@ -43,4 +43,8 @@ class Email {
 	
 	new() { }
 	
+	def void setContacto(Contacto _contacto) {
+		_contacto.agregarEmail(this)
+		contacto = _contacto
+	}
 }

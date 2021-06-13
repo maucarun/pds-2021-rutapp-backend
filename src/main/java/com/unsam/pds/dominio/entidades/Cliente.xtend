@@ -37,7 +37,7 @@ class Cliente {
 	
 	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@Size(min=10, max=12)
-	@Column(length=13, nullable=false, unique=true)
+	@Column(length=13, nullable=false, unique=false)
 	String cuit
 	
 	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
@@ -51,8 +51,6 @@ class Cliente {
 	/**
 	 * Un usuario puede tener muchos clientes
 	 *  El cliente pertenece a un usuario
-	 * 
-	 * TODO: es un propietario?
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="id_usuario")
@@ -60,14 +58,14 @@ class Cliente {
 	
 	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name="id_direccion")
+	@JoinColumn(name="id_direccion", nullable=false)
 	Direccion direccion
 	
 	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@OneToMany(mappedBy = "cliente", fetch=FetchType.LAZY)
 	Set<Disponibilidad> disponibilidades = newHashSet
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@OneToMany(mappedBy="cliente", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Contacto> contactos = newHashSet
 	
@@ -75,6 +73,10 @@ class Cliente {
 	
 	def void agregarDisponibilidad(Disponibilidad nuevaDisponibilidad) {
 		disponibilidades.add(nuevaDisponibilidad)
+	}
+	
+	def void agregarContacto(Contacto nuevoContacto) {
+		contactos.add(nuevoContacto)
 	}
 	
 	def void setContactos(Set<Contacto> _contactos){

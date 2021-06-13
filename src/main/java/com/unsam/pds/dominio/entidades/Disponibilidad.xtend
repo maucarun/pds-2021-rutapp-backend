@@ -54,10 +54,15 @@ class Disponibilidad {
 		diaSemana = _dia
 		hora_apertura = _hora_apertura
 		hora_cierre = _hora_cierre
+		_cliente.agregarDisponibilidad(this)
 	}
 	
 	def String dia() {
 		diaSemana.dia_semana
+	}
+	
+	def setCliente(Cliente cliente) {
+		cliente.agregarDisponibilidad(this)
 	}
 	
 }
