@@ -54,18 +54,20 @@ class ControllerRemito extends GenericController<Remito> {
 	@Autowired ServicioRemito servicioRemito
 
 	// GET ALL REMITOS por id usuario
-//	@GetMapping(path="/all/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseBody
-//	def List<Remito> obtenerTodosLosRemitosPorUsuario(@PathVariable("idUsuario") Long idUsuario) {
-//		logger.info("GET localhost:8080/remito/all/" + idUsuario)
-//		servicioRemito.obtenerRemitosPorIdUsuario(idUsuario)
-//	}
+	@JsonView(View.Remito.Lista)
+	@GetMapping(path="/all/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	def List<Remito> obtenerTodosLosRemitosPorUsuario(@PathVariable("idUsuario") Long idUsuario) {
+		logger.info("GET localhost:8080/remito/all/" + idUsuario)
+		servicioRemito.obtenerRemitosPorIdUsuario(idUsuario)
+	}
+	
 	// GET REMITOS por id cliente y estado pendiente
 	@JsonView(View.Remito.Lista)
 	@GetMapping(path="/all", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def List<Remito> obtenerRemito(@RequestParam("idCliente") Long idCliente, @RequestParam("estado") String estado) {
-		logger.info("GET localhost:8080/all?" + idCliente + "&estado=" + estado)
+		logger.info("GET localhost:8080/remito/all?" + idCliente + "&estado=" + estado)
 		servicioRemito.obtenerRemitosPendientesPorIdCliente(idCliente)
 	}
 

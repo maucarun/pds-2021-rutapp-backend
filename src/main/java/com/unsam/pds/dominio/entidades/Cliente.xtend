@@ -31,16 +31,16 @@ class Cliente {
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
 	@Column(length=250, nullable=true, unique=false)
 	String observaciones
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
 	@Size(min=10, max=12)
 	@Column(length=13, nullable=false, unique=false)
 	String cuit
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
 	@Positive(message="El promedio de espera debe ser positivo")
 	@Column(nullable=false, unique=false, name="promedio_espera")
 	Double promedio_espera
@@ -61,11 +61,11 @@ class Cliente {
 	@JoinColumn(name="id_direccion", nullable=false)
 	Direccion direccion
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
 	@OneToMany(mappedBy = "cliente", fetch=FetchType.LAZY)
 	Set<Disponibilidad> disponibilidades = newHashSet
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
 	@OneToMany(mappedBy="cliente", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Contacto> contactos = newHashSet
 	
