@@ -36,6 +36,7 @@ import com.unsam.pds.dominio.Generics.GenericController
 import com.unsam.pds.dominio.entidades.Usuario
 import com.unsam.pds.dominio.Exceptions.NotFoundException
 import com.unsam.pds.dominio.Exceptions.UnauthorizedException
+import com.unsam.pds.servicio.ServicioCloudinary
 
 @Controller
 @CrossOrigin("*")
@@ -45,6 +46,8 @@ class ControllerProducto extends GenericController<Producto> {
 	Logger logger = LoggerFactory.getLogger(this.class)
 
 	@Autowired ServicioProducto servicioProducto
+	@Autowired ServicioCloudinary servicioCloudinary
+	
 	@JsonView(View.Producto.Lista)
 	@GetMapping(path="/all/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -52,39 +55,7 @@ class ControllerProducto extends GenericController<Producto> {
 		logger.info("GET - Obtener todos los productos activos del id usuario " + idUsuario)
 		servicioProducto.obtenerProductosActivosPorUsuario(idUsuario)
 	}
-	
-//	@JsonView(View.Producto.Perfil)
-//	@GetMapping(path="/{idProducto}", produces=MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseBody
-//	def Producto obtenerProducto(@PathVariable("idProducto") Long idProducto) {
-//		logger.info("GET - Obtener el producto con id producto " + idProducto)
-//		servicioProducto.obtenerProductoActivoPorId(idProducto)
-//	}
 
-//	// POST PRODUCTO
-//	@PostMapping(path="", consumes=MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseStatus(code=HttpStatus.CREATED)
-//	@Transactional
-//	def void crearProducto(@RequestBody Producto producto) {
-//		servicioProducto.guardarProducto(producto)
-//	}
-
-//	// PUT PRODUCTO
-//	@PutMapping(path="/{idProducto}", consumes=MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseStatus(code=HttpStatus.OK)
-//	@Transactional
-//	def void actualizarProducto(@PathVariable("idProducto") Long idProducto, 
-//		@RequestBody Producto producto
-//	) {
-//		servicioProducto.actualizarProducto(idProducto, producto)
-//	}
-
-//	// DELETE PRODUCTO
-//	@DeleteMapping(path="/{idProducto}", produces=MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseStatus(code=HttpStatus.OK)
-//	def void eliminarProducto(@PathVariable("idProducto") Long idProducto) {
-//		servicioProducto.desactivarProduto(idProducto)
-//	}
 
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
@@ -128,6 +99,7 @@ class ControllerProducto extends GenericController<Producto> {
 
 		producto.propietario = new Usuario()
 		producto.propietario.idUsuario = usr
+		producto.url_imagen = servicioCloudinary.upload(producto.url_imagen)
 
 		servicioProducto.save(producto)
 	}
@@ -154,7 +126,13 @@ class ControllerProducto extends GenericController<Producto> {
 		producto.nombre = producto.nombre === null ? prod.nombre : producto.nombre
 		producto.precio_unitario = producto.precio_unitario === null ? prod.precio_unitario : producto.precio_unitario
 		producto.descripcion = producto.descripcion === null ? prod.descripcion : producto.descripcion
-		producto.url_imagen = producto.url_imagen === null ? prod.url_imagen : producto.url_imagen
+		logger.info("***public_url producto.url_imagen: ", producto.url_imagen)
+		producto.url_imagen = producto.url_imagen === null ? prod.url_imagen : {
+		//elimino la imagen de la nube
+		logger.info("***public_url prod.url_imagen.split(|).get(0): ", prod.url_imagen.split("|").get(0))
+			servicioCloudinary.delete(prod.url_imagen.split("|").get(0))//TODO revisar el delete			
+			servicioCloudinary.upload(producto.url_imagen)//producto.url_imagen
+		}
 
 		servicioProducto.save(producto)
 	}
@@ -175,6 +153,8 @@ class ControllerProducto extends GenericController<Producto> {
 		prod.activo  = false
 
 		servicioProducto.save(prod)
+//		logger.info("***public_url producto.url_imagen: ", prod.url_imagen)
+//		servicioCloudinary.delete(prod.url_imagen.split("|").get(0))//TODOverificar el delete
 		
 		new com.unsam.pds.dominio.Generics.ResponseBody() => [
 			code = HttpStatus.OK.toString
