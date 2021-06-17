@@ -47,7 +47,7 @@ class ControllerProducto extends GenericController<Producto> {
 
 	@Autowired ServicioProducto servicioProducto
 	@Autowired ServicioCloudinary servicioCloudinary
-	
+
 	@JsonView(View.Producto.Lista)
 	@GetMapping(path="/all/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -55,7 +55,6 @@ class ControllerProducto extends GenericController<Producto> {
 		logger.info("GET - Obtener todos los productos activos del id usuario " + idUsuario)
 		servicioProducto.obtenerProductosActivosPorUsuario(idUsuario)
 	}
-
 
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
@@ -93,8 +92,7 @@ class ControllerProducto extends GenericController<Producto> {
 	@JsonView(View.Producto.Perfil)
 	@ResponseBody
 	@Transactional
-	def Producto set(@RequestBody @JsonView(View.Producto.Post) Producto producto,
-		@RequestHeader HttpHeaders headers) {
+	def Producto set(@RequestBody @JsonView(View.Producto.Post) Producto producto, @RequestHeader HttpHeaders headers) {
 		var Long usr = getUsuarioIdFromLogin(headers)
 
 		producto.propietario = new Usuario()
@@ -120,18 +118,25 @@ class ControllerProducto extends GenericController<Producto> {
 
 		if (prod.propietario === null || prod.propietario.idUsuario !== usr)
 			throw new UnauthorizedException
-		
+
 		producto.propietario = producto.propietario === null ? prod.propietario : producto.propietario
 		producto.activo = producto.activo === null ? prod.activo : producto.activo
 		producto.nombre = producto.nombre === null ? prod.nombre : producto.nombre
 		producto.precio_unitario = producto.precio_unitario === null ? prod.precio_unitario : producto.precio_unitario
 		producto.descripcion = producto.descripcion === null ? prod.descripcion : producto.descripcion
-		logger.info("***public_url producto.url_imagen: ", producto.url_imagen)
-		producto.url_imagen = producto.url_imagen === null ? prod.url_imagen : {
-		//elimino la imagen de la nube
-		logger.info("***public_url prod.url_imagen.split(|).get(0): ", prod.url_imagen.split("|").get(0))
-			servicioCloudinary.delete(prod.url_imagen.split("|").get(0))//TODO revisar el delete			
-			servicioCloudinary.upload(producto.url_imagen)//producto.url_imagen
+
+		if (producto.url_imagen === null) {
+			producto.url_imagen = prod.url_imagen // Borrar, si no me viene una imagen desde el front le pongo lo que hay en la BD
+		} else if (prod.url_imagen.indexOf("|") != -1) { // puede ser nueva o vieja ambas tienen el |
+			if (prod.url_imagen != producto.url_imagen) {
+				logger.info("Es una imagen nueva")
+				// elimino la imagen vieja de la nube
+				servicioCloudinary.delete(prod.url_imagen.split("|").get(0)) 		
+				if (producto.url_imagen.split("|").get(1) != "") {
+//					subo la imagen nueva y guardo el link en el producto
+					producto.url_imagen = servicioCloudinary.upload(producto.url_imagen.split("|").get(1))
+				}
+			}
 		}
 
 		servicioProducto.save(producto)
@@ -140,22 +145,22 @@ class ControllerProducto extends GenericController<Producto> {
 	@DeleteMapping(path="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
 	@ResponseBody
-	def com.unsam.pds.dominio.Generics.ResponseBody delete(@PathVariable("id") Long id, @RequestHeader HttpHeaders headers) {
+	def com.unsam.pds.dominio.Generics.ResponseBody delete(@PathVariable("id") Long id,
+		@RequestHeader HttpHeaders headers) {
 		var Long usr = getUsuarioIdFromLogin(headers)
 		var Producto prod = servicioProducto.getById(id)
-		
+
 		if (prod === null || !prod.activo)
 			throw new NotFoundException
 
 		if (prod.propietario === null || prod.propietario.idUsuario !== usr)
 			throw new UnauthorizedException
 
-		prod.activo  = false
+		prod.activo = false
 
 		servicioProducto.save(prod)
 //		logger.info("***public_url producto.url_imagen: ", prod.url_imagen)
 //		servicioCloudinary.delete(prod.url_imagen.split("|").get(0))//TODOverificar el delete
-		
 		new com.unsam.pds.dominio.Generics.ResponseBody() => [
 			code = HttpStatus.OK.toString
 			message = "Producto eliminado exitosamente"
