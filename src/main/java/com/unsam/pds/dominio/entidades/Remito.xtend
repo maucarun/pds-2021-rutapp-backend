@@ -74,11 +74,11 @@ class Remito {
 	@JsonIgnore
 	HojaDeRuta hojaDeRuta
 	
-	@JsonView(View.Remito.Perfil, View.Remito.Perfil, View.Remito.Post)
-	@OneToMany(mappedBy = "remito", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	Set<ProductoRemito> productos = newHashSet
+	@JsonView(View.Remito.Perfil, View.Remito.Post)
+	@OneToMany(mappedBy = "remito", fetch=FetchType.LAZY)
+	Set<ProductoRemito> productosDelRemito = newHashSet
 	
-	@JsonView(View.Remito.Perfil, View.Remito.Perfil, View.Remito.Post)
+	@JsonView(View.Remito.Perfil, View.Remito.Post)
 	@OneToOne(mappedBy = "remito", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	ComprobanteEntrega comprobante
 	
@@ -86,16 +86,16 @@ class Remito {
 	
 	def void calcularTotal() {
 		/** Alternativa
-		 productos.forEach[ producto | total = total + producto.calcularSubCosto() ]
+		 productosDelRemito.forEach[ producto | total = total + producto.calcularSubCosto() ]
 		 */
 		
 		/** En un fold va primero el total a devolver y luego el elemento de la lista */
-		total = productos.fold(0.0)[subTotal, producto | subTotal + producto.calcularSubCosto()]
+		total = productosDelRemito.fold(0.0)[subTotal, producto | subTotal + producto.calcularSubCosto()]
 		
 	}
 	
 	def void agregarProducto(ProductoRemito nuevoProducto) {
-		productos.add(nuevoProducto)
+		productosDelRemito.add(nuevoProducto)
 		calcularTotal()
 	}
 	
@@ -115,7 +115,7 @@ class Remito {
 	
 	@JsonView(View.Remito.Lista, View.Remito.Perfil)
 	def Integer cantidadDeItems() {
-		productos.size
+		productosDelRemito.size
 	}
 	
 	@JsonView(View.Remito.Lista)

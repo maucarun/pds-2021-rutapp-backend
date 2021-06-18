@@ -14,11 +14,11 @@ import com.unsam.pds.web.view.View
 @Entity(name = "usuario")
 class Usuario {
 	
-	@JsonView(View.Usuario.Perfil)
+	@JsonView(View.Usuario.Perfil, View.Cliente.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long idUsuario
 	
-	@JsonView(View.Usuario.Perfil)
+	@JsonView(View.Usuario.Perfil, View.Cliente.Perfil)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre

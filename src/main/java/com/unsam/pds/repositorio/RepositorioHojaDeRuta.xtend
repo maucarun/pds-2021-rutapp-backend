@@ -5,6 +5,7 @@ import com.unsam.pds.dominio.entidades.HojaDeRuta
 import java.util.List
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import org.springframework.data.jpa.repository.EntityGraph
 
 interface RepositorioHojaDeRuta extends CrudRepository<HojaDeRuta, Long> {
 
@@ -38,6 +39,7 @@ interface RepositorioHojaDeRuta extends CrudRepository<HojaDeRuta, Long> {
 					cliente.propietario.idUsuario = :usuarioId
 			)
 		)")
+	@EntityGraph(attributePaths=#["estado"])
 	def List<HojaDeRuta> obtenerHojasDeRutaPorIdUsuario (@Param("usuarioId") Long idUsuario)
 
 }

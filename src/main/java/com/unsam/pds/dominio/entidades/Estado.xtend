@@ -29,7 +29,7 @@ abstract class Estado {
 	Long id_estado
 	
 	@NotNull
-	@JsonView(View.Remito.Perfil, View.Remito.Lista)
+	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.HojaDeRuta.Lista)
 	@Column(length=20, nullable=false, unique=false)
 	String nombre
 	

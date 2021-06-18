@@ -56,6 +56,7 @@ class Cliente {
 	 * Un usuario puede tener muchos clientes
 	 *  El cliente pertenece a un usuario
 	 */
+	@JsonView(View.Cliente.Perfil)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="id_usuario")
 	Usuario propietario
