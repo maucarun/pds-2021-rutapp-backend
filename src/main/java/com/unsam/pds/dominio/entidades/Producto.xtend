@@ -52,6 +52,7 @@ class Producto {
 	 * Un usuario puede tener muchos productos
 	 *  El producto pertenece a un usuario
 	 */
+ 	@JsonView(View.Producto.Lista)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="id_usuario")
 	Usuario propietario

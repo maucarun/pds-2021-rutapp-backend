@@ -35,8 +35,8 @@ class ServicioRemito extends GenericService<Remito, Long> {
 	}
 	
 	def void actualizarOCrearRemito( Remito remito){
-		servicioProductoRemito.guardarProductoRemito(remito.productosDelRemito)
 		repo.save(remito)
+		servicioProductoRemito.guardarProductoRemito(remito)
 	}
 //	@Transactional
 //	def void actualizarRemito(Long idRemito, Remito nuevoRemito) {

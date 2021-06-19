@@ -562,9 +562,12 @@ class Bootstrap implements InitializingBean {
 			hojaDeRutaBartHoy.remitos = #[remitoHoyMoeBart, remitoHoySkinnerBart].toSet
 			servicioHojaDeRuta.actualizarHdr(hojaDeRutaHomeroHoy.id_hoja_de_ruta, hojaDeRutaHomeroHoy)
 			servicioHojaDeRuta.actualizarHdr(hojaDeRutaBartHoy.id_hoja_de_ruta, hojaDeRutaBartHoy)
-			remitoHoyMoeHomero.agregarProducto(prMoeHomeroHoyVentilador)
-			remitoHoyMoeHomero.agregarProducto(prMoeHomeroHoyPuerta)
-			remitoHoyMoeHomero.agregarProducto(prCachoHomeroHoyVentilador)
+			
+			remitoHoyMoeHomero.productosDelRemito = #[prMoeHomeroHoyVentilador,prMoeHomeroHoyPuerta].toSet
+			
+//			remitoHoyMoeHomero.agregarProducto(prMoeHomeroHoyVentilador)
+//			remitoHoyMoeHomero.agregarProducto(prMoeHomeroHoyPuerta)
+//			remitoHoyMoeHomero.agregarProducto(prCachoHomeroHoyVentilador)
 			remitoHoyMoeHomero.agregarProducto(prSkinnerHomeroHoyVentana)
 			remitoHoyMoeHomero.agregarProducto(prMoeBartHoyElectricista)
 			remitoHoyMoeHomero.agregarProducto(prSkinnerBartHoyGasista)
@@ -572,12 +575,12 @@ class Bootstrap implements InitializingBean {
 			remitoHoyMoeHomero.comprobante = comprobanteHomeroMoeRemitoHoy
 			/** Guardar Comprobantes */
 			servicioComprobantes.crearNuevoComprobante(comprobanteHomeroMoeRemitoHoy)
-			servicioRemitos.actualizarOCrearRemito(remitoHoyMoeHomero)
-			servicioRemitos.actualizarOCrearRemito(remitoHoySkinnerHomero)
-			servicioRemitos.actualizarOCrearRemito(remitoHoyCachoHomero)
-			servicioRemitos.actualizarOCrearRemito(remitoHoyMoeBart)
-			servicioRemitos.actualizarOCrearRemito(remitoHoySkinnerBart)
-			servicioRemitos.actualizarOCrearRemito(remitoMananaSkinnerBart)
+//			servicioRemitos.actualizarOCrearRemito(remitoHoyMoeHomero)
+//			servicioRemitos.actualizarOCrearRemito(remitoHoySkinnerHomero)
+//			servicioRemitos.actualizarOCrearRemito(remitoHoyCachoHomero)
+//			servicioRemitos.actualizarOCrearRemito(remitoHoyMoeBart)
+//			servicioRemitos.actualizarOCrearRemito(remitoHoySkinnerBart)
+//			servicioRemitos.actualizarOCrearRemito(remitoMananaSkinnerBart)
 		}
 		
 	}

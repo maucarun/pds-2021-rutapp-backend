@@ -150,8 +150,10 @@ class ControllerRemito extends GenericController<Remito> {
 		remito.cliente = cliente
 //		remito.estado = servicioEstado.obtenerEstadoPorNombre("Pendiente", "estado_remito")
 		remito.estado = servicioEstado.obtenerEstadoPorId(6L) as EstadoRemito
-
-		servicioRemito.save(remito)
+		remito.productosDelRemito.forEach[pr | pr.descuento = 1.0]
+		
+		logger.info("Guardaré el remito del cliente " + remito.cliente.nombre);
+		servicioRemito.actualizarOCrearRemito(remito)
 	}
 
 	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
