@@ -106,7 +106,7 @@ class ControllerRemito extends GenericController<Remito> {
 	@JsonView(View.Remito.Lista)
 	@ResponseBody
 	def PaginationResponse<Remito> getAll(@And(#[
-		@Spec(path="id_remito", params="id", spec=typeof(Equal)),
+		@Spec(path="idRemito", params="id", spec=typeof(Equal)),
 		@Spec(path="motivo", params="motivo", spec=typeof(Like)),
 		@Spec(path="cliente", params="cliente", spec=typeof(Like)),
 		@Spec(path="hojaDeRuta", params="hojaDeRuta", spec=typeof(Equal)),
@@ -128,7 +128,7 @@ class ControllerRemito extends GenericController<Remito> {
 		//var Long usr = getUsuarioIdFromLogin(headers)
 
 		//var spec = joinClienteUsuario(null, usr)
-		//spec = AgregarFiltro(spec, "id_remito", id)
+		//spec = AgregarFiltro(spec, "idRemito", id)
 		
 		servicioRemito.getById(id)
 	}
@@ -162,8 +162,8 @@ class ControllerRemito extends GenericController<Remito> {
 	@Transactional
 	def void update(@RequestBody Remito remito, @RequestHeader HttpHeaders headers) {
 		var Long usr = getUsuarioIdFromLogin(headers)
-		println(remito.id_remito)
-		var Remito rmt = servicioRemito.getById(remito.id_remito)
+		println(remito.idRemito)
+		var Remito rmt = servicioRemito.getById(remito.idRemito)
 
 		if (rmt === null || rmt.estado.nombre != "Pendiente")
 			throw new NotFoundException

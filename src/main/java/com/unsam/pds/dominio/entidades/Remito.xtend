@@ -26,7 +26,7 @@ class Remito {
 	
 	@JsonView(View.Remito.Lista, View.Remito.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	Long id_remito
+	Long idRemito
 	
 	@Column(nullable=false, unique=false)
 	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)

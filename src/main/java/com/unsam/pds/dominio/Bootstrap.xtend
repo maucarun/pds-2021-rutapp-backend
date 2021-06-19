@@ -550,13 +550,13 @@ class Bootstrap implements InitializingBean {
 			servicioRemitos.actualizarOCrearRemito(remitoHoySkinnerBart)
 			servicioRemitos.actualizarOCrearRemito(remitoMananaSkinnerBart)
 			/** Guardar PRs */
-			servicioProductoRemitos.crearNuevoProductoRemito(prMoeHomeroHoyVentilador)
-			servicioProductoRemitos.crearNuevoProductoRemito(prMoeHomeroHoyPuerta)
-			servicioProductoRemitos.crearNuevoProductoRemito(prCachoHomeroHoyVentilador)
-			servicioProductoRemitos.crearNuevoProductoRemito(prSkinnerHomeroHoyVentana)
-			servicioProductoRemitos.crearNuevoProductoRemito(prSkinnerBartHoyElectricista)
-			servicioProductoRemitos.crearNuevoProductoRemito(prMoeBartHoyElectricista)
-			servicioProductoRemitos.crearNuevoProductoRemito(prSkinnerBartMananaTechista)
+//			servicioProductoRemitos.crearNuevoProductoRemito(prMoeHomeroHoyVentilador)
+//			servicioProductoRemitos.crearNuevoProductoRemito(prMoeHomeroHoyPuerta)
+//			servicioProductoRemitos.crearNuevoProductoRemito(prCachoHomeroHoyVentilador)
+//			servicioProductoRemitos.crearNuevoProductoRemito(prSkinnerHomeroHoyVentana)
+//			servicioProductoRemitos.crearNuevoProductoRemito(prSkinnerBartHoyElectricista)
+//			servicioProductoRemitos.crearNuevoProductoRemito(prMoeBartHoyElectricista)
+//			servicioProductoRemitos.crearNuevoProductoRemito(prSkinnerBartMananaTechista)
 			/** Actualizar remitos */
 			hojaDeRutaHomeroHoy.remitos = #[remitoHoyMoeHomero, remitoHoySkinnerHomero, remitoHoyCachoHomero].toSet
 			hojaDeRutaBartHoy.remitos = #[remitoHoyMoeBart, remitoHoySkinnerBart].toSet

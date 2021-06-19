@@ -22,7 +22,7 @@ class ProductoRemito {
 	ProductoRemitoKey idProductoRemito;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@MapsId("id_remito")
+	@MapsId("idRemito")
 	@JoinColumn(name="id_remito")
 	//@JsonIgnore
 	Remito remito
@@ -52,7 +52,7 @@ class ProductoRemito {
 	 *  ya que hibernate no puede hacer el seter id por reflection
 	 */
 	new(Remito _remito, Producto _producto, Integer _cantidad, Double _precioUnitario, Double _descuento) {
-		idProductoRemito = new ProductoRemitoKey(_producto.idProducto, _remito.id_remito)
+		idProductoRemito = new ProductoRemitoKey(_producto.idProducto, _remito.idRemito)
 		remito = _remito
 		producto = _producto
 		cantidad = _cantidad
