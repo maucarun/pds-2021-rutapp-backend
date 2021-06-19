@@ -33,6 +33,7 @@ class Usuario {
 	@Column(length=50, nullable=false, unique=true)
 	String username
 	
+	@JsonView(View.Usuario.Perfil)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String password
