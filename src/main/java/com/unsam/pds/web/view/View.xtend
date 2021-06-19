@@ -40,4 +40,12 @@ class View {
 		
 		static interface Put extends Post { }
 	}
+	
+	static interface HojaDeRuta {
+		
+		static interface Perfil { }
+		
+		static interface Lista { }
+	
+	}
 }

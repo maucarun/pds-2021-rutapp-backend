@@ -19,7 +19,11 @@ class ServicioEstado<T extends Estado> {
 	}
 	
 	def static <T extends Estado> T getByNombre(String estado) {
-		var ServicioEstado<T> serv = new ServicioEstado<T>
+		var serv = new ServicioEstado<T>
 		serv.getEstadoByNombre(estado) as T	
+	}
+	
+	def Estado obtenerEstadoPorId(Long idEstado) {
+		repo.findById(idEstado).get
 	}
 }

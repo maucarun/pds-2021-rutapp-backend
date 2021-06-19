@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.client.HttpClientErrorException
+import com.unsam.pds.dominio.entidades.EstadoRemito
 
 @Controller
 @CrossOrigin("*")
@@ -52,6 +53,8 @@ class ControllerRemito extends GenericController<Remito> {
 	Logger logger = LoggerFactory.getLogger(this.class)
 
 	@Autowired ServicioRemito servicioRemito
+	@Autowired ServicioEstado servicioEstado
+	
 
 	// GET ALL REMITOS por id usuario
 	@JsonView(View.Remito.Lista)
@@ -131,10 +134,9 @@ class ControllerRemito extends GenericController<Remito> {
 
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.CREATED)
-	@JsonView(View.Remito.Perfil)
-	@ResponseBody
 	@Transactional
-	def Remito set(@RequestBody @JsonView(View.Remito.Post) Remito remito, @RequestHeader HttpHeaders headers) {
+	def void set(@RequestBody Remito remito, @RequestHeader HttpHeaders headers) {
+		logger.info("Intentando guardar remito");
 		var Long usr = getUsuarioIdFromLogin(headers)
 		
 		if(remito.cliente === null || remito.cliente.idCliente === null)
@@ -146,6 +148,8 @@ class ControllerRemito extends GenericController<Remito> {
 			throw new UnauthorizedException
 			
 		remito.cliente = cliente
+//		remito.estado = servicioEstado.obtenerEstadoPorNombre("Pendiente", "estado_remito")
+		remito.estado = servicioEstado.obtenerEstadoPorId(6L) as EstadoRemito
 
 		servicioRemito.save(remito)
 	}
@@ -183,16 +187,20 @@ class ControllerRemito extends GenericController<Remito> {
 	@ResponseBody
 	def com.unsam.pds.dominio.Generics.ResponseBody delete(@PathVariable("id") Long id,
 		@RequestHeader HttpHeaders headers) {
-		var Long usr = getUsuarioIdFromLogin(headers)
+		logger.info("Intentando cancelar el remito id " + id)
+		
+		var Long usuarioId = getUsuarioIdFromLogin(headers)
 		var Remito rmt = servicioRemito.getById(id)
+		
+		logger.info("El usuario id " + usuarioId + " quiere cancelar el remito id " + id + " con estado " + rmt.estado.nombre)
 
-		if (rmt === null || rmt.estado.nombre !== "Pendiente")
+		if (rmt === null || rmt.estado.nombre != "Pendiente")
 			throw new NotFoundException
 
-		if (rmt.cliente.propietario === null || rmt.cliente.propietario.idUsuario !== usr)
+		if (rmt.cliente.propietario === null || rmt.cliente.propietario.idUsuario !== usuarioId)
 			throw new UnauthorizedException
-
-		rmt.estado = ServicioEstado.getByNombre("Cancelado")
+	
+		rmt.estado = servicioEstado.obtenerEstadoPorId(5L) as EstadoRemito
 
 		servicioRemito.save(rmt)
 

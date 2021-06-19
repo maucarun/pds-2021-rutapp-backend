@@ -13,14 +13,18 @@ import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import java.util.Set
 import javax.persistence.FetchType
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Accessors
 @Entity(name="hoja_de_ruta")
 class HojaDeRuta {
 	
+	@JsonView(View.HojaDeRuta.Lista)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_hoja_de_ruta
 	
+	@JsonView(View.HojaDeRuta.Lista)
 	@Column(nullable=true, unique=false, name="fecha_hora_inicio")
 	LocalDateTime fecha_hora_inicio
 	
@@ -38,6 +42,7 @@ class HojaDeRuta {
 	 * Un estado puede estar en muchas hdr
 	 *  Una hdr tiene un solo estado
 	 */
+ 	@JsonView(View.HojaDeRuta.Lista)
 	@ManyToOne
 	@JoinColumn(name="id_estado")
 	EstadoHojaDeRuta estado

@@ -19,6 +19,8 @@ import org.springframework.http.HttpStatus
 import javax.transaction.Transactional
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PostMapping
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
 
 @Controller
 @CrossOrigin("*")
@@ -29,6 +31,7 @@ class ControllerHojaDeRuta {
 	
 	@Autowired ServicioHojaDeRuta servicioHojasDeRutas
 	
+	@JsonView(View.HojaDeRuta.Lista)
 	@GetMapping(path="/usuario/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def List<HojaDeRuta> obtenerHojasDeRutaPorUsuario(@PathVariable("idUsuario") Long idUsuario) {
