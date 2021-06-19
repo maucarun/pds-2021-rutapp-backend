@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import com.unsam.pds.dominio.entidades.Cliente
 import javax.transaction.Transactional
+import com.unsam.pds.dominio.entidades.ProductoRemito
+import java.util.Set
 
 @Service
 class ServicioRemito extends GenericService<Remito, Long> {
@@ -37,7 +39,10 @@ class ServicioRemito extends GenericService<Remito, Long> {
 	
 	@Transactional
 	def void actualizarOCrearRemito( Remito remito){
+		var Set<ProductoRemito> productosSinRemito = newHashSet 
+		productosSinRemito = remito.productosDelRemito
 		repo.save(remito)
+		remito.productosDelRemito = productosSinRemito
 		servicioProductoRemito.guardarProductoRemito(remito)
 	}
 //	@Transactional
