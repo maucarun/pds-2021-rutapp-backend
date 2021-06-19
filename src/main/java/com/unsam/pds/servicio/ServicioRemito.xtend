@@ -39,9 +39,9 @@ class ServicioRemito extends GenericService<Remito, Long> {
 	
 	@Transactional
 	def void actualizarOCrearRemito( Remito remito){
-		var Set<ProductoRemito> productosSinRemito = newHashSet 
-		productosSinRemito = remito.productosDelRemito
-		repo.save(remito)
+		/* Importante clonar los PRs antes de guardar como backup. Esto es un workaround! */
+		var Set<ProductoRemito> productosSinRemito = remito.productosDelRemito.clone.toSet 
+		repo.save(remito) /* Cuando guarda: los datos de los PRs del remito quedan nulos */
 		remito.productosDelRemito = productosSinRemito
 		servicioProductoRemito.guardarProductoRemito(remito)
 	}

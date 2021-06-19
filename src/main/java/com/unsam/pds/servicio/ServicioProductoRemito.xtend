@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service
 import org.springframework.beans.factory.annotation.Autowired
 import com.unsam.pds.repositorio.RepositorioProductoRemito
 import com.unsam.pds.dominio.entidades.ProductoRemito
-import java.util.Set
 import javax.transaction.Transactional
 import com.unsam.pds.dominio.entidades.Remito
 
@@ -24,11 +23,16 @@ class ServicioProductoRemito {
 		remito.productosDelRemito = newHashSet
 		
 		productosSinRemitos.forEach[ pr | 
-			println("remito id: " + remito.idRemito)
-			println("id producto: " + pr.producto.idProducto)
 			remito.productosDelRemito.add(new ProductoRemito(remito, pr.producto, pr.cantidad, pr.precio_unitario, pr.descuento))
 		]
 		
+		eliminarProductosDelRemitoPorIdRemito(remito.idRemito) /* Si no eliminas los PRs anteriores, los que agregas se suman */
+		
 		repositorioProductoRemitos.saveAll(remito.productosDelRemito)
+	}
+	
+	@Transactional
+	def void eliminarProductosDelRemitoPorIdRemito(Long idRemito) {
+		repositorioProductoRemitos.deleteByRemito_idRemito(idRemito)
 	}
 }

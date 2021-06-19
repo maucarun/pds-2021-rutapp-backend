@@ -8,11 +8,9 @@ import javax.persistence.JoinColumn
 import javax.persistence.EmbeddedId
 import javax.persistence.MapsId
 import com.unsam.pds.dominio.keys.ProductoRemitoKey
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonView
 import com.unsam.pds.web.view.View
 import javax.persistence.FetchType
-import javax.persistence.CascadeType
 
 @Accessors
 @Entity(name="producto_remito")
@@ -28,7 +26,7 @@ class ProductoRemito {
 	Remito remito
 	
 	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.Remito.Post, View.Producto.Lista)
-	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@MapsId("idProducto")
 	@JoinColumn(name="id_producto")
 	Producto producto
@@ -43,7 +41,7 @@ class ProductoRemito {
 	
 	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.Remito.Post, View.Producto.Lista)
 	@Column(nullable=false, unique=false)
-	Double descuento
+	Double descuento = 1.0
 	
 	new() { }
 	

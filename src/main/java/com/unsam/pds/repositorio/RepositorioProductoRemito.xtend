@@ -6,4 +6,6 @@ import com.unsam.pds.dominio.keys.ProductoRemitoKey
 
 interface RepositorioProductoRemito extends CrudRepository <ProductoRemito, ProductoRemitoKey> {
 	
+	def void deleteByRemito_idRemito(Long idRemito)
+	
 }

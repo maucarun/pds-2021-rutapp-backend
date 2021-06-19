@@ -26,7 +26,6 @@ import java.time.LocalDateTime
 import java.time.LocalDate
 import com.unsam.pds.dominio.entidades.Remito
 import com.unsam.pds.servicio.ServicioRemito
-import com.unsam.pds.servicio.ServicioProductoRemito
 import com.unsam.pds.dominio.entidades.ProductoRemito
 import com.unsam.pds.servicio.ServicioComprobanteEntrega
 import com.unsam.pds.dominio.entidades.ComprobanteEntrega
@@ -54,7 +53,6 @@ class Bootstrap implements InitializingBean {
 	@Autowired ServicioEstado<Estado> 	servicioEstados
 	@Autowired ServicioHojaDeRuta		servicioHojaDeRuta
 	@Autowired ServicioProducto 		servicioProductos
-	@Autowired ServicioProductoRemito 	servicioProductoRemitos
 	@Autowired ServicioRemito			servicioRemitos
 	@Autowired ServicioUsuario 			servicioUsuarios
 	@Autowired RepositorioUsuario       repositorioUsuarios
@@ -587,9 +585,12 @@ class Bootstrap implements InitializingBean {
 
 	override afterPropertiesSet() throws Exception {
 		println("************************************************************************")
-		println("Running initialization")
+		println("Cargando datos iniciales")
 		println("************************************************************************")
 		init_app
+		println("************************************************************************")
+		println("Finalizó la carga de datos iniciales correctamente!")
+		println("************************************************************************")
 	}
 	
 }
