@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.client.HttpClientErrorException
 import com.unsam.pds.dominio.entidades.EstadoRemito
+import org.springframework.beans.BeanUtils
 
 @Controller
 @CrossOrigin("*")
@@ -158,30 +159,29 @@ class ControllerRemito extends GenericController<Remito> {
 
 	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
-	@JsonView(View.Remito.Perfil)
-	@ResponseBody
 	@Transactional
-	def Remito update(@RequestBody @JsonView(View.Producto.Put) Remito remito, @RequestHeader HttpHeaders headers) {
+	def void update(@RequestBody Remito remito, @RequestHeader HttpHeaders headers) {
 		var Long usr = getUsuarioIdFromLogin(headers)
-
+		println(remito.id_remito)
 		var Remito rmt = servicioRemito.getById(remito.id_remito)
 
-		if (rmt === null || rmt.estado.nombre !== "Pendiente")
+		if (rmt === null || rmt.estado.nombre != "Pendiente")
 			throw new NotFoundException
 
 		if (rmt.cliente.propietario === null || rmt.cliente.propietario.idUsuario !== usr)
 			throw new UnauthorizedException
 
-		remito.cliente = remito.cliente === null ? rmt.cliente : remito.cliente
-		remito.estado = remito.estado === null ? rmt.estado : remito.estado
-		remito.hojaDeRuta = remito.hojaDeRuta === null ? rmt.hojaDeRuta : remito.hojaDeRuta
-		remito.fechaDeCreacion = remito.fechaDeCreacion === null ? rmt.fechaDeCreacion : remito.fechaDeCreacion
-		remito.total = remito.estado === null ? rmt.total : remito.total
-		remito.motivo = remito.motivo === null ? rmt.motivo : remito.motivo
-		remito.tiempo_espera = remito.tiempo_espera === null ? rmt.tiempo_espera : remito.tiempo_espera
-		remito.comprobante = remito.comprobante === null ? rmt.comprobante : remito.comprobante
-
-		servicioRemito.save(remito)
+//		remito.cliente = remito.cliente === null ? rmt.cliente : remito.cliente
+//		remito.estado = remito.estado === null ? rmt.estado : remito.estado
+//		remito.hojaDeRuta = remito.hojaDeRuta === null ? rmt.hojaDeRuta : remito.hojaDeRuta
+//		remito.fechaDeCreacion = remito.fechaDeCreacion === null ? rmt.fechaDeCreacion : remito.fechaDeCreacion
+//		remito.total = remito.estado === null ? rmt.total : remito.total
+//		remito.motivo = remito.motivo === null ? rmt.motivo : remito.motivo
+//		remito.tiempo_espera = remito.tiempo_espera === null ? rmt.tiempo_espera : remito.tiempo_espera
+		//remito.comprobante = remito.comprobante === null ? rmt.comprobante : remito.comprobante
+		
+		BeanUtils.copyProperties(remito,rmt,"comprobante")
+		servicioRemito.actualizarOCrearRemito(rmt)
 	}
 
 	@DeleteMapping(path="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)

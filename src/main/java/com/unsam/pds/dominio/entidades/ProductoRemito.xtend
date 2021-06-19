@@ -21,10 +21,10 @@ class ProductoRemito {
 	@EmbeddedId
 	ProductoRemitoKey idProductoRemito;
 	
-	@ManyToOne
-	@MapsId("idRemito")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@MapsId("id_remito")
 	@JoinColumn(name="id_remito")
-	@JsonIgnore
+	//@JsonIgnore
 	Remito remito
 	
 	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.Remito.Post, View.Producto.Lista)
@@ -58,9 +58,14 @@ class ProductoRemito {
 		cantidad = _cantidad
 		precio_unitario = _precioUnitario
 		descuento = _descuento
+		_remito.agregarProducto(this)
 	}
 	
 	def Double calcularSubCosto() {
 		cantidad * precio_unitario * descuento
+	}
+	
+	def setRemito(Remito remito) {
+		remito.agregarProducto(this)
 	}
 }

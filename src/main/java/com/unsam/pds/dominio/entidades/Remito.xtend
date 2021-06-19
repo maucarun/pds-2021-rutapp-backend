@@ -99,14 +99,14 @@ class Remito {
 		calcularTotal()
 	}
 	
-	def void setProductos(Set<ProductoRemito> _productos) {
-		_productos.forEach[producto | 
-			producto.remito = this
-		]
-		
-		productos = _productos
-		calcularTotal()
-	}
+//	def void setProductos(Set<ProductoRemito> _productos) {
+//		_productos.forEach[producto | 
+//			producto.remito = this
+//		]
+//		
+//		productos = _productos
+//		calcularTotal()
+//	}
 	
 	def void setComprobante(ComprobanteEntrega _comprobante) {
 		comprobante = _comprobante

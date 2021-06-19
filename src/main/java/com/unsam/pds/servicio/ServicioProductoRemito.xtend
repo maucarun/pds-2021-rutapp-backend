@@ -24,6 +24,8 @@ class ServicioProductoRemito {
 		remito.productosDelRemito = newHashSet
 		
 		productosSinRemitos.forEach[ pr | 
+			println("remito id: " + remito.id_remito)
+			println("id producto: " + pr.producto.idProducto)
 			remito.productosDelRemito.add(new ProductoRemito(remito, pr.producto, pr.cantidad, pr.precio_unitario, pr.descuento))
 		]
 		

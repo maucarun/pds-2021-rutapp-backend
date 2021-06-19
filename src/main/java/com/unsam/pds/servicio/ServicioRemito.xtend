@@ -10,6 +10,7 @@ import javassist.NotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import com.unsam.pds.dominio.entidades.Cliente
+import javax.transaction.Transactional
 
 @Service
 class ServicioRemito extends GenericService<Remito, Long> {
@@ -34,6 +35,7 @@ class ServicioRemito extends GenericService<Remito, Long> {
 		repo.findByCliente_idClienteAndEstado_nombre(idCliente, "Pendiente")
 	}
 	
+	@Transactional
 	def void actualizarOCrearRemito( Remito remito){
 		repo.save(remito)
 		servicioProductoRemito.guardarProductoRemito(remito)
