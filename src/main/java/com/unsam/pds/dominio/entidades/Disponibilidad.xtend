@@ -57,8 +57,12 @@ class Disponibilidad {
 		_cliente.agregarDisponibilidad(this)
 	}
 	
+	new(DiaSemana _dia) {
+		diaSemana = _dia
+	}
+	
 	def String dia() {
-		diaSemana.dia_semana
+		diaSemana.diaSemana
 	}
 	
 	def setCliente(Cliente cliente) {

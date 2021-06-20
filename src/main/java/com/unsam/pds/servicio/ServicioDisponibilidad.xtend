@@ -25,7 +25,7 @@ class ServicioDisponibilidad {
 	
 	@Transactional
 	def void crearNuevaDisponibilidad(Disponibilidad nuevaDisponibilidad) {
-		logger.info("Creando la disponibilidad del dia " + nuevaDisponibilidad.diaSemana.dia_semana 
+		logger.info("Creando la disponibilidad del dia " + nuevaDisponibilidad.diaSemana.diaSemana 
 			+ " para el cliente " + nuevaDisponibilidad.cliente.nombre)
 		repositorioDisponibilidad.save(nuevaDisponibilidad)
 		logger.info("Disponibilidad creada exitosamente!")
@@ -49,7 +49,7 @@ class ServicioDisponibilidad {
 	@Transactional
 	private def Disponibilidad crearDisponibilidad(Disponibilidad disponibilidad, Cliente cliente) {
 		logger.info("Creando la disponibilidad para el cliente " + cliente.nombre 
-			+ " el dia " + disponibilidad.diaSemana.dia_semana)
+			+ " el dia " + disponibilidad.diaSemana.diaSemana)
 		new Disponibilidad(cliente, disponibilidad.diaSemana, disponibilidad.hora_apertura, disponibilidad.hora_cierre)
 	}
 	

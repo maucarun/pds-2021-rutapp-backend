@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 
 interface RepositorioDiaSemana extends CrudRepository <DiaSemana, Long> {
 	
+	def DiaSemana findByDiaSemana(String diaNombre)
+	
 }

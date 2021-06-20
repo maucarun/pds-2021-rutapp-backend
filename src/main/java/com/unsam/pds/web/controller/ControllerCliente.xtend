@@ -36,6 +36,9 @@ import net.kaczmarzyk.spring.data.jpa.domain.Between
 import com.unsam.pds.dominio.entidades.Usuario
 import com.unsam.pds.dominio.Exceptions.NotFoundException
 import com.unsam.pds.dominio.Exceptions.UnauthorizedException
+import com.unsam.pds.dominio.entidades.Disponibilidad
+import java.util.Set
+import com.unsam.pds.servicio.ServicioDiaSemana
 
 @Controller
 @CrossOrigin("*")
@@ -45,7 +48,22 @@ class ControllerCliente extends GenericController<Cliente> {
 	Logger logger = LoggerFactory.getLogger(this.class)
 
 	@Autowired ServicioCliente servicioClientes
-
+	@Autowired ServicioDiaSemana servicioDiaSemana
+	
+	@GetMapping(path="/disponibilidades", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	def Set<Disponibilidad> obtenerDisponibilidadesVacias() {
+		var List<Disponibilidad> nuevasDisponibilidades = newArrayList
+		nuevasDisponibilidades.add(new Disponibilidad(servicioDiaSemana.obtenerDiaPorNombre("Lunes")))
+		nuevasDisponibilidades.add(new Disponibilidad(servicioDiaSemana.obtenerDiaPorNombre("Martes")))
+		nuevasDisponibilidades.add(new Disponibilidad(servicioDiaSemana.obtenerDiaPorNombre("Miercoles")))
+		nuevasDisponibilidades.add(new Disponibilidad(servicioDiaSemana.obtenerDiaPorNombre("Jueves")))
+		nuevasDisponibilidades.add(new Disponibilidad(servicioDiaSemana.obtenerDiaPorNombre("Viernes")))
+		nuevasDisponibilidades.add(new Disponibilidad(servicioDiaSemana.obtenerDiaPorNombre("Sabado")))
+		nuevasDisponibilidades.add(new Disponibilidad(servicioDiaSemana.obtenerDiaPorNombre("Domingo")))
+		return nuevasDisponibilidades.toSet
+	}
+	
 	@JsonView(View.Cliente.Lista)
 	@GetMapping(path="/activo/usuario/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

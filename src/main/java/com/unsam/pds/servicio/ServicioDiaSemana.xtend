@@ -14,4 +14,8 @@ class ServicioDiaSemana {
 		repositorioDiasSemana.save(nuevoDia)
 	}
 	
+	def DiaSemana obtenerDiaPorNombre(String diaNombre) {
+		repositorioDiasSemana.findByDiaSemana(diaNombre)
+	}
+	
 }

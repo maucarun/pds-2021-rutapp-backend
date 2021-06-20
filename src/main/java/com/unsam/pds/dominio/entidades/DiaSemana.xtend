@@ -20,7 +20,7 @@ class DiaSemana {
 	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
 	@NotNull
 	@Column(length=12, nullable=false, unique=true)
-	String dia_semana
+	String diaSemana
 	
 	new() { }	
 }

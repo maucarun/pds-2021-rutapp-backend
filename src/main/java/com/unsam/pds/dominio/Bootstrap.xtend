@@ -58,13 +58,13 @@ class Bootstrap implements InitializingBean {
 	@Autowired RepositorioUsuario       repositorioUsuarios
 	
 	/** Crear dias */
-	DiaSemana lunes = new DiaSemana() => [ dia_semana = "Lunes" ]
-	DiaSemana martes = new DiaSemana() => [ dia_semana = "Martes" ]
-	DiaSemana miercoles = new DiaSemana() => [ dia_semana = "Miercoles" ]
-	DiaSemana jueves = new DiaSemana() => [ dia_semana = "Jueves" ]
-	DiaSemana viernes = new DiaSemana() => [ dia_semana = "Viernes" ]
-	DiaSemana sabado = new DiaSemana() => [ dia_semana = "Sabado" ]
-	DiaSemana domingo = new DiaSemana() => [ dia_semana = "Domingo" ]
+	DiaSemana lunes = new DiaSemana() => [ diaSemana = "Lunes" ]
+	DiaSemana martes = new DiaSemana() => [ diaSemana = "Martes" ]
+	DiaSemana miercoles = new DiaSemana() => [ diaSemana = "Miercoles" ]
+	DiaSemana jueves = new DiaSemana() => [ diaSemana = "Jueves" ]
+	DiaSemana viernes = new DiaSemana() => [ diaSemana = "Viernes" ]
+	DiaSemana sabado = new DiaSemana() => [ diaSemana = "Sabado" ]
+	DiaSemana domingo = new DiaSemana() => [ diaSemana = "Domingo" ]
 	
 	/** Crear direcciones */
 	Direccion direccionHomeroMoe = new Direccion() => [
