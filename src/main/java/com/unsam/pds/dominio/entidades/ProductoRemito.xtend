@@ -41,7 +41,7 @@ class ProductoRemito {
 	
 	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.Remito.Post, View.Producto.Lista)
 	@Column(nullable=false, unique=false)
-	Double descuento = 1.0
+	Integer descuento = 0
 	
 	new() { }
 	
@@ -49,7 +49,7 @@ class ProductoRemito {
 	 * Es importante tener este constructor para definir el ID
 	 *  ya que hibernate no puede hacer el seter id por reflection
 	 */
-	new(Remito _remito, Producto _producto, Integer _cantidad, Double _precioUnitario, Double _descuento) {
+	new(Remito _remito, Producto _producto, Integer _cantidad, Double _precioUnitario, Integer _descuento) {
 		idProductoRemito = new ProductoRemitoKey(_producto.idProducto, _remito.idRemito)
 		remito = _remito
 		producto = _producto
@@ -60,7 +60,8 @@ class ProductoRemito {
 	}
 	
 	def Double calcularSubCosto() {
-		cantidad * precio_unitario * descuento
+		var descuentoPorcentaje = 1 - descuento / 100
+		cantidad * precio_unitario * descuentoPorcentaje
 	}
 	
 	def setRemito(Remito remito) {
