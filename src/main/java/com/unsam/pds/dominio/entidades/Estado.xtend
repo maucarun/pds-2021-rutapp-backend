@@ -14,7 +14,7 @@ import javax.persistence.Inheritance
 import com.fasterxml.jackson.annotation.JsonView
 import com.unsam.pds.web.view.View
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo", visible = true) 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo", visible = false) 
 @JsonSubTypes(#[
 	@JsonSubTypes.Type(value = EstadoRemito, name = "Remito"), 
 	@JsonSubTypes.Type(value = EstadoHojaDeRuta, name= "HojaDeRuta")
@@ -24,12 +24,12 @@ import com.unsam.pds.web.view.View
 @Accessors
 abstract class Estado {
 	
-	@JsonView(View.Remito.Perfil)
+	@JsonView(View.Remito.Perfil, View.HojaDeRuta.Perfil, View.HojaDeRuta.Post)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_estado
 	
 	@NotNull
-	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.HojaDeRuta.Lista)
+	@JsonView(View.Remito.Perfil, View.Remito.Lista, View.HojaDeRuta.Lista, View.HojaDeRuta.Perfil)
 	@Column(length=20, nullable=false, unique=false)
 	String nombre
 	

@@ -1,38 +1,57 @@
 package com.unsam.pds.servicio
 
-import org.springframework.stereotype.Service
-import org.springframework.beans.factory.annotation.Autowired
-import com.unsam.pds.repositorio.RepositorioHojaDeRuta
+import com.unsam.pds.dominio.Generics.GenericService
+import com.unsam.pds.dominio.entidades.EstadoHojaDeRuta
 import com.unsam.pds.dominio.entidades.HojaDeRuta
-import javax.transaction.Transactional
+import com.unsam.pds.repositorio.RepositorioHojaDeRuta
+import java.util.List
 import javassist.NotFoundException
+import javax.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.BeanUtils
-import java.util.List
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.springframework.beans.factory.annotation.Qualifier
 
 @Service
-class ServicioHojaDeRuta {
-	
+class ServicioHojaDeRuta extends GenericService<HojaDeRuta, Long> {
+
 	Logger logger = LoggerFactory.getLogger(ServicioHojaDeRuta)
-	
-	@Autowired RepositorioHojaDeRuta repositorioHojaDeRutas
-	
+
+	@Autowired  RepositorioHojaDeRuta repoHoja
+	@Autowired ServicioEstado<EstadoHojaDeRuta> servEstado
+	@Autowired ServicioRemito servRto
+
 	def HojaDeRuta obtenerHdrPorId(Long idHdr) {
-		repositorioHojaDeRutas.findById(idHdr).orElseThrow([
+		repoHoja.findById(idHdr).orElseThrow([
 			throw new NotFoundException("No existe el remito con el id " + idHdr)
 		])
 	}
-	
+
 	def List<HojaDeRuta> obtenerHojasDeRutaPorIdUsuario(Long idUsuario) {
-		repositorioHojaDeRutas.obtenerHojasDeRutaPorIdUsuario(idUsuario)
+		repoHoja.obtenerHojasDeRutaPorIdUsuario(idUsuario)
 	}
-	
+
 	@Transactional
-	def void crearNuevaHdr(HojaDeRuta nuevaHdr) {
-		repositorioHojaDeRutas.save(nuevaHdr)
+	def HojaDeRuta crearNuevaHdr(HojaDeRuta nuevaHdr) {
+///////////// ESTA VALIDACION TIRA ERROR EN EL BOOTSTRAP :(
+//		nuevaHdr.remitos.forEach [ rmo |
+//			val rto = repoRto.getById(rmo.idRemito)
+//			if (rto.hojaDeRuta !== null && rto.hojaDeRuta != nuevaHdr)
+//				throw new com.unsam.pds.dominio.Exceptions.NotFoundException("El remito " + rto.idRemito +
+//					" Esta asignado a otra Hoja de Ruta")
+//		]
+
+		val hoja = repoHoja.save(nuevaHdr)
+		nuevaHdr.remitos.forEach [ rto |
+			val rt = servRto.getById(rto.idRemito)
+			rt.hojaDeRuta = hoja
+			servRto.save(rt)
+		]
+		hoja
 	}
-	
+
 	@Transactional
 	def void actualizarHdr(Long idHdr, HojaDeRuta nuevaHdr) {
 		var hdrAModificar = obtenerHdrPorId(idHdr)
@@ -41,5 +60,26 @@ class ServicioHojaDeRuta {
 		crearNuevaHdr(nuevaHdr)
 		logger.info("Hoja de ruta actualizada!")
 	}
+
+	override HojaDeRuta getById(Long id) {
+		repoHoja.findById(id).get
+	}
+
+
+	@Transactional	
+	override void deleteById(Long id) {
+		val hoja = repoHoja.getById(id)
+		hoja.estado = getEstadoByNombre("Suspendida")
+		repoHoja.save(hoja)
+	}
+
+	@Transactional
 	
+	def EstadoHojaDeRuta getEstadoById(Long id) {
+		servEstado.obtenerEstadoPorId(id)
+	}
+	
+	def EstadoHojaDeRuta getEstadoByNombre(String nombre) {
+		servEstado.getEstadoByNombre("Suspendida")
+	}
 }

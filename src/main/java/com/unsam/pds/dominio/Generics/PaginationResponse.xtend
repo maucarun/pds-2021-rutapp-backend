@@ -13,7 +13,8 @@ class PaginationResponse<T> {
 		View.Producto.Perfil,
 		View.Producto.Lista,
 		View.Remito.Perfil,
-		View.Remito.Lista
+		View.Remito.Lista,
+		View.HojaDeRuta.Lista
 	)
 	Long cant;
 	@JsonView(
@@ -22,7 +23,8 @@ class PaginationResponse<T> {
 		View.Producto.Perfil,
 		View.Producto.Lista,
 		View.Remito.Perfil,
-		View.Remito.Lista
+		View.Remito.Lista,
+		View.HojaDeRuta.Lista
 	)
 	Long paganro;
 	@JsonView(
@@ -31,7 +33,8 @@ class PaginationResponse<T> {
 		View.Producto.Perfil,
 		View.Producto.Lista,
 		View.Remito.Perfil,
-		View.Remito.Lista
+		View.Remito.Lista,
+		View.HojaDeRuta.Lista
 	)
 	Long cantporpag;
 	@JsonView(
@@ -40,7 +43,8 @@ class PaginationResponse<T> {
 		View.Producto.Perfil,
 		View.Producto.Lista,
 		View.Remito.Perfil,
-		View.Remito.Lista
+		View.Remito.Lista,
+		View.HojaDeRuta.Lista
 	)
 	Long offset;
 	@JsonView(
@@ -49,7 +53,8 @@ class PaginationResponse<T> {
 		View.Producto.Perfil,
 		View.Producto.Lista,
 		View.Remito.Perfil,
-		View.Remito.Lista
+		View.Remito.Lista,
+		View.HojaDeRuta.Lista
 	)
 	Long cantpag;
 	@JsonView(
@@ -58,7 +63,8 @@ class PaginationResponse<T> {
 		View.Producto.Perfil,
 		View.Producto.Lista,
 		View.Remito.Perfil,
-		View.Remito.Lista
+		View.Remito.Lista,
+		View.HojaDeRuta.Lista
 	)
 	List<T> reultado;
 
