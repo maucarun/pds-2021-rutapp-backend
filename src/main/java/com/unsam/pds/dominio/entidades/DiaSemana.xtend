@@ -13,11 +13,11 @@ import com.unsam.pds.web.view.View
 @Accessors
 @Entity(name="dia_semana")
 class DiaSemana {
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_dia_semana
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.HojaDeRuta.Perfil)
 	@NotNull
 	@Column(length=12, nullable=false, unique=true)
 	String diaSemana
