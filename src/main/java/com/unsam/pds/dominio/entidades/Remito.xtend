@@ -24,7 +24,7 @@ import javax.persistence.CascadeType
 @Entity(name="remito")
 class Remito {
 	
-	@JsonView(View.Remito.Lista, View.Remito.Perfil)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.HojaDeRuta.Perfil, View.HojaDeRuta.Post)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long idRemito
 	
@@ -50,7 +50,7 @@ class Remito {
 	 * Un cliente puede tener muchos remitos
 	 *  Un remito pertenece a un solo cliente
 	 */
-	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post, View.HojaDeRuta.Perfil)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_cliente")
 	Cliente cliente
@@ -60,7 +60,7 @@ class Remito {
 	 *  Un remito tiene un solo estado
 	 */
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JsonView(View.Remito.Lista, View.Remito.Perfil)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.HojaDeRuta.Perfil)
 	@JoinColumn(name="id_estado")
 	EstadoRemito estado
 	
@@ -71,7 +71,6 @@ class Remito {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_hoja_de_ruta")
 	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
-	@JsonIgnore
 	HojaDeRuta hojaDeRuta
 	
 	@JsonView(View.Remito.Perfil, View.Remito.Post)
@@ -113,7 +112,7 @@ class Remito {
 		_comprobante.remito = this
 	}
 	
-	@JsonView(View.Remito.Lista, View.Remito.Perfil)
+	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.HojaDeRuta.Perfil)
 	def Integer cantidadDeItems() {
 		productosDelRemito.size
 	}

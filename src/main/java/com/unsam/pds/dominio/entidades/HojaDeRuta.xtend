@@ -1,40 +1,43 @@
 package com.unsam.pds.dominio.entidades
 
-import org.eclipse.xtend.lib.annotations.Accessors
+import com.fasterxml.jackson.annotation.JsonView
+import com.unsam.pds.web.view.View
+import java.time.LocalDateTime
+import java.util.Set
+import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.Id
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
-import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.validation.constraints.PositiveOrZero
+import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
-import java.util.Set
-import javax.persistence.FetchType
-import com.fasterxml.jackson.annotation.JsonView
-import com.unsam.pds.web.view.View
+import javax.validation.constraints.PositiveOrZero
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 @Entity(name="hoja_de_ruta")
 class HojaDeRuta {
 	
-	@JsonView(View.HojaDeRuta.Lista)
+	@JsonView(View.HojaDeRuta.Lista, View.HojaDeRuta.Perfil, View.HojaDeRuta.Put)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_hoja_de_ruta
 	
-	@JsonView(View.HojaDeRuta.Lista)
+	@JsonView(View.HojaDeRuta.Lista, View.HojaDeRuta.Perfil, View.HojaDeRuta.Post)
 	@Column(nullable=true, unique=false, name="fecha_hora_inicio")
 	LocalDateTime fecha_hora_inicio
 	
+	@JsonView(View.HojaDeRuta.Perfil, View.HojaDeRuta.Post)
 	@Column(nullable=true, unique=false, name="fecha_hora_fin")
 	LocalDateTime fecha_hora_fin
 	
+	@JsonView(View.HojaDeRuta.Perfil, View.HojaDeRuta.Post)
 	@PositiveOrZero(message="Los kms recorridos no pueden ser negativos")
 	@Column(nullable=false, unique=false)
 	Double kms_recorridos
 	
+	@JsonView(View.HojaDeRuta.Perfil, View.HojaDeRuta.Post)
 	@Column(length=250, nullable=true, unique=false)
 	String justificacion
 	
@@ -42,12 +45,13 @@ class HojaDeRuta {
 	 * Un estado puede estar en muchas hdr
 	 *  Una hdr tiene un solo estado
 	 */
- 	@JsonView(View.HojaDeRuta.Lista)
+ 	@JsonView(View.HojaDeRuta.Lista, View.HojaDeRuta.Perfil, View.HojaDeRuta.Post)
 	@ManyToOne
 	@JoinColumn(name="id_estado")
 	EstadoHojaDeRuta estado
 	
-	@OneToMany(mappedBy="hojaDeRuta", fetch=FetchType.EAGER)
+ 	@JsonView(View.HojaDeRuta.Perfil, View.HojaDeRuta.Post)
+	@OneToMany(mappedBy="hojaDeRuta", fetch=FetchType.LAZY)
 	Set<Remito> remitos = newHashSet
 	
 	new() { }

@@ -46,6 +46,10 @@ class View {
 		static interface Perfil { }
 		
 		static interface Lista { }
+		
+		static interface Post { }
+		
+		static interface Put extends Post { }
 	
 	}
 }

@@ -22,11 +22,11 @@ import com.unsam.pds.web.view.View
 @Accessors
 @Entity(name="cliente")
 class Cliente {
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Put, View.Remito.Perfil, View.Remito.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Put, View.Remito.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long idCliente
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Lista, View.Remito.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Lista, View.Remito.Perfil, View.HojaDeRuta.Perfil)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
