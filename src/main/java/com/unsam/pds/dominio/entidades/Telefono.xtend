@@ -31,7 +31,7 @@ class Telefono {
 	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
 	@NotNull
 	@Column(nullable=false, unique=false)
-	Boolean esPrincipal
+	Boolean esPrincipal = true
 	
 	/**
 	 * Un contacto tiene muchos telefonos

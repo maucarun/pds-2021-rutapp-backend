@@ -133,7 +133,7 @@ class Bootstrap implements InitializingBean {
 	LocalTime PM18 = LocalTime.of(18,0)
 	
 	/** Crear tiempos */
-	LocalTime diezMinutos = LocalTime.of(0,10)
+	Integer diezMinutos = 10
 	
 	/** Crear usuarios */
 	Usuario homero = new Usuario() => [
@@ -217,7 +217,7 @@ class Bootstrap implements InitializingBean {
 		nombre = "Bar de Moe"
 		observaciones = "Es un bar"
 		cuit = "10301112225"
-		promedio_espera = 10.0
+		promedio_espera = 10
 		propietario = homero
 		direccion = direccionHomeroMoe
 	]
@@ -226,7 +226,7 @@ class Bootstrap implements InitializingBean {
 		nombre = "Taller de Cacho"
 		observaciones = "Es un taller"
 		cuit = "30501112560"
-		promedio_espera = 25.0
+		promedio_espera = 25
 		propietario = homero
 		direccion = direccionHomeroTallerAutos
 	]
@@ -235,7 +235,7 @@ class Bootstrap implements InitializingBean {
 		nombre = "Bar de Moe"
 		observaciones = "Es un bar"
 		cuit = "10301112225"
-		promedio_espera = 10.0
+		promedio_espera = 10
 		propietario = bart
 		direccion = direccionBartMoe
 	]
@@ -244,7 +244,7 @@ class Bootstrap implements InitializingBean {
 		nombre = "Escuela Primaria de Springfield"
 		observaciones = "Es un una escuela"
 		cuit = "10301112220"
-		promedio_espera = 15.0
+		promedio_espera = 15
 		propietario = homero
 		direccion = direccionHomeroEscuelaPrimaria
 	]
@@ -253,7 +253,7 @@ class Bootstrap implements InitializingBean {
 		nombre = "Escuela Primaria de Springfield"
 		observaciones = "Es un una escuela"
 		cuit = "10301112220"
-		promedio_espera = 15.0
+		promedio_espera = 15
 		propietario = bart
 		direccion = direccionBartEscuelaPrimaria
 	]

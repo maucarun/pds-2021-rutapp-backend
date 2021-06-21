@@ -89,23 +89,38 @@ class ControllerCliente extends GenericController<Cliente> {
 		servicioClientes.obtenerClienteActivoDelUsuarioPorId(idCliente, idUsuario)
 	}
 
-//	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseStatus(code=HttpStatus.CREATED)
-//	@Transactional
-//	def void crearCliente(@RequestBody Cliente nuevoCliente) {
-//		logger.info("POST agregar nuevo cliente")
-//		servicioClientes.crearNuevoCliente(nuevoCliente)
-//	}
-	@PutMapping(path="/usuario/{idUsuario}/cliente/{idCliente}", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(code=HttpStatus.CREATED)
+	@Transactional
+	def void crearCliente(@RequestBody Cliente nuevoCliente,
+		@RequestHeader HttpHeaders headers) {
+		var Long usr = getUsuarioIdFromLogin(headers)
+		
+		nuevoCliente.propietario = new Usuario()
+		nuevoCliente.propietario.idUsuario = usr
+		
+		logger.info("POST agregar nuevo cliente")
+		servicioClientes.crearNuevoCliente(nuevoCliente)
+	}
+	
+	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
 	@Transactional
 	def void actualizarCLiente(
-		@PathVariable("idUsuario") Long idUsuario,
-		@PathVariable("idCliente") Long idCliente,
-		@RequestBody Cliente clienteModificado
-	) {
-		logger.info("PUT actualizar el cliente con id " + idCliente + " del usuario con el id " + idUsuario)
-		servicioClientes.actualizarCliente(clienteModificado, idCliente, idUsuario)
+		@RequestBody Cliente clienteModificado,	
+		@RequestHeader HttpHeaders headers) {
+		var Long usr = getUsuarioIdFromLogin(headers)
+
+		var Cliente clie = servicioClientes.getById(clienteModificado.idCliente)
+
+		if (clie === null || !clie.activo)
+			throw new NotFoundException
+
+		if (clie.propietario === null || clie.propietario.idUsuario !== usr)
+			throw new UnauthorizedException
+		
+		logger.info("PUT actualizar el cliente con id " + clienteModificado.idCliente + " del usuario con el id " + usr)
+		servicioClientes.actualizarCliente(clienteModificado, clienteModificado.idCliente, usr)
 	}
 
 	@DeleteMapping(path="/usuario/{idUsuario}/cliente/{idCliente}")
@@ -150,48 +165,48 @@ class ControllerCliente extends GenericController<Cliente> {
 		servicioClientes.get(specUsr)
 	}
 
-	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(code=HttpStatus.CREATED)
-	@JsonView(View.Cliente.Perfil)
-	@ResponseBody
-	@Transactional
-	def Cliente set(@RequestBody @JsonView(View.Cliente.Post) Cliente nuevoCliente,
-		@RequestHeader HttpHeaders headers) {
-		var Long usr = getUsuarioIdFromLogin(headers)
+//	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseStatus(code=HttpStatus.CREATED)
+//	@JsonView(View.Cliente.Perfil)
+//	@ResponseBody
+//	@Transactional
+//	def Cliente set(@RequestBody @JsonView(View.Cliente.Post) Cliente nuevoCliente,
+//		@RequestHeader HttpHeaders headers) {
+//		var Long usr = getUsuarioIdFromLogin(headers)
+//
+//		nuevoCliente.propietario = new Usuario()
+//		nuevoCliente.propietario.idUsuario = usr
+//
+//		servicioClientes.save(nuevoCliente)
+//	}
 
-		nuevoCliente.propietario = new Usuario()
-		nuevoCliente.propietario.idUsuario = usr
-
-		servicioClientes.save(nuevoCliente)
-	}
-
-	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(code=HttpStatus.OK)
-	@JsonView(View.Cliente.Perfil)
-	@ResponseBody
-	@Transactional
-	def Cliente actualizarCLiente(@RequestBody @JsonView(View.Cliente.Put) Cliente cliente,
-		@RequestHeader HttpHeaders headers) {
-		var Long usr = getUsuarioIdFromLogin(headers)
-
-		var Cliente clie = servicioClientes.getById(cliente.idCliente)
-
-		if (clie === null || !clie.activo)
-			throw new NotFoundException
-
-		if (clie.propietario === null || clie.propietario.idUsuario !== usr)
-			throw new UnauthorizedException
-		
-		cliente.propietario = cliente.propietario === null ? clie.propietario : cliente.propietario
-		cliente.cuit = cliente.cuit === null ? clie.cuit : cliente.cuit
-		cliente.nombre = cliente.nombre === null ? clie.nombre : cliente.nombre
-		cliente.observaciones = cliente.observaciones === null ? clie.observaciones : cliente.observaciones
-		cliente.direccion = cliente.direccion === null ? clie.direccion : cliente.direccion
-		cliente.promedio_espera = cliente.promedio_espera === null ? clie.promedio_espera : cliente.promedio_espera
-		cliente.activo = cliente.activo === null ? clie.activo : cliente.activo
-
-		servicioClientes.save(cliente)
-	}
+//	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseStatus(code=HttpStatus.OK)
+//	@JsonView(View.Cliente.Perfil)
+//	@ResponseBody
+//	@Transactional
+//	def Cliente actualizarCLiente(@RequestBody @JsonView(View.Cliente.Put) Cliente cliente,
+//		@RequestHeader HttpHeaders headers) {
+//		var Long usr = getUsuarioIdFromLogin(headers)
+//
+//		var Cliente clie = servicioClientes.getById(cliente.idCliente)
+//
+//		if (clie === null || !clie.activo)
+//			throw new NotFoundException
+//
+//		if (clie.propietario === null || clie.propietario.idUsuario !== usr)
+//			throw new UnauthorizedException
+//		
+//		cliente.propietario = cliente.propietario === null ? clie.propietario : cliente.propietario
+//		cliente.cuit = cliente.cuit === null ? clie.cuit : cliente.cuit
+//		cliente.nombre = cliente.nombre === null ? clie.nombre : cliente.nombre
+//		cliente.observaciones = cliente.observaciones === null ? clie.observaciones : cliente.observaciones
+//		cliente.direccion = cliente.direccion === null ? clie.direccion : cliente.direccion
+//		cliente.promedio_espera = cliente.promedio_espera === null ? clie.promedio_espera : cliente.promedio_espera
+//		cliente.activo = cliente.activo === null ? clie.activo : cliente.activo
+//
+//		servicioClientes.save(cliente)
+//	}
 
 	@DeleteMapping(path="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)

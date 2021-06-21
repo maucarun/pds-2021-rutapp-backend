@@ -44,7 +44,7 @@ class Remito {
 	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
 	@PositiveOrZero(message="El tiempo no puede ser negativo")
 	@Column(nullable=false, unique=false)
-	LocalTime tiempo_espera = LocalTime.of(0,0)
+	Integer tiempo_espera = 0
 	
 	/**
 	 * Un cliente puede tener muchos remitos

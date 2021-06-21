@@ -47,7 +47,7 @@ class Cliente {
 	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
 	@Positive(message="El promedio de espera debe ser positivo")
 	@Column(nullable=false, unique=false, name="promedio_espera")
-	Double promedio_espera
+	Integer promedio_espera = 0
 	
 	@Column(nullable=false, unique=false)
 	Boolean activo = true
