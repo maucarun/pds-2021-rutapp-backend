@@ -19,6 +19,7 @@ class ServicioCliente extends GenericService<Cliente, Long> {
 	@Autowired RepositorioCliente repo
 	
 	@Autowired ServicioDisponibilidad servicioDisponibilidad
+	@Autowired ServicioContacto servicioContacto
 	
 	def Cliente obtenerClienteActivoPorId(Long idCliente) {
 		logger.info("Obtener el id cliente " + idCliente)
@@ -67,6 +68,8 @@ class ServicioCliente extends GenericService<Cliente, Long> {
 	def void actualizarCliente(Cliente clienteModificado, Long idCliente, Long idUsuario) {
 		logger.info("Actualizando el cliente id " + idCliente)
 		obtenerClienteActivoDelUsuarioPorId(idCliente, idUsuario)
+		
+		servicioContacto.eliminarContactosPorCliente(idCliente)
 		
 		crearNuevoCliente(clienteModificado)
 		logger.info("Cliente actualizado exitosamente!")
