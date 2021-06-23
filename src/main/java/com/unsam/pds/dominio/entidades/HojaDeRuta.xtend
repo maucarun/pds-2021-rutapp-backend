@@ -20,7 +20,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 @Entity(name="hoja_de_ruta")
 class HojaDeRuta {
 	
-	@JsonView(View.HojaDeRuta.Lista, View.HojaDeRuta.Perfil, View.HojaDeRuta.Put)
+	@JsonView(View.HojaDeRuta.Lista, View.HojaDeRuta.Perfil, View.HojaDeRuta.Put, View.Remito.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_hoja_de_ruta
 	

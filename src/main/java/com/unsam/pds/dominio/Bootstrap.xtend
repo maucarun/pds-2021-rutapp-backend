@@ -165,25 +165,25 @@ class Bootstrap implements InitializingBean {
 	
 	/** Crear productos */
 	Producto ventiladorHomero = new Producto() => [
-		nombre = "ventilador"
+		nombre = "Ventilador"
 		precio_unitario = 1000.0
-		descripcion = "es un ventilador"
+		descripcion = "Es un ventilador"
 		url_imagen = "https://depor.com/resizer/UO7fzHpi6ZCPJXpfl9aFntHfIuE=/1200x900/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/SNF4HQTDJVCIFBU7NLYOH6BY7E.jpg"
 		propietario = homero
 	]
 	
 	Producto ventanaHomero = new Producto() => [
-		nombre = "ventana"
+		nombre = "Ventana"
 		precio_unitario = 500.0
-		descripcion = "es una ventana"
+		descripcion = "Es una ventana"
 		url_imagen = "https://www.enriquedans.com/wp-content/uploads/2013/11/Ventana.jpg"
 		propietario = homero
 	]
 	
 	Producto puertaHomero = new Producto() => [
-		nombre = "puerta"
+		nombre = "Puerta"
 		precio_unitario = 2000.0
-		descripcion = "es una puerta"
+		descripcion = "Es una puerta"
 		url_imagen = "http://d3ugyf2ht6aenh.cloudfront.net/stores/005/906/products/craffmaster_021-73b0d5aa0481dcbabd15132670274882-640-0.jpg"
 		propietario = homero
 	]
@@ -191,7 +191,7 @@ class Bootstrap implements InitializingBean {
 	Producto servicioTechista = new Producto() => [
 		nombre = "Techista"
 		precio_unitario = 200.0
-		descripcion = "servicio de techista"
+		descripcion = "Servicio de techista"
 		url_imagen = "https://techistareparaciones.com.ar/img/placeholder/techista_zona_norte_1.jpg"
 		propietario = bart
 	]
@@ -199,7 +199,7 @@ class Bootstrap implements InitializingBean {
 	Producto servicioElectricista = new Producto() => [
 		nombre = "Electricista"
 		precio_unitario = 500.0
-		descripcion = "servicio de electricista"
+		descripcion = "Servicio de electricista"
 		url_imagen = "https://zonanorteanuncios.com/oc-content/uploads/26/2731_thumbnail.jpg"
 		propietario = bart
 	]
@@ -207,7 +207,7 @@ class Bootstrap implements InitializingBean {
 	Producto servicioGasista = new Producto() => [
 		nombre = "Gasista"
 		precio_unitario = 1000.0
-		descripcion = "servicio de gas"
+		descripcion = "Servicio de gas"
 		url_imagen = "https://miguiaargentina.com.ar/Imagenes/m/790273299-1-a-plomero-gasista-matriculado.jpeg"
 		propietario = bart
 	]
