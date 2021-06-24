@@ -20,7 +20,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 @Entity(name="hoja_de_ruta")
 class HojaDeRuta {
 	
-	@JsonView(View.HojaDeRuta.Lista, View.HojaDeRuta.Perfil, View.HojaDeRuta.Put, View.Remito.Post, View.Remito.Perfil)
+	@JsonView(View.HojaDeRuta.Lista, View.HojaDeRuta.Perfil, View.HojaDeRuta.Delete, View.HojaDeRuta.Put, View.Remito.Post, View.Remito.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_hoja_de_ruta
 	
@@ -37,7 +37,7 @@ class HojaDeRuta {
 	@Column(nullable=false, unique=false)
 	Double kms_recorridos
 	
-	@JsonView(View.HojaDeRuta.Perfil, View.HojaDeRuta.Post)
+	@JsonView(View.HojaDeRuta.Perfil, View.HojaDeRuta.Post, View.HojaDeRuta.Delete)
 	@Column(length=250, nullable=true, unique=false)
 	String justificacion
 	
