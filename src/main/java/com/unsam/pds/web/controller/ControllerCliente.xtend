@@ -123,13 +123,14 @@ class ControllerCliente extends GenericController<Cliente> {
 		servicioClientes.actualizarCliente(clienteModificado, clienteModificado.idCliente, usr)
 	}
 
-	@DeleteMapping(path="/usuario/{idUsuario}/cliente/{idCliente}")
+	@DeleteMapping(path="/{idCliente}")
 	@ResponseStatus(code=HttpStatus.OK)
 	@Transactional
 	def void desactivarCliente(
-		@PathVariable("idUsuario") Long idUsuario,
-		@PathVariable("idCliente") Long idCliente
-	) {
+		@PathVariable("idCliente") Long idCliente, 
+		@RequestHeader HttpHeaders headers) {
+		var Long idUsuario = getUsuarioIdFromLogin(headers)
+		
 		logger.info("DELETE desactivar el cliente con id " + idCliente)
 		servicioClientes.desactivarCliente(idCliente, idUsuario)
 	}
@@ -163,72 +164,6 @@ class ControllerCliente extends GenericController<Cliente> {
 		specUsr = AgregarFiltro(specUsr, "idCliente", idClie)
 
 		servicioClientes.get(specUsr)
-	}
-
-//	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseStatus(code=HttpStatus.CREATED)
-//	@JsonView(View.Cliente.Perfil)
-//	@ResponseBody
-//	@Transactional
-//	def Cliente set(@RequestBody @JsonView(View.Cliente.Post) Cliente nuevoCliente,
-//		@RequestHeader HttpHeaders headers) {
-//		var Long usr = getUsuarioIdFromLogin(headers)
-//
-//		nuevoCliente.propietario = new Usuario()
-//		nuevoCliente.propietario.idUsuario = usr
-//
-//		servicioClientes.save(nuevoCliente)
-//	}
-
-//	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseStatus(code=HttpStatus.OK)
-//	@JsonView(View.Cliente.Perfil)
-//	@ResponseBody
-//	@Transactional
-//	def Cliente actualizarCLiente(@RequestBody @JsonView(View.Cliente.Put) Cliente cliente,
-//		@RequestHeader HttpHeaders headers) {
-//		var Long usr = getUsuarioIdFromLogin(headers)
-//
-//		var Cliente clie = servicioClientes.getById(cliente.idCliente)
-//
-//		if (clie === null || !clie.activo)
-//			throw new NotFoundException
-//
-//		if (clie.propietario === null || clie.propietario.idUsuario !== usr)
-//			throw new UnauthorizedException
-//		
-//		cliente.propietario = cliente.propietario === null ? clie.propietario : cliente.propietario
-//		cliente.cuit = cliente.cuit === null ? clie.cuit : cliente.cuit
-//		cliente.nombre = cliente.nombre === null ? clie.nombre : cliente.nombre
-//		cliente.observaciones = cliente.observaciones === null ? clie.observaciones : cliente.observaciones
-//		cliente.direccion = cliente.direccion === null ? clie.direccion : cliente.direccion
-//		cliente.promedio_espera = cliente.promedio_espera === null ? clie.promedio_espera : cliente.promedio_espera
-//		cliente.activo = cliente.activo === null ? clie.activo : cliente.activo
-//
-//		servicioClientes.save(cliente)
-//	}
-
-	@DeleteMapping(path="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(code=HttpStatus.OK)
-	@ResponseBody
-	def com.unsam.pds.dominio.Generics.ResponseBody delete(@PathVariable("id") Long id, @RequestHeader HttpHeaders headers) {
-		var Long usr = getUsuarioIdFromLogin(headers)
-		var Cliente clie = servicioClientes.getById(id)
-		
-		if (clie === null || !clie.activo)
-			throw new NotFoundException
-
-		if (clie.propietario === null || clie.propietario.idUsuario !== usr)
-			throw new UnauthorizedException
-
-		clie.activo  = false
-
-		servicioClientes.save(clie)
-		
-		new com.unsam.pds.dominio.Generics.ResponseBody() => [
-			code = HttpStatus.OK.toString
-			message = "Cliente eliminado exitosamente"
-		]
 	}
 
 }
