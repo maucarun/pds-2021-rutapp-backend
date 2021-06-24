@@ -110,31 +110,36 @@ class ControllerProducto extends GenericController<Producto> {
 	def Producto update(@RequestBody @JsonView(View.Producto.Put) Producto producto,
 		@RequestHeader HttpHeaders headers) {
 		var Long usr = getUsuarioIdFromLogin(headers)
+		// prod Es de BD       -> imagen vieja
+		// producto  del front -> se guarda en el BD
+		var Producto prodBD = servicioProducto.getById(producto.idProducto)
 
-		var Producto prod = servicioProducto.getById(producto.idProducto)
-
-		if (prod === null || !prod.activo)
+		if (prodBD === null || !prodBD.activo)
 			throw new NotFoundException
 
-		if (prod.propietario === null || prod.propietario.idUsuario !== usr)
+		if (prodBD.propietario === null || prodBD.propietario.idUsuario !== usr)
 			throw new UnauthorizedException
 
-		producto.propietario = producto.propietario === null ? prod.propietario : producto.propietario
-		producto.activo = producto.activo === null ? prod.activo : producto.activo
-		producto.nombre = producto.nombre === null ? prod.nombre : producto.nombre
-		producto.precio_unitario = producto.precio_unitario === null ? prod.precio_unitario : producto.precio_unitario
-		producto.descripcion = producto.descripcion === null ? prod.descripcion : producto.descripcion
+		producto.propietario = producto.propietario === null ? prodBD.propietario : producto.propietario
+		producto.activo = producto.activo === null ? prodBD.activo : producto.activo
+		producto.nombre = producto.nombre === null ? prodBD.nombre : producto.nombre
+		producto.precio_unitario = producto.precio_unitario === null ? prodBD.precio_unitario : producto.precio_unitario
+		producto.descripcion = producto.descripcion === null ? prodBD.descripcion : producto.descripcion
 
 		if (producto.url_imagen === null) {
-			producto.url_imagen = prod.url_imagen // Borrar, si no me viene una imagen desde el front le pongo lo que hay en la BD
-		} else if (prod.url_imagen.indexOf("|") != -1) { // puede ser nueva o vieja ambas tienen el |
-			if (prod.url_imagen != producto.url_imagen) {
+			producto.url_imagen = prodBD.url_imagen // Borrar, si no me viene una imagen desde el front le pongo lo que hay en la BD
+		} else if (prodBD.url_imagen.indexOf("|") != -1) { // puede ser nueva o vieja ambas tienen el |
+			if (prodBD.url_imagen != producto.url_imagen) {
 				logger.info("Es una imagen nueva")
 				// elimino la imagen vieja de la nube
-				servicioCloudinary.delete(prod.url_imagen.split("|").get(0)) 		
-				if (producto.url_imagen.split("|").get(1) != "") {
+				var int index = producto.url_imagen.indexOf("|")
+				var String key = producto.url_imagen.substring(0, index)
+				var String image = producto.url_imagen.substring(index+1)
+				
+				servicioCloudinary.delete(key) 		
+				if (image != "") {
 //					subo la imagen nueva y guardo el link en el producto
-					producto.url_imagen = servicioCloudinary.upload(producto.url_imagen.split("|").get(1))
+					producto.url_imagen = servicioCloudinary.upload(image)//imagen en base64
 				}
 			}
 		}
