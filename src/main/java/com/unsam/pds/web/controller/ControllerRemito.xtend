@@ -46,6 +46,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.client.HttpClientErrorException
 import com.unsam.pds.dominio.entidades.EstadoRemito
 import org.springframework.beans.BeanUtils
+import net.kaczmarzyk.spring.data.jpa.domain.Null
 
 @Controller
 @CrossOrigin("*")
@@ -54,7 +55,7 @@ class ControllerRemito extends GenericController<Remito> {
 	Logger logger = LoggerFactory.getLogger(this.class)
 
 	@Autowired ServicioRemito servicioRemito
-	@Autowired ServicioEstado servicioEstado
+	@Autowired ServicioEstado<EstadoRemito> servicioEstado
 	
 
 	// GET ALL REMITOS por id usuario
@@ -106,12 +107,14 @@ class ControllerRemito extends GenericController<Remito> {
 	@JsonView(View.Remito.Lista)
 	@ResponseBody
 	def PaginationResponse<Remito> getAll(@And(#[
-		@Spec(path="idRemito", params="id", spec=typeof(Equal)),
-		@Spec(path="motivo", params="motivo", spec=typeof(Like)),
-		@Spec(path="cliente", params="cliente", spec=typeof(Like)),
-		@Spec(path="hojaDeRuta", params="hojaDeRuta", spec=typeof(Equal)),
-		@Spec(path="fecha", params=#["fechaDesde", "fechaHasta"], spec=typeof(Between)),
-		@Spec(path="tiempo_espera", params=#["esperadesde", "esperahasta"], spec=typeof(Between))
+		@Spec(path="idRemito", params="id", spec=Equal),
+		@Spec(path="motivo", params="motivo", spec=Like),
+		@Spec(path="cliente", params="cliente", spec=Like),
+		@Spec(path="estado.id_estado", params="estado", spec=Equal),
+		@Spec(path="hojaDeRuta.id_hoja_de_ruta", params="hojaDeRuta", spec=Equal),
+		@Spec(path="hojaDeRuta", params="sinhdr", spec=Null),
+		@Spec(path="fecha", params=#["fechaDesde", "fechaHasta"], spec=Between),
+		@Spec(path="tiempo_espera", params=#["esperadesde", "esperahasta"], spec=Between)
 	])
 	Specification<Remito> spec, Sort sort, @RequestHeader HttpHeaders headers) {
 		var Long usr = getUsuarioIdFromLogin(headers)

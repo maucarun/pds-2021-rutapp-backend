@@ -28,7 +28,7 @@ class Disponibilidad {
 	@JoinColumn(name="id_cliente")
 	Cliente cliente
 
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil)
+	@JsonView(View.Remito.Lista, View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@MapsId("idDiaSemana")
 	@JoinColumn(name="id_dia_semana")

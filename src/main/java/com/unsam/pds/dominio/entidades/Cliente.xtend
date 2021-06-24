@@ -66,7 +66,7 @@ class Cliente {
 	@JoinColumn(name="id_direccion", nullable=false)
 	Direccion direccion
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Post, View.HojaDeRuta.Perfil)
+	@JsonView(View.Remito.Lista, View.Cliente.Perfil, View.Cliente.Post, View.HojaDeRuta.Perfil)
 	@OneToMany(mappedBy = "cliente", fetch=FetchType.LAZY)
 	Set<Disponibilidad> disponibilidades = newHashSet
 	

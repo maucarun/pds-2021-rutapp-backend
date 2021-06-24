@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
+import com.unsam.pds.dominio.entidades.EstadoHojaDeRuta
 
 @Controller
 @CrossOrigin("*")
@@ -79,11 +80,12 @@ class ControllerHojaDeRuta extends GenericController<HojaDeRuta> {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	def PaginationResponse<HojaDeRuta> getAll(@And(#[
-		@Spec(path="idCliente", params="id", spec=Equal),
-		@Spec(path="nombre", params="nombre", spec=Like),
-		@Spec(path="cuit", params="cuit", spec=Equal),
-		@Spec(path="activo", params="activo", spec=Equal),
-		@Spec(path="promedio_espera", params=#["esperadesde", "esperahasta"], spec=Between)
+		@Spec(path="id_hoja_de_ruta", params="id", spec=Equal),
+		@Spec(path="justificacion", params="causa", spec=Like),
+		@Spec(path="estado.id_estado", params="estado", spec=Equal),
+		@Spec(path="kms_recorridos", params=#["mksdesde", "mkshasta"], spec=Between),
+		@Spec(path="fecha_hora_inicio", params=#["horainiciodesde", "horainiciohasta"], spec=Between),
+		@Spec(path="fecha_hora_fin", params=#["horafindesde", "horafinhasta"], spec=Between)
 	])
 	Specification<HojaDeRuta> spec, Sort sort, @RequestHeader HttpHeaders headers) {
 		var Long usr = getUsuarioIdFromLogin(headers)
@@ -105,6 +107,15 @@ class ControllerHojaDeRuta extends GenericController<HojaDeRuta> {
 		servicioHojasDeRutas.get(specUsr)
 	}
 
+	@GetMapping(value="/Estados", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	def List<EstadoHojaDeRuta> getEstados(@RequestHeader HttpHeaders headers) {
+		getUsuarioIdFromLogin(headers)
+
+		servicioHojasDeRutas.allEstados
+	}
+
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.CREATED)
 	@JsonView(View.HojaDeRuta.Perfil)
@@ -116,9 +127,10 @@ class ControllerHojaDeRuta extends GenericController<HojaDeRuta> {
 
 		if (hoja.remitos === null || hoja.remitos.length < 1)
 			throw new NotFoundException("La hoja de ruta debe tener al menos un remito")
-		if (hoja.remitos.filter[rto|val r =servRemito.getById(rto.idRemito)  ; r.cliente.propietario.idUsuario !== usr].length > 0)
+		if (hoja.remitos.filter[rto|val r = servRemito.getById(rto.idRemito); r.cliente.propietario.idUsuario !== usr].
+			length > 0)
 			throw new UnauthorizedException("Los remitos de la hoja de ruta deben pertenecer al usuario")
-			
+
 		hoja.estado = servicioHojasDeRutas.getEstadoById(hoja.estado.id_estado)
 
 		servicioHojasDeRutas.crearNuevaHdr(hoja)
@@ -140,39 +152,42 @@ class ControllerHojaDeRuta extends GenericController<HojaDeRuta> {
 			throw new NotFoundException("La hoja de ruta " + hoja.id_hoja_de_ruta + " no existe")
 
 		if (hdr.estado === servicioHojasDeRutas.getEstadoByNombre("Completada"))
-			throw new NotFoundException("El estado de la hoja de ruta no permite su edision")
+			throw new NotFoundException("El estado de la hoja de ruta no permite su edición")
 
-		if (hdr.remitos.forall[rto| rto.cliente.propietario.idUsuario !== usr])
+		if (hdr.remitos.forall[rto|rto.cliente.propietario.idUsuario !== usr])
 			throw new UnauthorizedException("Los remitos de la hoja de ruta deben pertenecer al usuario")
 
-//		cliente.propietario = cliente.propietario === null ? clie.propietario : cliente.propietario
-//		cliente.cuit = cliente.cuit === null ? clie.cuit : cliente.cuit
-//		cliente.nombre = cliente.nombre === null ? clie.nombre : cliente.nombre
-//		cliente.observaciones = cliente.observaciones === null ? clie.observaciones : cliente.observaciones
-//		cliente.direccion = cliente.direccion === null ? clie.direccion : cliente.direccion
-//		cliente.promedio_espera = cliente.promedio_espera === null ? clie.promedio_espera : cliente.promedio_espera
-//		cliente.activo = cliente.activo === null ? clie.activo : cliente.activo
-		servicioHojasDeRutas.save(hoja)
+		hoja.fecha_hora_inicio = hoja.fecha_hora_inicio === null ? hdr.fecha_hora_inicio : hoja.fecha_hora_inicio
+		hoja.fecha_hora_fin = hoja.fecha_hora_fin === null ? hdr.fecha_hora_fin : hoja.fecha_hora_fin
+		hoja.kms_recorridos = hoja.kms_recorridos === null ? hdr.kms_recorridos : hoja.kms_recorridos
+		hoja.justificacion = hoja.justificacion === null ? hdr.justificacion : hoja.justificacion
+		hoja.estado = hoja.estado === null ? hdr.estado : servicioHojasDeRutas.getEstadoById(hoja.estado.id_estado)
+		hoja.remitos = hoja.remitos === null ? hdr.remitos : hoja.remitos
+
+		if (hoja.estado !== servicioHojasDeRutas.getEstadoByNombre("Suspendida"))
+			servicioHojasDeRutas.save(hoja)
 	}
 
-	@DeleteMapping(path="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
 	@ResponseBody
-	def com.unsam.pds.dominio.Generics.ResponseBody delete(@PathVariable("id") Long id,
-		@RequestHeader HttpHeaders headers) {
+	@Transactional
+	def com.unsam.pds.dominio.Generics.ResponseBody delete(
+		@RequestBody @JsonView(View.HojaDeRuta.Delete) HojaDeRuta hoja, @RequestHeader HttpHeaders headers) {
 		val Long usr = getUsuarioIdFromLogin(headers)
-		val HojaDeRuta hdr = servicioHojasDeRutas.getById(id)
+		val HojaDeRuta hdr = servicioHojasDeRutas.getById(hoja.id_hoja_de_ruta)
 
 		if (hdr === null)
-			throw new NotFoundException("La hoja de ruta " + id + " no existe")
+			throw new NotFoundException("La hoja de ruta " + hoja.id_hoja_de_ruta + " no existe")
 
-		if (hdr.estado === servicioHojasDeRutas.getEstadoByNombre("Completada"))
-			throw new NotFoundException("El estado de la hoja de ruta no permite su edision")
+		if (hdr.estado === servicioHojasDeRutas.getEstadoByNombre("Completada") ||
+			hdr.estado === servicioHojasDeRutas.getEstadoByNombre("Suspendida"))
+			throw new NotFoundException("El estado de la hoja de ruta no permite su edición")
 
 		if (hdr.remitos.filter[rto|rto.cliente.propietario.idUsuario !== usr].length > 0)
 			throw new UnauthorizedException("Los remitos de la hoja de ruta deben pertenecer al usuario")
 
-		servicioHojasDeRutas.deleteById(id)
+		servicioHojasDeRutas.delete(hdr, hoja.justificacion)
 
 		new com.unsam.pds.dominio.Generics.ResponseBody() => [
 			code = HttpStatus.OK.toString

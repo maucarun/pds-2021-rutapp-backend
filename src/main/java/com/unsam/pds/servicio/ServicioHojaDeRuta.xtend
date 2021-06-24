@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.beans.factory.annotation.Qualifier
 
 @Service
 class ServicioHojaDeRuta extends GenericService<HojaDeRuta, Long> {
@@ -67,19 +66,23 @@ class ServicioHojaDeRuta extends GenericService<HojaDeRuta, Long> {
 
 
 	@Transactional	
-	override void deleteById(Long id) {
-		val hoja = repoHoja.getById(id)
-		hoja.estado = getEstadoByNombre("Suspendida")
-		repoHoja.save(hoja)
+	def void delete(HojaDeRuta hdr, String causa) {
+		hdr.estado = getEstadoByNombre("Suspendida")
+		hdr.justificacion = causa
+		repoHoja.save(hdr)
 	}
 
 	@Transactional
 	
 	def EstadoHojaDeRuta getEstadoById(Long id) {
-		servEstado.obtenerEstadoPorId(id)
+		servEstado.obtenerEstadoPorTipoAndId('estado_hoja_ruta', id)
 	}
 	
 	def EstadoHojaDeRuta getEstadoByNombre(String nombre) {
-		servEstado.getEstadoByNombre("Suspendida")
+		servEstado.getEstadoByNombre('estado_hoja_ruta',nombre)
+	}
+	
+	def List<EstadoHojaDeRuta> getAllEstados() {
+		servEstado.obtenerEstadosPorTipo('estado_hoja_ruta')
 	}
 }

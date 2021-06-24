@@ -1,24 +1,22 @@
 package com.unsam.pds.dominio.entidades
 
-import org.eclipse.xtend.lib.annotations.Accessors
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Column
-import java.time.LocalDate
-import javax.validation.constraints.PositiveOrZero
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import java.util.Set
-import javax.persistence.OneToMany
-import java.time.LocalTime
-import com.fasterxml.jackson.annotation.JsonIgnore
-import javax.persistence.FetchType
 import com.fasterxml.jackson.annotation.JsonView
 import com.unsam.pds.web.view.View
-import javax.persistence.OneToOne
+import java.time.LocalDate
+import java.util.Set
 import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import javax.persistence.OneToOne
+import javax.validation.constraints.PositiveOrZero
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 @Entity(name="remito")

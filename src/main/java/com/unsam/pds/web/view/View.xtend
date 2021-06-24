@@ -50,6 +50,8 @@ class View {
 		static interface Post { }
 		
 		static interface Put extends Post { }
+		
+		static interface Delete { }
 	
 	}
 }

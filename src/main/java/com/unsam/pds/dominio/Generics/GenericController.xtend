@@ -2,8 +2,6 @@ package com.unsam.pds.dominio.Generics
 
 import com.unsam.pds.dominio.Exceptions.NotFoundException
 import com.unsam.pds.dominio.Exceptions.UnauthorizedException
-import com.unsam.pds.dominio.entidades.Estado
-import com.unsam.pds.servicio.ServicioEstado
 import com.unsam.pds.servicio.ServicioUsuario
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.CriteriaQuery
@@ -45,10 +43,6 @@ abstract class GenericController<T> {
 		}
 
 		spec === null ? pr : pr.and(spec)
-	}
-
-	def static <T extends Estado> Estado obtenerEstado(String estado) {
-		ServicioEstado.getByNombre(estado) as T
 	}
 
 	@ExceptionHandler(typeof(NotFoundException))
