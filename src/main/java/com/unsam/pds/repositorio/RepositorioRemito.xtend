@@ -27,7 +27,9 @@ interface RepositorioRemito extends GenericRepository<Remito, Long> {
 				cliente.propietario.idUsuario = :usuarioId
 		)"
 	)
-	@EntityGraph(attributePaths=#["cliente","productosDelRemito","comprobante","estado"])
+	@EntityGraph(attributePaths=#["cliente","cliente.disponibilidades","cliente.disponibilidades.diaSemana"
+		,"productosDelRemito","comprobante","estado"
+	])
 	def List<Remito> findRemitosByIdUsuario (@Param("usuarioId") Long idUsuario)
 	
 	@EntityGraph(attributePaths=#["cliente","productosDelRemito","comprobante","estado"])

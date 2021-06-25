@@ -35,11 +35,11 @@ class Remito {
 	@Column(nullable=false, unique=false)
 	Double total = 0.0
 	
-	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
+	@JsonView(View.Remito.Perfil, View.Remito.Post)
 	@Column(length=250, nullable=true, unique=false)
 	String motivo
 	
-	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
+	@JsonView(View.Remito.Perfil, View.Remito.Post)
 	@PositiveOrZero(message="El tiempo no puede ser negativo")
 	@Column(nullable=false, unique=false)
 	Integer tiempo_espera = 0
@@ -68,7 +68,7 @@ class Remito {
 	 */
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_hoja_de_ruta")
-	@JsonView(View.Remito.Lista, View.Remito.Perfil, View.Remito.Post)
+	@JsonView(View.Remito.Perfil, View.Remito.Post)
 	HojaDeRuta hojaDeRuta
 	
 	@JsonView(View.Remito.Perfil, View.Remito.Post)
