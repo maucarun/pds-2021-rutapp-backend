@@ -15,8 +15,8 @@ interface RepositorioCliente extends GenericRepository<Cliente, Long> {
 	def List<Cliente> findByPropietario_IdUsuarioAndActivo(Long idPropietario, Boolean estado)
 	
 	@EntityGraph(attributePaths=#["direccion"
-		,"disponibilidades","disponibilidades.diaSemana"
-		,"contactos","contactos.emails","contactos.telefonos"
+		,"disponibilidades.diaSemana"
+		,"contactos.emails","contactos.telefonos"
 		,"propietario"
 	])
 	def Optional<Cliente> findByIdClienteAndActivo(Long idCliente, Boolean estado)
