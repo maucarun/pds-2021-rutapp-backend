@@ -97,7 +97,9 @@ class ControllerProducto extends GenericController<Producto> {
 
 		producto.propietario = new Usuario()
 		producto.propietario.idUsuario = usr
+		//if (producto.url_imagen !== ''){
 		producto.url_imagen = servicioCloudinary.upload(producto.url_imagen)
+		//}
 
 		servicioProducto.save(producto)
 	}
@@ -136,7 +138,9 @@ class ControllerProducto extends GenericController<Producto> {
 				var String key = producto.url_imagen.substring(0, index)
 				var String image = producto.url_imagen.substring(index+1)
 				
-				servicioCloudinary.delete(key) 		
+				//if (key != '-1') {
+				servicioCloudinary.delete(key)
+				//}			
 				if (image != "") {
 //					subo la imagen nueva y guardo el link en el producto
 					producto.url_imagen = servicioCloudinary.upload(image)//imagen en base64
