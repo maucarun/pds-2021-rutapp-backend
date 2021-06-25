@@ -6,6 +6,9 @@ import java.util.List
 import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import java.util.Optional
+import org.springframework.lang.Nullable
+import org.springframework.data.jpa.domain.Specification
 
 interface RepositorioHojaDeRuta extends GenericRepository<HojaDeRuta, Long> {
 
@@ -44,4 +47,21 @@ interface RepositorioHojaDeRuta extends GenericRepository<HojaDeRuta, Long> {
 
 	@Query(value = "SELECT * FROM hoja_de_ruta WHERE id_hoja_de_ruta=?1", nativeQuery = true)
 	override HojaDeRuta getById(Long id)
+	
+	@EntityGraph(attributePaths=#["estado.nombre",
+		"estado.id_estado",
+		"remitos.idRemito",
+		"remitos.estado.nombre",
+		"remitos.estado.id_estado",
+		"remitos.cliente.nombre",
+		"remitos.cliente.direccion.calle",
+		"remitos.cliente.direccion.altura",
+		"remitos.cliente.direccion.localidad",
+		"remitos.cliente.direccion.provincia",
+		"remitos.cliente.direccion.latitud",
+		"remitos.cliente.direccion.longitud",
+		"remitos.productosDelRemito",
+		"remitos.cliente.disponibilidades.diaSemana.id_dia_semana",
+		"remitos.cliente.disponibilidades.diaSemana.diaSemana"])
+	override Optional<HojaDeRuta> findOne(@Nullable Specification<HojaDeRuta> spec);
 }
