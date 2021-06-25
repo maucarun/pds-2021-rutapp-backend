@@ -12,10 +12,12 @@
 	<groupId>com.unsam.pds</groupId>
 	<artifactId>PDS_2021_RUTAPP_BE</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>PDS_2021_RUTAPP_BE</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
+		<start-class>com.unsam.pds.Pds2021RutappBeApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,7 +71,7 @@
 			<artifactId>specification-arg-resolver</artifactId>
 			<version>2.1.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.cloudinary</groupId>
 			<artifactId>cloudinary-http44</artifactId>
@@ -82,6 +84,43 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.xtend</groupId>
+				<artifactId>xtend-maven-plugin</artifactId>
+				<version>2.25.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>testCompile</goal>
+						</goals>
+
+						<configuration>
+							<outputDirectory>${project.build.directory}/xtend-gen/main
+							</outputDirectory>
+							<testOutputDirectory>${project.build.directory}/xtend-gen/test
+							</testOutputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- jar with dependencies -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

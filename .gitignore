@@ -45,3 +45,4 @@ xtend-gen
 # Ignore application configuration
 /config/application
 *.yml
+/WebContent/
