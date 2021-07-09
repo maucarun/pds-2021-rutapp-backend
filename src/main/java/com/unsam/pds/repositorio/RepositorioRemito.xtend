@@ -1,12 +1,15 @@
 package com.unsam.pds.repositorio
 
 import com.unsam.pds.dominio.Generics.GenericRepository
+import org.springframework.data.domain.Pageable
 import com.unsam.pds.dominio.entidades.Remito
 import java.util.List
 import java.util.Optional
 import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import org.springframework.data.jpa.domain.Specification
+import org.springframework.data.domain.Page
 
 interface RepositorioRemito extends GenericRepository<Remito, Long> {
 	
@@ -41,4 +44,15 @@ interface RepositorioRemito extends GenericRepository<Remito, Long> {
 	override Remito getById(Long id){
 		findById(id).get
 	}
+	
+		
+	@EntityGraph(attributePaths=#[
+	"cliente",
+	"cliente.disponibilidades",
+	"cliente.disponibilidades.diaSemana",
+	"productosDelRemito",
+	"productosDelRemito.producto",
+	"estado"])
+	override Page<Remito> findAll(Specification<Remito> spec, Pageable pageable)
+	
 }
