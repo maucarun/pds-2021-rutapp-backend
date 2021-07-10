@@ -60,7 +60,7 @@ class ProductoRemito {
 	}
 	
 	def Double calcularSubCosto() {
-		var descuentoPorcentaje = 1 - descuento / 100
+		var descuentoPorcentaje = 1 - descuento / 100.00
 		cantidad * precio_unitario * descuentoPorcentaje
 	}
 	
