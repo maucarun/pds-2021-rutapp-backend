@@ -35,7 +35,7 @@ class Cliente {
 	@Column(length=250, nullable=true, unique=false)
 	String observaciones
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Post, View.Remito.Perfil)
 	@Size(min=10, max=12)
 	@Column(length=13, nullable=false, unique=false)
 	String cuit
@@ -61,7 +61,7 @@ class Cliente {
 	@JoinColumn(name="id_usuario")
 	Usuario propietario
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil, View.Remito.Perfil)
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="id_direccion", nullable=false)
 	Direccion direccion
@@ -70,7 +70,7 @@ class Cliente {
 	@OneToMany(mappedBy = "cliente", fetch=FetchType.LAZY)
 	Set<Disponibilidad> disponibilidades = newHashSet
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Post, View.Remito.Perfil)
 	@OneToMany(mappedBy="cliente", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Contacto> contactos = newHashSet
 	

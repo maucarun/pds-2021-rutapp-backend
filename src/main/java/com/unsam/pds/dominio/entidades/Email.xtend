@@ -22,7 +22,7 @@ class Email {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_email
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Perfil)
 	@javax.validation.constraints.Email
 	@Column(length=50, nullable=false, unique=false)
 	String direccion

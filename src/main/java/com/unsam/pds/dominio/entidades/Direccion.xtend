@@ -22,22 +22,22 @@ class Direccion {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_direccion
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil, View.Remito.Perfil)
 	@NotNull
 	@Column(length=250, nullable=false, unique=false)
 	String calle
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil, View.Remito.Perfil)
 	@Positive(message="La altura debe ser positiva")
 	@Column(nullable=false, unique=false)
 	Integer altura
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil, View.Remito.Perfil)
 	@NotNull
 	@Column(length=100, nullable=false, unique=false)
 	String localidad
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.HojaDeRuta.Perfil, View.Remito.Perfil)
 	@NotNull
 	@Column(length=100, nullable=false, unique=false)
 	String provincia

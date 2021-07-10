@@ -23,7 +23,7 @@ class Telefono {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_telefono
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Perfil)
 	@Min(value=8)
 	@Column(length=20, nullable=false, unique=false)
 	String telefono

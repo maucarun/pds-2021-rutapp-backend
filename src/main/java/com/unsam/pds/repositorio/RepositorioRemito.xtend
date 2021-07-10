@@ -38,7 +38,7 @@ interface RepositorioRemito extends GenericRepository<Remito, Long> {
 	@EntityGraph(attributePaths=#["cliente","productosDelRemito","comprobante","estado"])
 	def List<Remito> findByCliente_idClienteAndEstado_nombre(Long idCliente, String estadoPendiente)
 	
-	@EntityGraph(attributePaths=#["cliente","productosDelRemito","productosDelRemito.producto","estado"])
+	@EntityGraph(attributePaths=#["cliente","cliente.direccion","cliente.contactos.emails","cliente.contactos.telefonos","productosDelRemito","productosDelRemito.producto","estado"])
 	override Optional<Remito> findById(Long idRemito)
 		
 	override Remito getById(Long id){
