@@ -6,11 +6,16 @@ import com.unsam.pds.repositorio.RepositorioProductoRemito
 import com.unsam.pds.dominio.entidades.ProductoRemito
 import javax.transaction.Transactional
 import com.unsam.pds.dominio.entidades.Remito
+import java.time.LocalDate
 
 @Service
 class ServicioProductoRemito {
 	
 	@Autowired RepositorioProductoRemito repositorioProductoRemitos
+	
+	def obtenerCantidadProductosVendidos(Long idUsuario, LocalDate fechaDesde, LocalDate fechaHasta) {
+		repositorioProductoRemitos.findByIdUsuarioAndFechaDesdeAndFechaHasta(idUsuario, fechaDesde, fechaHasta)
+	}
 	
 	@Transactional
 	def void crearNuevoProductoRemito(ProductoRemito nuevoPR) {

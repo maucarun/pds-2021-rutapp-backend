@@ -47,6 +47,9 @@ import org.springframework.web.client.HttpClientErrorException
 import com.unsam.pds.dominio.entidades.EstadoRemito
 import org.springframework.beans.BeanUtils
 import net.kaczmarzyk.spring.data.jpa.domain.Null
+import com.unsam.pds.servicio.ServicioProductoRemito
+import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
 @Controller
 @CrossOrigin("*")
@@ -56,6 +59,7 @@ class ControllerRemito extends GenericController<Remito> {
 
 	@Autowired ServicioRemito servicioRemito
 	@Autowired ServicioEstado<EstadoRemito> servicioEstado
+	@Autowired ServicioProductoRemito servicioPR
 	
 
 	// GET ALL REMITOS por id usuario
@@ -74,6 +78,20 @@ class ControllerRemito extends GenericController<Remito> {
 	def List<Remito> obtenerRemito(@RequestParam("idCliente") Long idCliente, @RequestParam("estado") String estado) {
 		logger.info("GET localhost:8080/remito/all?" + idCliente + "&estado=" + estado)
 		servicioRemito.obtenerRemitosPendientesPorIdCliente(idCliente)
+	}
+	
+	@JsonView(View.Remito.ProductoVentas)
+	@GetMapping(path="/producto/ventas", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	def obtenerCantidadProductosVendidos(@RequestHeader HttpHeaders headers, @RequestParam("fechaDesde") String fechaDesde, @RequestParam("fechaHasta") String fechaHasta) {
+		logger.info("GET remito/producto/ventas")
+		var Long idUsuario = getUsuarioIdFromLogin(headers)
+		
+		var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+		var LocalDate fechaDesdeFormateada = LocalDate.parse(fechaDesde, formatter)
+		var LocalDate fechaHastaFormateada = LocalDate.parse(fechaHasta, formatter)
+				
+		servicioPR.obtenerCantidadProductosVendidos(idUsuario, fechaDesdeFormateada, fechaHastaFormateada)
 	}
 
 //	// GET REMITO por id remito

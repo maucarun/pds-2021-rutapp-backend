@@ -22,7 +22,7 @@ class Producto {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long idProducto
 
-	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Post, View.Remito.Perfil)
+	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Post, View.Remito.Perfil, View.Remito.ProductoVentas)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
