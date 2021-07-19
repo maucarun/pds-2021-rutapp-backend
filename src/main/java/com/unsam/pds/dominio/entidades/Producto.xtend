@@ -18,7 +18,7 @@ import com.unsam.pds.web.view.View
 @Entity(name="producto")
 class Producto {
 	
-	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Put, View.Remito.Perfil)
+	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Put, View.Remito.Perfil, View.Remito.ProductoVentas)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long idProducto
 
