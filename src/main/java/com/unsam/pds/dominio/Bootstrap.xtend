@@ -475,10 +475,10 @@ class Bootstrap implements InitializingBean {/**
 	ProductoRemito prMoeHomeroHoyVentilador = new ProductoRemito(remitoHoyMoeHomero, ventiladorHomero, 10, ventiladorHomero.precio_unitario, 0)
 	ProductoRemito prMoeHomeroHoyPuerta = new ProductoRemito(remitoHoyMoeHomero, puertaHomero, 2, puertaHomero.precio_unitario, 10)
 	ProductoRemito prSkinnerHomeroHoyVentana = new ProductoRemito(remitoHoySkinnerBart, ventanaHomero, 3, ventanaHomero.precio_unitario, 10)
-	ProductoRemito prCachoHomeroHoyVentilador = new ProductoRemito(remitoHoyCachoHomero, ventiladorHomero, 2, ventiladorHomero.precio_unitario, 0)
+	public ProductoRemito prCachoHomeroHoyVentilador = new ProductoRemito(remitoHoyCachoHomero, ventiladorHomero, 2, ventiladorHomero.precio_unitario, 0)
 	
 	ProductoRemito prMoeBartHoyElectricista = new ProductoRemito(remitoHoySkinnerBart, servicioElectricista, 2, servicioElectricista.precio_unitario, 10)
-	ProductoRemito prSkinnerBartHoyElectricista = new ProductoRemito(remitoHoyMoeBart, servicioElectricista, 4, servicioElectricista.precio_unitario, 0)
+	public ProductoRemito prSkinnerBartHoyElectricista = new ProductoRemito(remitoHoyMoeBart, servicioElectricista, 4, servicioElectricista.precio_unitario, 0)
 	ProductoRemito prSkinnerBartHoyGasista = new ProductoRemito(remitoHoySkinnerBart, servicioGasista, 1, servicioGasista.precio_unitario, 0)
 	ProductoRemito prSkinnerBartMananaTechista = new ProductoRemito(remitoMananaSkinnerBart, servicioTechista, 4, servicioTechista.precio_unitario, 0)
 	
