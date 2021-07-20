@@ -80,7 +80,6 @@ class ControllerRemito extends GenericController<Remito> {
 		servicioRemito.obtenerRemitosPendientesPorIdCliente(idCliente)
 	}
 	
-	@JsonView(View.Remito.ProductoVentas)
 	@GetMapping(path="/producto/ventas", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	def obtenerCantidadProductosVendidos(@RequestHeader HttpHeaders headers, @RequestParam("fechaDesde") String fechaDesde, @RequestParam("fechaHasta") String fechaHasta) {
@@ -92,6 +91,19 @@ class ControllerRemito extends GenericController<Remito> {
 		var LocalDate fechaHastaFormateada = LocalDate.parse(fechaHasta, formatter)
 				
 		servicioPR.obtenerCantidadProductosVendidos(idUsuario, fechaDesdeFormateada, fechaHastaFormateada)
+	}
+	
+	@GetMapping(path="/producto/entregados", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	def obtenerProductosEntregadosPorCliente(@RequestHeader HttpHeaders headers, @RequestParam("fechaDesde") String fechaDesde, @RequestParam("fechaHasta") String fechaHasta) {
+		logger.info("GET remito/producto/entregados")
+		var Long idUsuario = getUsuarioIdFromLogin(headers)
+		
+		var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+		var LocalDate fechaDesdeFormateada = LocalDate.parse(fechaDesde, formatter)
+		var LocalDate fechaHastaFormateada = LocalDate.parse(fechaHasta, formatter)
+				
+		servicioPR.obtenerCantidadProductosEntregados(idUsuario, fechaDesdeFormateada, fechaHastaFormateada)
 	}
 
 //	// GET REMITO por id remito

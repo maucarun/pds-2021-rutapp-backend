@@ -14,7 +14,11 @@ class ServicioProductoRemito {
 	@Autowired RepositorioProductoRemito repositorioProductoRemitos
 	
 	def obtenerCantidadProductosVendidos(Long idUsuario, LocalDate fechaDesde, LocalDate fechaHasta) {
-		repositorioProductoRemitos.findByIdUsuarioAndFechaDesdeAndFechaHasta(idUsuario, fechaDesde, fechaHasta)
+		repositorioProductoRemitos.findByCantidadProductosVendidos(idUsuario, fechaDesde, fechaHasta)
+	}
+	
+	def obtenerCantidadProductosEntregados(Long idUsuario, LocalDate fechaDesde, LocalDate fechaHasta) {
+		repositorioProductoRemitos.findByCantidadProductosEntregados(idUsuario, fechaDesde, fechaHasta)
 	}
 	
 	@Transactional

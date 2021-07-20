@@ -18,11 +18,11 @@ import com.unsam.pds.web.view.View
 @Entity(name="producto")
 class Producto {
 	
-	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Put, View.Remito.Perfil, View.Remito.ProductoVentas)
+	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Put, View.Remito.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long idProducto
 
-	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Post, View.Remito.Perfil, View.Remito.ProductoVentas)
+	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Post, View.Remito.Perfil)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
@@ -36,9 +36,6 @@ class Producto {
 	@Column(length=250, nullable=true, unique=false)
 	String descripcion
 	
-	/**
-	 * TODO: vamos a tener las imagenes en un servidor local?
-	 */
  	@JsonView(View.Producto.Perfil, View.Producto.Lista, View.Producto.Post)
 	@Column(length=250, nullable=true, unique=false)
 	String url_imagen
