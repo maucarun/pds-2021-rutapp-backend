@@ -44,7 +44,7 @@ class Cliente {
 	@Column(length=250, nullable=true, unique=false)
 	String urlImagenPerfil
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Post)
+	@JsonView(View.Cliente.Lista, View.Cliente.Perfil, View.Cliente.Post)
 	@Positive(message="El promedio de espera debe ser positivo")
 	@Column(nullable=false, unique=false, name="promedio_espera")
 	Integer promedio_espera = 0
