@@ -213,10 +213,6 @@ class ControllerRemito extends GenericController<Remito> {
 		
 		BeanUtils.copyProperties(remito,rmt,"comprobante")
 		servicioRemito.actualizarOCrearRemito(rmt)
-		
-//		if (remito.tiempo_espera != 0) {
-//			servicioCliente.calcularPromedioEspera(remito)
-//		}
 	}
 
 	@DeleteMapping(path="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
