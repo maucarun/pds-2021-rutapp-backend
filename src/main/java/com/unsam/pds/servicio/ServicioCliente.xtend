@@ -10,6 +10,7 @@ import javassist.NotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import com.unsam.pds.dominio.Generics.GenericService
+import com.unsam.pds.dominio.entidades.Remito
 
 @Service
 class ServicioCliente extends GenericService<Cliente, Long> {
@@ -19,7 +20,8 @@ class ServicioCliente extends GenericService<Cliente, Long> {
 	@Autowired RepositorioCliente repo
 	
 	@Autowired ServicioDisponibilidad servicioDisponibilidad
-	@Autowired ServicioContacto servicioContacto
+	//@Autowired ServicioContacto servicioContacto
+	@Autowired ServicioRemito servicioRemito
 	
 	def Cliente obtenerClienteActivoPorId(Long idCliente) {
 		logger.info("Obtener el id cliente " + idCliente)
@@ -69,7 +71,7 @@ class ServicioCliente extends GenericService<Cliente, Long> {
 		logger.info("Actualizando el cliente id " + idCliente)
 		obtenerClienteActivoDelUsuarioPorId(idCliente, idUsuario)
 		
-		servicioContacto.eliminarContactosPorCliente(idCliente)
+		//servicioContacto.eliminarContactosPorCliente(idCliente)
 		
 		crearNuevoCliente(clienteModificado)
 		logger.info("Cliente actualizado exitosamente!")
@@ -80,6 +82,14 @@ class ServicioCliente extends GenericService<Cliente, Long> {
 		var cliente = obtenerClienteActivoDelUsuarioPorId(idCliente, idUsuario)
 		cliente.desactivarCliente
 		logger.info("Cliente desactivado exitosamente!")
+	}
+	
+	@Transactional
+	def void calcularPromedioEspera(Remito remito){
+		var cliente = obtenerClienteActivoPorId(remito.cliente.idCliente)
+		var cantidadRemitos = servicioRemito.obtenerCantidadRemitosEntregadosPorCliente(cliente.idCliente)
+		cliente.promedio_espera = (cliente.promedio_espera + remito.tiempo_espera) / (cantidadRemitos + 1)
+		actualizarCliente(cliente, cliente.idCliente, cliente.propietario.idUsuario)
 	}
 	
 }

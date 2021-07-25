@@ -37,6 +37,14 @@ class ServicioRemito extends GenericService<Remito, Long> {
 		repo.findByCliente_idClienteAndEstado_nombre(idCliente, "Pendiente")
 	}
 	
+	def List<Remito> obtenerRemitosPorIdHdR(Long idHdR) {
+		repo.findByHojaDeRuta_id_hoja_de_ruta(idHdR)
+	}
+	
+	def Integer obtenerCantidadRemitosEntregadosPorCliente(Long idCliente) {
+		repo.cantidadRemitosEntregadosByCliente(idCliente)
+	}
+	
 	@Transactional
 	def void actualizarOCrearRemito( Remito remito){
 		/* Importante clonar los PRs antes de guardar como backup. Esto es un workaround! */
@@ -44,6 +52,10 @@ class ServicioRemito extends GenericService<Remito, Long> {
 		repo.save(remito) /* Cuando guarda: los datos de los PRs del remito quedan nulos */
 		remito.productosDelRemito = productosSinRemito
 		servicioProductoRemito.guardarProductoRemito(remito)
+		
+		if (remito.estado.id_estado == 7) {
+			servicioCliente.calcularPromedioEspera(remito)
+		}
 	}
 //	@Transactional
 //	def void actualizarRemito(Long idRemito, Remito nuevoRemito) {

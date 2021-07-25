@@ -38,6 +38,19 @@ interface RepositorioRemito extends GenericRepository<Remito, Long> {
 	@EntityGraph(attributePaths=#["cliente","productosDelRemito","comprobante","estado"])
 	def List<Remito> findByCliente_idClienteAndEstado_nombre(Long idCliente, String estadoPendiente)
 	
+	@Query(value = 
+		"SELECT r FROM remito r WHERE r.hojaDeRuta.id_hoja_de_ruta = :idHdR"
+	)
+	@EntityGraph(attributePaths=#["cliente.disponibilidades.diaSemana"
+		,"productosDelRemito","comprobante","estado"
+	])
+	def List<Remito> findByHojaDeRuta_id_hoja_de_ruta(@Param("idHdR")Long idHdR)
+	
+	@Query(value = 
+		"SELECT COUNT(id_remito) FROM remito WHERE id_estado = 7 AND id_cliente = :clienteId"
+	)
+	def Integer cantidadRemitosEntregadosByCliente(@Param("clienteId") Long idCliente)
+	
 	@EntityGraph(attributePaths=#["cliente","cliente.direccion","cliente.contactos.emails","cliente.contactos.telefonos","productosDelRemito","productosDelRemito.producto","estado"])
 	override Optional<Remito> findById(Long idRemito)
 		

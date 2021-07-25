@@ -60,7 +60,6 @@ class ControllerRemito extends GenericController<Remito> {
 	@Autowired ServicioRemito servicioRemito
 	@Autowired ServicioEstado<EstadoRemito> servicioEstado
 	@Autowired ServicioProductoRemito servicioPR
-	
 
 	// GET ALL REMITOS por id usuario
 	@JsonView(View.Remito.Lista)
@@ -210,10 +209,14 @@ class ControllerRemito extends GenericController<Remito> {
 //		remito.total = remito.estado === null ? rmt.total : remito.total
 //		remito.motivo = remito.motivo === null ? rmt.motivo : remito.motivo
 //		remito.tiempo_espera = remito.tiempo_espera === null ? rmt.tiempo_espera : remito.tiempo_espera
-		//remito.comprobante = remito.comprobante === null ? rmt.comprobante : remito.comprobante
+//		remito.comprobante = remito.comprobante === null ? rmt.comprobante : remito.comprobante
 		
 		BeanUtils.copyProperties(remito,rmt,"comprobante")
 		servicioRemito.actualizarOCrearRemito(rmt)
+		
+//		if (remito.tiempo_espera != 0) {
+//			servicioCliente.calcularPromedioEspera(remito)
+//		}
 	}
 
 	@DeleteMapping(path="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -242,6 +245,15 @@ class ControllerRemito extends GenericController<Remito> {
 			code = HttpStatus.OK.toString
 			message = "Remito eliminado exitosamente"
 		]
+	}
+	
+	// GET ALL REMITOS por id hdr
+	@JsonView(View.Remito.Lista)
+	@GetMapping(path="/all/hdr/{idHdR}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	def List<Remito> obtenerTodosLosRemitosPorHdR(@PathVariable("idHdR") Long idHdR) {
+		logger.info("GET localhost:8080/remito/all/hdr/" + idHdR)
+		servicioRemito.obtenerRemitosPorIdHdR(idHdR)
 	}
 
 	private def Specification<Remito> joinClienteUsuario(Specification<Remito> spec, Long idUsuario) {

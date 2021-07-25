@@ -39,6 +39,7 @@ import com.unsam.pds.dominio.Exceptions.UnauthorizedException
 import com.unsam.pds.dominio.entidades.Disponibilidad
 import java.util.Set
 import com.unsam.pds.servicio.ServicioDiaSemana
+import com.unsam.pds.servicio.ServicioContacto
 
 @Controller
 @CrossOrigin("*")
@@ -49,6 +50,7 @@ class ControllerCliente extends GenericController<Cliente> {
 
 	@Autowired ServicioCliente servicioClientes
 	@Autowired ServicioDiaSemana servicioDiaSemana
+	@Autowired ServicioContacto servicioContacto
 	
 	@GetMapping(path="/disponibilidades", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -120,6 +122,7 @@ class ControllerCliente extends GenericController<Cliente> {
 			throw new UnauthorizedException
 		
 		logger.info("PUT actualizar el cliente con id " + clienteModificado.idCliente + " del usuario con el id " + usr)
+		servicioContacto.eliminarContactosPorCliente(clie.idCliente)
 		servicioClientes.actualizarCliente(clienteModificado, clienteModificado.idCliente, usr)
 	}
 
