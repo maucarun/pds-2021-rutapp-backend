@@ -45,11 +45,11 @@ interface RepositorioRemito extends GenericRepository<Remito, Long> {
 		,"productosDelRemito","comprobante","estado"
 	])
 	def List<Remito> findByHojaDeRuta_id_hoja_de_ruta(@Param("idHdR")Long idHdR)
-	
+
 	@Query(value = 
-		"SELECT COUNT(id_remito) FROM remito WHERE id_estado = 7 AND id_cliente = :clienteId"
+		"SELECT AVG(tiempo_espera) FROM remito WHERE id_estado = 7 AND id_cliente = :clienteId"
 	)
-	def Integer cantidadRemitosEntregadosByCliente(@Param("clienteId") Long idCliente)
+	def Integer calcularPromedioEsperaPorCliente(@Param("clienteId") Long idCliente)
 	
 	@EntityGraph(attributePaths=#["cliente","cliente.direccion","cliente.contactos.emails","cliente.contactos.telefonos","productosDelRemito","productosDelRemito.producto","estado"])
 	override Optional<Remito> findById(Long idRemito)

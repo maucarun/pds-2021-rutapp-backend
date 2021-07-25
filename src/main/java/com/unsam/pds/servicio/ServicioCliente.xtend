@@ -87,8 +87,7 @@ class ServicioCliente extends GenericService<Cliente, Long> {
 	@Transactional
 	def void calcularPromedioEspera(Remito remito){
 		var cliente = obtenerClienteActivoPorId(remito.cliente.idCliente)
-		var cantidadRemitos = servicioRemito.obtenerCantidadRemitosEntregadosPorCliente(cliente.idCliente)
-		cliente.promedio_espera = (cliente.promedio_espera + remito.tiempo_espera) / (cantidadRemitos + 1)
+		cliente.promedio_espera = servicioRemito.calcularPromedioEsperaPorCliente(cliente.idCliente)
 		actualizarCliente(cliente, cliente.idCliente, cliente.propietario.idUsuario)
 	}
 	

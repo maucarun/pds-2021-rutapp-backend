@@ -41,8 +41,8 @@ class ServicioRemito extends GenericService<Remito, Long> {
 		repo.findByHojaDeRuta_id_hoja_de_ruta(idHdR)
 	}
 	
-	def Integer obtenerCantidadRemitosEntregadosPorCliente(Long idCliente) {
-		repo.cantidadRemitosEntregadosByCliente(idCliente)
+	def Integer calcularPromedioEsperaPorCliente(Long idCliente) {
+		repo.calcularPromedioEsperaPorCliente(idCliente)
 	}
 	
 	@Transactional
