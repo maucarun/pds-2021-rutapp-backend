@@ -23,9 +23,19 @@ interface RepositorioCliente extends GenericRepository<Cliente, Long> {
 	
 	def Boolean existsByIdClienteAndPropietario_IdUsuario(Long idCliente, Long idPropietario)
 	
+	@EntityGraph(attributePaths=#["direccion"
+		,"disponibilidades.diaSemana"
+		,"contactos.emails","contactos.telefonos"
+		,"propietario"
+	])
 	override Cliente getById(Long id){
 		findByIdCliente(id)
 	}
 	
+	@EntityGraph(attributePaths=#["direccion"
+		,"disponibilidades.diaSemana"
+		,"contactos.emails","contactos.telefonos"
+		,"propietario"
+	])
 	def Cliente findByIdCliente(Long id)	
 }

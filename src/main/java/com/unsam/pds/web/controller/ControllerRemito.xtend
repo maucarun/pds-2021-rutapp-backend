@@ -50,16 +50,28 @@ import net.kaczmarzyk.spring.data.jpa.domain.Null
 import com.unsam.pds.servicio.ServicioProductoRemito
 import java.time.format.DateTimeFormatter
 import java.time.LocalDate
+import javax.servlet.http.HttpServletResponse
+import com.itextpdf.text.DocumentException
+import java.io.IOException
+import com.unsam.pds.servicio.ServicioCliente
+import com.unsam.pds.servicio.ServicioUsuario
+import com.unsam.pds.dominio.entidades.PdfRemito
+import org.springframework.beans.factory.annotation.Value
+import com.unsam.pds.dominio.entidades.MailSender
 
 @Controller
 @CrossOrigin("*")
 @RequestMapping("/remito")
 class ControllerRemito extends GenericController<Remito> {
+	@Value("${app.logo}")
+	String strLogo
 	Logger logger = LoggerFactory.getLogger(this.class)
 
 	@Autowired ServicioRemito servicioRemito
 	@Autowired ServicioEstado<EstadoRemito> servicioEstado
 	@Autowired ServicioProductoRemito servicioPR
+	@Autowired ServicioCliente servicioCliente
+	@Autowired ServicioUsuario servicioUsuario
 
 	// GET ALL REMITOS por id usuario
 	@JsonView(View.Remito.Lista)
@@ -262,5 +274,38 @@ class ControllerRemito extends GenericController<Remito> {
 			}
 		}
 		spec === null ? pr : pr.and(spec)
+	}
+
+	@GetMapping("/descargapdf/{id}")
+	def exportToPDF(@PathVariable("id") Long id, @PathVariable("id") Long idUsuario,
+		HttpServletResponse response) throws DocumentException, IOException {
+		val rto = servicioRemito.getById(id)			
+		rto.cliente = servicioCliente.getById(rto.cliente.idCliente) 
+		val usr = servicioUsuario.obtenerUsuarioPorId(rto.cliente.propietario.idUsuario)
+
+		response.setContentType("application/pdf");
+
+		var String headerKey = "Content-Disposition";
+		var String headerValue = "attachment; filename=remito_rutapp_" + rto.idRemito + ".pdf";
+		response.setHeader(headerKey, headerValue);
+
+		var PdfRemito pdf = new PdfRemito() => [
+			usuario = usr
+			remito = rto
+			urlLogo = strLogo
+		]
+		pdf.export(response);
+	}
+
+	@GetMapping("/sendemail/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	def sendEmail(@PathVariable("id") Long id,
+		HttpServletResponse response) throws DocumentException, IOException {
+		val rto = servicioRemito.getById(id)			
+		rto.cliente = servicioCliente.getById(rto.cliente.idCliente) 
+		val usr = servicioUsuario.obtenerUsuarioPorId(rto.cliente.propietario.idUsuario)
+		
+		var MailSender ms = new MailSender()
+		ms.sendPdfMail(rto, usr, strLogo)
 	}
 }
