@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import com.unsam.pds.dominio.entidades.EstadoHojaDeRuta
+import com.unsam.pds.repositorio.projectionQueries.IReporteInfoHojaDeRuta
 
 @Controller
 @CrossOrigin("*")
@@ -61,6 +62,15 @@ class ControllerHojaDeRuta extends GenericController<HojaDeRuta> {
 	def List<HojaDeRuta> obtenerHojasDeRutaPorUsuario(@PathVariable("idUsuario") Long idUsuario) {
 		logger.info("GET obtener todos las hojas de ruta del usuario con el id " + idUsuario)
 		servicioHojasDeRutas.obtenerHojasDeRutaPorIdUsuario(idUsuario)
+	}
+	
+	@GetMapping(path="/info", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	def List <IReporteInfoHojaDeRuta> obtenerInfoHojasDeRutaPorUsuario(@RequestHeader HttpHeaders headers) {
+		var Long idUsuario = getUsuarioIdFromLogin(headers)
+		logger.info("GET obtener todos las hojas de ruta del usuario con el id " + idUsuario)
+		
+		servicioHojasDeRutas.obtenerInfoHojasDeRutaPorUsuario(idUsuario)
 	}
 
 	@PutMapping(path="{idHdr}", consumes=MediaType.APPLICATION_JSON_VALUE)

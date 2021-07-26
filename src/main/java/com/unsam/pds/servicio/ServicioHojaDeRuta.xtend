@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import com.unsam.pds.repositorio.projectionQueries.IReporteInfoHojaDeRuta
 
 @Service
 class ServicioHojaDeRuta extends GenericService<HojaDeRuta, Long> {
@@ -31,6 +32,10 @@ class ServicioHojaDeRuta extends GenericService<HojaDeRuta, Long> {
 	def List<HojaDeRuta> obtenerHojasDeRutaPorIdUsuario(Long idUsuario) {
 		repoHoja.obtenerHojasDeRutaPorIdUsuario(idUsuario)
 	}
+	
+	def List<IReporteInfoHojaDeRuta> obtenerInfoHojasDeRutaPorUsuario(Long idUsuario) {
+		repoHoja.obtenerInfoHojasDeRutaPorUsuario(idUsuario)
+	} 
 
 	@Transactional
 	def HojaDeRuta crearNuevaHdr(HojaDeRuta nuevaHdr) {

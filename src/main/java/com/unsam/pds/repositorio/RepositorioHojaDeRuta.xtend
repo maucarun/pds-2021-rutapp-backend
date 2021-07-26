@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param
 import java.util.Optional
 import org.springframework.lang.Nullable
 import org.springframework.data.jpa.domain.Specification
+import com.unsam.pds.repositorio.projectionQueries.IReporteInfoHojaDeRuta
 
 interface RepositorioHojaDeRuta extends GenericRepository<HojaDeRuta, Long> {
 
@@ -47,6 +48,40 @@ interface RepositorioHojaDeRuta extends GenericRepository<HojaDeRuta, Long> {
 
 	@Query(value = "SELECT * FROM hoja_de_ruta WHERE id_hoja_de_ruta=?1", nativeQuery = true)
 	override HojaDeRuta getById(Long id)
+	
+	@Query(value="
+		SELECT 
+			  id_hoja_de_ruta as idHojaDeRuta
+			, fecha_hora_inicio as fechaHoraInicio
+		    , kms_recorridos as kmsRecorridos
+		    , (select nombre from rutapp_db.estado where id_estado = hdr.id_estado) as estado
+		    , (select count(*) from rutapp_db.remito where id_hoja_de_ruta = hdr.id_hoja_de_ruta ) as cantidadClientes
+		    , (select count(*) from rutapp_db.remito where id_hoja_de_ruta = hdr.id_hoja_de_ruta and (id_estado = 7 or id_estado = 5)) as cantidadClientesVisitados
+		    , (select count(*) from rutapp_db.producto_remito where id_remito in (select id_remito from rutapp_db.remito where id_hoja_de_ruta = hdr.id_hoja_de_ruta)) as cantidadProductosEntregados
+		    , (select avg(tiempo_espera) from rutapp_db.remito where id_hoja_de_ruta = hdr.id_hoja_de_ruta ) as promedioEntrega
+		FROM 
+			rutapp_db.hoja_de_ruta as hdr
+		WHERE 
+			id_hoja_de_ruta
+		IN
+		(
+			select 
+				id_hoja_de_ruta 
+			from 
+				rutapp_db.remito 
+			where 
+				id_cliente
+			in
+			(
+				select 
+					id_cliente 
+				from 
+					rutapp_db.cliente 
+				where 
+					id_usuario=:usuarioId
+			)
+		)", nativeQuery = true)
+	def List<IReporteInfoHojaDeRuta> obtenerInfoHojasDeRutaPorUsuario(@Param("usuarioId") Long idUsuario) 
 	
 	@EntityGraph(attributePaths=#["estado.nombre",
 		"estado.id_estado",
