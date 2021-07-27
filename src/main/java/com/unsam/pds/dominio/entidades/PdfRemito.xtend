@@ -56,7 +56,7 @@ class PdfRemito {
 			document.add(createTable())
 			document.add(new Paragraph(" "))
 			document.add(new Paragraph(" "))
-			document.add(generateFooter())
+//			document.add(generateFooter())
 
 			document.close
 			baos
@@ -81,7 +81,7 @@ class PdfRemito {
 		document.add(createTable())
 		document.add(new Paragraph(" "))
 		document.add(new Paragraph(" "))
-		document.add(generateFooter())
+//		document.add(generateFooter())
 		document.close
 	}
 
@@ -129,10 +129,10 @@ class PdfRemito {
 
 			createHeadings(cb, 150, 790, usuario.apellido.toUpperCase + " " + usuario.nombre.toUpperCase, 16)
 			createHeadings(cb, 150, 775, "", 8)
-			createHeadings(cb, 150, 760, "CUIT: 00-00000000-0", 12)
-			createHeadings(cb, 150, 745, "Direccion:_________________________", 12)
-			createHeadings(cb, 150, 730, "Ciudad:____________________________", 12)
-			createHeadings(cb, 150, 715, "Teléfono: (011) 0000-0000", 12)
+			createHeadings(cb, 150, 760, "CUIT: 20-18043724-0", 12)
+			createHeadings(cb, 150, 745, "Direccion: Av. 25 de Mayo 1954", 12)
+			createHeadings(cb, 150, 730, "Ciudad: San Martín", 12)
+			createHeadings(cb, 150, 715, "Teléfono: (011) 7894-0663", 12)
 
 			cb.setLineWidth(1f)
 
@@ -171,97 +171,97 @@ class PdfRemito {
 		}
 	}
 
-	def PdfPTable generateFooter() {
-		try {
-			var PdfPTable table = new PdfPTable(2)
-			table.setTotalWidth(#[85f, 455])
-			table.setLockedWidth(true)
-
-			var strFecha = ""
-			var strNombre = ""
-			var strDocumento = ""
-
-			if (remito.comprobante !== null) {
-				strFecha = remito.comprobante.fechaHoraEntrega.format(
-					DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
-				strNombre = remito.comprobante.nombre_completo
-				strDocumento = remito.comprobante.dni
-			}
-
-			var PdfPCell cell = new PdfPCell(new Phrase("COMPROBANTE DE ENTREGA", catFontBold))
-			cell.setColspan(2)
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER)
-			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
-			cell.setBackgroundColor(BaseColor.LIGHT_GRAY)
-			cell.setPaddingTop(5)
-			cell.setPaddingRight(5)
-			cell.setPaddingBottom(5)
-			table.addCell(cell)
-
-			cell = new PdfPCell(new Phrase("FECHA", smallBold))
-			cell.setColspan(1)
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
-			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
-			cell.disableBorderSide(8)
-			cell.setPaddingTop(5)
-			cell.setPaddingRight(5)
-			cell.setPaddingBottom(5)
-			table.addCell(cell)
-
-			cell = new PdfPCell(new Phrase(strFecha, catFont))
-			cell.setColspan(1)
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT)
-			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
-			cell.disableBorderSide(4)
-			cell.setPaddingTop(5)
-			cell.setPaddingBottom(5)
-			table.addCell(cell)
-
-			cell = new PdfPCell(new Phrase("NOMBRE", smallBold))
-			cell.setColspan(1)
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
-			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
-			cell.disableBorderSide(8)
-			cell.setPaddingTop(5)
-			cell.setPaddingRight(5)
-			cell.setPaddingBottom(5)
-			table.addCell(cell)
-
-			cell = new PdfPCell(new Phrase(strNombre, catFont))
-			cell.setColspan(1)
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT)
-			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
-			cell.disableBorderSide(4)
-			cell.setPaddingTop(5)
-			cell.setPaddingBottom(5)
-			table.addCell(cell)
-
-			cell = new PdfPCell(new Phrase("DOCUMENTO", smallBold))
-			cell.setColspan(1)
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
-			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
-			cell.disableBorderSide(8)
-			cell.setPaddingTop(5)
-			cell.setPaddingRight(5)
-			cell.setPaddingBottom(5)
-			table.addCell(cell)
-
-			cell = new PdfPCell(new Phrase(strDocumento, catFont))
-			cell.setColspan(1)
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT)
-			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
-			cell.disableBorderSide(4)
-			cell.setPaddingTop(5)
-			cell.setPaddingBottom(5)
-			table.addCell(cell)
-
-			table
-
-		} catch (Exception ex) {
-			ex.printStackTrace
-			null
-		}
-	}
+//	def PdfPTable generateFooter() {
+//		try {
+//			var PdfPTable table = new PdfPTable(2)
+//			table.setTotalWidth(#[85f, 455])
+//			table.setLockedWidth(true)
+//
+//			var strFecha = ""
+//			var strNombre = ""
+//			var strDocumento = ""
+//
+//			if (remito.comprobante !== null) {
+//				strFecha = remito.comprobante.fechaHoraEntrega.format(
+//					DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+//				strNombre = remito.comprobante.nombre_completo
+//				strDocumento = remito.comprobante.dni
+//			}
+//
+//			var PdfPCell cell = new PdfPCell(new Phrase("COMPROBANTE DE ENTREGA", catFontBold))
+//			cell.setColspan(2)
+//			cell.setHorizontalAlignment(Element.ALIGN_CENTER)
+//			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
+//			cell.setBackgroundColor(BaseColor.LIGHT_GRAY)
+//			cell.setPaddingTop(5)
+//			cell.setPaddingRight(5)
+//			cell.setPaddingBottom(5)
+//			table.addCell(cell)
+//
+//			cell = new PdfPCell(new Phrase("FECHA", smallBold))
+//			cell.setColspan(1)
+//			cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
+//			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
+//			cell.disableBorderSide(8)
+//			cell.setPaddingTop(5)
+//			cell.setPaddingRight(5)
+//			cell.setPaddingBottom(5)
+//			table.addCell(cell)
+//
+//			cell = new PdfPCell(new Phrase(strFecha, catFont))
+//			cell.setColspan(1)
+//			cell.setHorizontalAlignment(Element.ALIGN_LEFT)
+//			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
+//			cell.disableBorderSide(4)
+//			cell.setPaddingTop(5)
+//			cell.setPaddingBottom(5)
+//			table.addCell(cell)
+//
+//			cell = new PdfPCell(new Phrase("NOMBRE", smallBold))
+//			cell.setColspan(1)
+//			cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
+//			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
+//			cell.disableBorderSide(8)
+//			cell.setPaddingTop(5)
+//			cell.setPaddingRight(5)
+//			cell.setPaddingBottom(5)
+//			table.addCell(cell)
+//
+//			cell = new PdfPCell(new Phrase(strNombre, catFont))
+//			cell.setColspan(1)
+//			cell.setHorizontalAlignment(Element.ALIGN_LEFT)
+//			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
+//			cell.disableBorderSide(4)
+//			cell.setPaddingTop(5)
+//			cell.setPaddingBottom(5)
+//			table.addCell(cell)
+//
+//			cell = new PdfPCell(new Phrase("DOCUMENTO", smallBold))
+//			cell.setColspan(1)
+//			cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
+//			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
+//			cell.disableBorderSide(8)
+//			cell.setPaddingTop(5)
+//			cell.setPaddingRight(5)
+//			cell.setPaddingBottom(5)
+//			table.addCell(cell)
+//
+//			cell = new PdfPCell(new Phrase(strDocumento, catFont))
+//			cell.setColspan(1)
+//			cell.setHorizontalAlignment(Element.ALIGN_LEFT)
+//			cell.setVerticalAlignment(Element.ALIGN_BOTTOM)
+//			cell.disableBorderSide(4)
+//			cell.setPaddingTop(5)
+//			cell.setPaddingBottom(5)
+//			table.addCell(cell)
+//
+//			table
+//
+//		} catch (Exception ex) {
+//			ex.printStackTrace
+//			null
+//		}
+//	}
 
 	def PdfPTable createTable() throws DocumentException {
 		var descuento = 0d
@@ -338,33 +338,33 @@ class PdfRemito {
 			total += (prodRto.precio_unitario * prodRto.cantidad)
 		}
 
-		cell = new PdfPCell(new Phrase(" "))
-		cell.setColspan(1)
-		cell.setBorderWidthBottom(0)
-		cell.setBorderWidthLeft(0)
-		cell.setBorder(0)
-		cell.setBorderColorLeft(BaseColor.WHITE)
-		cell.setBorderColorBottom(BaseColor.WHITE)
-		cell.setPaddingBottom(5)
-		table.addCell(cell)
-		table.addCell(cell)
-		table.addCell(cell)
-		table.addCell(cell)
+//		cell = new PdfPCell(new Phrase(" "))
+//		cell.setColspan(1)
+//		cell.setBorderWidthBottom(0)
+//		cell.setBorderWidthLeft(0)
+//		cell.setBorder(0)
+//		cell.setBorderColorLeft(BaseColor.WHITE)
+//		cell.setBorderColorBottom(BaseColor.WHITE)
+//		cell.setPaddingBottom(5)
+//		table.addCell(cell)
+//		table.addCell(cell)
+//		table.addCell(cell)
+//		table.addCell(cell)
 
-		cell = new PdfPCell(new Phrase("SUMA", smallBold))
-		cell.setColspan(1)
-		cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
-		cell.setBackgroundColor(BaseColor.LIGHT_GRAY)
-		cell.setPaddingBottom(5)
-		table.addCell(cell)
+//		cell = new PdfPCell(new Phrase("SUMA", smallBold))
+//		cell.setColspan(1)
+//		cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
+//		cell.setBackgroundColor(BaseColor.LIGHT_GRAY)
+//		cell.setPaddingBottom(5)
+//		table.addCell(cell)
 
 		remito.calcularTotal
 
-		cell = new PdfPCell(new Phrase(" $" + df.format(total), catFont))
-		cell.setColspan(1)
-		cell.setHorizontalAlignment(Element.ALIGN_LEFT)
-		cell.setPaddingBottom(5)
-		table.addCell(cell)
+//		cell = new PdfPCell(new Phrase(" $" + df.format(total), catFont))
+//		cell.setColspan(1)
+//		cell.setHorizontalAlignment(Element.ALIGN_LEFT)
+//		cell.setPaddingBottom(5)
+//		table.addCell(cell)
 
 		cell = new PdfPCell(new Phrase(" "))
 		cell.setColspan(1)
