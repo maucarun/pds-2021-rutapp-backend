@@ -25,7 +25,7 @@ class Contacto {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_contacto
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Perfil, View.HojaDeRuta.Perfil)
 	@NotNull
 	@Column(length=50, nullable=false, unique=false)
 	String nombre
@@ -48,7 +48,7 @@ class Contacto {
 	@OneToMany(mappedBy="contacto", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Email> emails = newHashSet
 
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Perfil, View.HojaDeRuta.Perfil)
 	@OneToMany(mappedBy="contacto", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Telefono> telefonos = newHashSet
 	

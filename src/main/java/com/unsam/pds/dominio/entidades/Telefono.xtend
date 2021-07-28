@@ -19,11 +19,11 @@ import javax.persistence.FetchType
 @Entity(name="telefono")
 class Telefono {
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.HojaDeRuta.Perfil)
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id_telefono
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Lista, View.Cliente.Post, View.Remito.Perfil, View.HojaDeRuta.Perfil)
 	@Min(value=8)
 	@Column(length=20, nullable=false, unique=false)
 	String telefono

@@ -38,6 +38,12 @@ class ControllerUsuario {
 
 	@Autowired ServicioUsuario servicioUsuarios
 
+	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	def boolean consultarEstadoDelBE() {
+		return true;
+	}
+	
 	@JsonView(View.Usuario.Perfil)
 	@GetMapping(path="/{idUsuario}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
