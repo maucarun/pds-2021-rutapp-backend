@@ -97,6 +97,7 @@ interface RepositorioHojaDeRuta extends GenericRepository<HojaDeRuta, Long> {
 		"remitos.cliente.direccion.longitud",
 		"remitos.productosDelRemito",
 		"remitos.cliente.disponibilidades.diaSemana.id_dia_semana",
-		"remitos.cliente.disponibilidades.diaSemana.diaSemana"])
+		"remitos.cliente.disponibilidades.diaSemana.diaSemana",
+		"remitos.cliente.contactos.telefonos"])
 	override Optional<HojaDeRuta> findOne(@Nullable Specification<HojaDeRuta> spec);
 }

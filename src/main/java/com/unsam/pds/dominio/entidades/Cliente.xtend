@@ -70,7 +70,7 @@ class Cliente {
 	@OneToMany(mappedBy = "cliente", fetch=FetchType.LAZY)
 	Set<Disponibilidad> disponibilidades = newHashSet
 	
-	@JsonView(View.Cliente.Perfil, View.Cliente.Post, View.Remito.Perfil)
+	@JsonView(View.Cliente.Perfil, View.Cliente.Post, View.Remito.Perfil, View.HojaDeRuta.Perfil)
 	@OneToMany(mappedBy="cliente", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Contacto> contactos = newHashSet
 	
