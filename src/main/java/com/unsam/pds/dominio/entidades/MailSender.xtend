@@ -46,6 +46,26 @@ class MailSender {
 			ex.printStackTrace()
 		}
 	}
+	
+	def void sendEmail(String destinatario, String asunto, String texto) {
+		try {
+			println("Se comieza el envio")
+			var String to = destinatario//"rutapp.abecam@gmail.com"
+			var String subject = asunto//"Envio de remito"
+			var String text = texto//"Esto es una prueba"
+			var SimpleMailMessage message = new SimpleMailMessage()
+			message.setFrom("rutapp.abecam@gmail.com")
+			message.setTo(to)
+			message.setSubject(subject)
+			message.setText(text)
+			var sender = new EmailConfiguration().javaMailSender
+			sender.send(message)
+			println("Finaliza el envio")
+		} catch (Exception ex) {
+			println("Error")
+			ex.printStackTrace()
+		}
+	}
 
 	def sendPdfMail(Remito rto, Usuario usr, String dirLogo) {
 		println("Se comieza el envio")

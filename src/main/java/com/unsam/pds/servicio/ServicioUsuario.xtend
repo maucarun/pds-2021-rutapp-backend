@@ -60,4 +60,10 @@ class ServicioUsuario {
 			
 		usr.get.idUsuario
 	}
+	
+	def Usuario validarEmail(String email){
+		repo.findByEmail(email).orElseThrow([
+			throw new NotFoundException("No existe un usuario con el email asociado " + email)
+		])
+	}
 }
