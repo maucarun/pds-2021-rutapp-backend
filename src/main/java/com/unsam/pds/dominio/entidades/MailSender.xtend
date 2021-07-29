@@ -70,7 +70,7 @@ class MailSender {
 	def sendPdfMail(Remito rto, Usuario usr, String dirLogo) {
 		println("Se comieza el envio")
 		var String to = rto.cliente.contactos.get(0).emails.get(0).direccion
-		var String subject = "Envio de remito " + rto.idRemito
+		var String subject = "Envio de Remito N°" + rto.idRemito
 		var String text = getTextMessage(rto, usr)
 		var sender = new EmailConfiguration().javaMailSender
 
@@ -96,7 +96,39 @@ class MailSender {
 			var MimeBodyPart pdfBodyPart = new MimeBodyPart()
 			pdfBodyPart.setDataHandler(new DataHandler(dataSource))
 			pdfBodyPart.setFileName("Remito.pdf")
-			helper.addAttachment("Remito " + rto.idRemito, dataSource)
+			helper.addAttachment("Remito " + rto.idRemito + ".pdf", dataSource)
+			sender.send(message)
+		} catch (Exception ex) {
+			ex.printStackTrace()
+		} finally {
+			if (null !== outputStream) {
+				try {
+					outputStream.close()
+					outputStream = null
+				} catch (Exception ex) {
+				}
+			}
+
+		}
+	}
+	
+	def sendComprobante(Remito rto, Usuario usr) {
+		println("Se comieza el envio")
+		var String to = rto.cliente.contactos.get(0).emails.get(0).direccion
+		var String subject = "Comprobante de Entrega - Remito N°" + rto.idRemito
+		var String text = getTextMessage(rto, usr)
+		var sender = new EmailConfiguration().javaMailSender
+
+		var MimeMessage message = sender.createMimeMessage();
+		var MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setFrom(usr.email);
+		helper.setTo(to);
+		helper.setSubject(subject);
+		helper.setText(text);
+
+		var ByteArrayOutputStream outputStream = null
+
+		try {
 			sender.send(message)
 		} catch (Exception ex) {
 			ex.printStackTrace()
@@ -113,25 +145,29 @@ class MailSender {
 	}
 
 	def String getTextMessage(Remito rto, Usuario usr) {
-		var mje = "Hola, " + rto.cliente.nombre + ":\n\n" +
+		var mje = "Hola, " + rto.cliente.nombre + ":\n\n" 
+		
+		if (rto.comprobante === null) {
+			mje +=
 			"Tengo el agrado de dirigirme a ud. a fin de hacerle entrega del " + "remito nro. " + rto.idRemito +
 			", el cual se adjunta al " + "presente.\n"
 
-		if (rto.productosDelRemito.length > 0) {
-			mje += "El mismo corresponde a su pedido de: \n"
+			if (rto.productosDelRemito.length > 0) {
+				mje += "El mismo corresponde a su pedido de: \n"
 
-			for (ProductoRemito pr : rto.productosDelRemito) {
-				mje += "\t* " + pr.cantidad + " unidades de " + pr.producto.nombre + ".\n"
+				for (ProductoRemito pr : rto.productosDelRemito) {
+					mje += "\t* " + pr.cantidad + " unidades de " + pr.producto.nombre + ".\n"
+				}
+
+				mje += "\n"
 			}
-
-			mje += "\n"
 		}
 
 		if (rto.comprobante !== null) {
 			mje +=
-				"Por otra parte me complace informarle que dicho pedido " + "fue entregado el " +
+				"Me complace informarle que el pedido que forma parte del remito nro. " + rto.idRemito + " fue entregado el " +
 					rto.comprobante.fechaHoraEntrega.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " a las " +
-					rto.comprobante.fechaHoraEntrega.format(DateTimeFormatter.ofPattern("HH:mm")) + " Hs. a " +
+					rto.comprobante.fechaHoraEntrega.format(DateTimeFormatter.ofPattern("HH:mm")) + " hs. a " +
 					rto.comprobante.nombre_completo + " (DNI: " + rto.comprobante.dni + ").\n\n"
 		}
 

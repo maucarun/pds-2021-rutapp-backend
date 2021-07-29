@@ -223,7 +223,11 @@ class ControllerRemito extends GenericController<Remito> {
 //		remito.tiempo_espera = remito.tiempo_espera === null ? rmt.tiempo_espera : remito.tiempo_espera
 //		remito.comprobante = remito.comprobante === null ? rmt.comprobante : remito.comprobante
 		
-		BeanUtils.copyProperties(remito,rmt,"comprobante")
+		if (remito.comprobante === null) {
+			BeanUtils.copyProperties(remito,rmt,"comprobante")
+		} else {
+			BeanUtils.copyProperties(remito,rmt)
+		}
 		servicioRemito.actualizarOCrearRemito(rmt)
 	}
 
@@ -298,7 +302,7 @@ class ControllerRemito extends GenericController<Remito> {
 	}
 
 	@GetMapping("/sendemail/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(HttpStatus.OK)
 	def sendEmail(@PathVariable("id") Long id,
 		HttpServletResponse response) throws DocumentException, IOException {
 		val rto = servicioRemito.getById(id)			
@@ -307,5 +311,17 @@ class ControllerRemito extends GenericController<Remito> {
 		
 		var MailSender ms = new MailSender()
 		ms.sendPdfMail(rto, usr, strLogo)
+	}
+	
+	@GetMapping("/sendcomprobante/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	def sendComprobante(@PathVariable("id") Long id,
+		HttpServletResponse response) throws DocumentException, IOException {
+		val rto = servicioRemito.getById(id)			
+		rto.cliente = servicioCliente.getById(rto.cliente.idCliente) 
+		val usr = servicioUsuario.obtenerUsuarioPorId(rto.cliente.propietario.idUsuario)
+		
+		var MailSender ms = new MailSender()
+		ms.sendComprobante(rto, usr)
 	}
 }
