@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.validation.constraints.PositiveOrZero
 import org.eclipse.xtend.lib.annotations.Accessors
+import javax.persistence.CascadeType
 
 @Accessors
 @Entity(name="hoja_de_ruta")

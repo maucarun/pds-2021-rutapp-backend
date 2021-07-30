@@ -48,25 +48,40 @@ class ServicioHojaDeRuta extends GenericService<HojaDeRuta, Long> {
 //		]
 
 		val hoja = repoHoja.save(nuevaHdr)
+		actualizarRemitos(nuevaHdr,hoja)
+//		nuevaHdr.remitos.forEach [ rto |
+//			val rt = servRto.getById(rto.idRemito)
+//			rt.hojaDeRuta = hoja
+//			servRto.save(rt)
+//		]
+		hoja
+	}
+	
+	def actualizarRemitos(HojaDeRuta nuevaHdr, HojaDeRuta hoja) {
 		nuevaHdr.remitos.forEach [ rto |
 			val rt = servRto.getById(rto.idRemito)
 			rt.hojaDeRuta = hoja
 			servRto.save(rt)
 		]
-		hoja
 	}
 
 	@Transactional
 	def void actualizarHdr(Long idHdr, HojaDeRuta nuevaHdr) {
-		var hdrAModificar = obtenerHdrPorId(idHdr)
-		logger.info("Actualizando la hoja de ruta del " + hdrAModificar.fecha_hora_inicio)
-		BeanUtils.copyProperties(nuevaHdr, hdrAModificar)
+		//var hdrAModificar = obtenerHdrPorId(idHdr)
+		logger.info("Actualizando la hoja de ruta del " + nuevaHdr.id_hoja_de_ruta)
+		//BeanUtils.copyProperties(nuevaHdr, hdrAModificar)
+		if (nuevaHdr.remitos.forall[rto|rto.estado.nombre != "Pendiente"]) {
+			logger.info("COMO NO TIENE NINGUN REMITO CON ESTADO PENDIENTE CANCELO LA HDR")
+			nuevaHdr.estado = this.getEstadoByNombre("Completada")
+		}
 		crearNuevaHdr(nuevaHdr)
 		logger.info("Hoja de ruta actualizada!")
 	}
 
 	override HojaDeRuta getById(Long id) {
-		repoHoja.findById(id).get
+		repoHoja.findById(id).orElseThrow([
+			throw new NotFoundException("No existe la HDR con el id " + id)
+		])
 	}
 
 
@@ -77,8 +92,6 @@ class ServicioHojaDeRuta extends GenericService<HojaDeRuta, Long> {
 		repoHoja.save(hdr)
 	}
 
-	@Transactional
-	
 	def EstadoHojaDeRuta getEstadoById(Long id) {
 		servEstado.obtenerEstadoPorTipoAndId('estado_hoja_ruta', id)
 	}

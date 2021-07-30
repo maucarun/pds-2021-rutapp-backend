@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import com.unsam.pds.dominio.entidades.EstadoHojaDeRuta
 import com.unsam.pds.repositorio.projectionQueries.IReporteInfoHojaDeRuta
+import org.springframework.beans.BeanUtils
 
 @Controller
 @CrossOrigin("*")
@@ -148,42 +149,41 @@ class ControllerHojaDeRuta extends GenericController<HojaDeRuta> {
 
 	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
-	@JsonView(View.HojaDeRuta.Lista)
+	@JsonView(View.HojaDeRuta.Put)
 	@ResponseBody
 	@Transactional
-	def HojaDeRuta update(@RequestBody @JsonView(View.HojaDeRuta.Put) HojaDeRuta hoja,
-		@RequestHeader HttpHeaders headers) {
+	def void update(@RequestBody HojaDeRuta hoja, @RequestHeader HttpHeaders headers) {
 		val Long usr = getUsuarioIdFromLogin(headers)
 		println("hoja de ruta " + hoja.id_hoja_de_ruta)
 
 		var HojaDeRuta hdr = servicioHojasDeRutas.getById(hoja.id_hoja_de_ruta)
 
-		if (hdr === null)
-			throw new NotFoundException("La hoja de ruta " + hoja.id_hoja_de_ruta + " no existe")
-
+		servicioHojasDeRutas.actualizarRemitos(hdr,null)
+		
 		if (hdr.estado === servicioHojasDeRutas.getEstadoByNombre("Completada"))
 			throw new NotFoundException("El estado de la hoja de ruta no permite su edición")
 
 		if (hdr.remitos.forall[rto|rto.cliente.propietario.idUsuario !== usr])
 			throw new UnauthorizedException("Los remitos de la hoja de ruta deben pertenecer al usuario")
 
-		hoja.fecha_hora_inicio = hoja.fecha_hora_inicio === null ? hdr.fecha_hora_inicio : hoja.fecha_hora_inicio
-		hoja.fecha_hora_fin = hoja.fecha_hora_fin === null ? hdr.fecha_hora_fin : hoja.fecha_hora_fin
-		hoja.kms_recorridos = hoja.kms_recorridos === null ? hdr.kms_recorridos : hoja.kms_recorridos
-		hoja.justificacion = hoja.justificacion === null ? hdr.justificacion : hoja.justificacion
-		hoja.estado = hoja.estado === null ? hdr.estado : servicioHojasDeRutas.getEstadoById(hoja.estado.id_estado)
-		hoja.remitos = hoja.remitos === null ? hdr.remitos : hoja.remitos
-
-		if (hoja.estado !== servicioHojasDeRutas.getEstadoByNombre("Suspendida"))
-			servicioHojasDeRutas.save(hoja)
+//		hoja.fecha_hora_inicio = hoja.fecha_hora_inicio === null ? hdr.fecha_hora_inicio : hoja.fecha_hora_inicio
+//		hoja.fecha_hora_fin = hoja.fecha_hora_fin === null ? hdr.fecha_hora_fin : hoja.fecha_hora_fin
+//		hoja.kms_recorridos = hoja.kms_recorridos === null ? hdr.kms_recorridos : hoja.kms_recorridos
+//		hoja.justificacion = hoja.justificacion === null ? hdr.justificacion : hoja.justificacion
+//		hoja.estado = hoja.estado === null ? hdr.estado : servicioHojasDeRutas.getEstadoById(hoja.estado.id_estado)
+//		hoja.remitos = hoja.remitos === null ? hdr.remitos : hoja.remitos
+		
+		BeanUtils.copyProperties(hoja,hdr)
+		
+		//if (hoja.estado !== servicioHojasDeRutas.getEstadoByNombre("Suspendida"))
+			servicioHojasDeRutas.actualizarHdr(hoja.id_hoja_de_ruta, hdr)
 	}
 
 	@DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code=HttpStatus.OK)
-	@ResponseBody
+//	@ResponseBody
 	@Transactional
-	def com.unsam.pds.dominio.Generics.ResponseBody delete(
-		@RequestBody @JsonView(View.HojaDeRuta.Delete) HojaDeRuta hoja, @RequestHeader HttpHeaders headers) {
+	def void delete(@RequestBody HojaDeRuta hoja, @RequestHeader HttpHeaders headers) {
 		val Long usr = getUsuarioIdFromLogin(headers)
 		val HojaDeRuta hdr = servicioHojasDeRutas.getById(hoja.id_hoja_de_ruta)
 
@@ -199,10 +199,10 @@ class ControllerHojaDeRuta extends GenericController<HojaDeRuta> {
 
 		servicioHojasDeRutas.delete(hdr, hoja.justificacion)
 
-		new com.unsam.pds.dominio.Generics.ResponseBody() => [
-			code = HttpStatus.OK.toString
-			message = "Hoja de ruta eliminada exitosamente"
-		]
+//		new com.unsam.pds.dominio.Generics.ResponseBody() => [
+//			code = HttpStatus.OK.toString
+//			message = "Hoja de ruta eliminada exitosamente"
+//		]
 	}
 
 	private def Specification<HojaDeRuta> joinHojaDeRutaUsuario(Specification<HojaDeRuta> spec, Long idUsuario) {
